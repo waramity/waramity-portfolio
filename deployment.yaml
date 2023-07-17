@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: waramity-portfolio-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: waramity-portfolio
+  template:
+    metadata:
+      labels:
+        app: waramity-portfolio
+    spec:
+      containers:
+        - name: waramity-portfolio-container
+          image: waramity-portfolio:latest
+          ports:
+            - containerPort: 80
