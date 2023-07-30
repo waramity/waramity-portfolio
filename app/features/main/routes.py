@@ -1,7 +1,7 @@
 
 from flask import (render_template, Blueprint, g, redirect,
                    request, current_app, abort, url_for, jsonify, make_response)
-# from flask_babel import _, refresh
+from flask_babel import _, refresh
 # from flask_login import login_required, current_user
 
 
