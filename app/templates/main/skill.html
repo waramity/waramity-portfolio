@@ -1,5 +1,37 @@
 <h1 class="display-3">Skill-Set</h1>
 
+<ul class="nav nav-underline" id="myTab" role="tablist">
+  {% for item in skillset_data %}
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link {% if loop.index == 1 %}active{% endif %}"
+      id="{{ loop.index }}-skillset-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#{{ loop.index }}-skillset-tab-pane"
+      type="button"
+      role="tab"
+      aria-controls="{{ loop.index }}-skillset-tab-pane"
+    >
+      {{ item.title }}
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+
+<div class="tab-content" id="myTabContent">
+  {% for item in skillset_data %}
+  <div
+    class="tab-pane fade {% if loop.index == 1 %}show active{% endif %}"
+    id="{{ loop.index }}-skillset-tab-pane"
+    role="tabpanel"
+    aria-labelledby="{{ loop.index }}-skillset-tab"
+    tabindex="0"
+  >
+    {{ item.title }}
+  </div>
+  {% endfor %}
+</div>
+
 <div>
   <canvas id="myChart"></canvas>
 </div>
@@ -12,35 +44,7 @@
   new Chart(ctx, {
     type: "bar",
     data: {
-      labels: [
-        "Flask",
-        "SQLAlchemy",
-        "React",
-        "React Native",
-        "Expo",
-        "Transformer",
-        "Diffuser",
-        "Stable Diffusion",
-        "OpenCV",
-        "Tensorflow",
-        "Docker",
-        "Kubernetes",
-        "Line Official Account",
-        "Multiligual",
-        "Socket.io",
-        "Python",
-        "Javascript",
-        "Java",
-        "C",
-        "R",
-        "PHP",
-        "HTML",
-        "CSS",
-        "Digital Ocean",
-        "Heroku",
-        "Firebase",
-        "Google Authentication",
-      ],
+      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
         {
           label: "# of Votes",

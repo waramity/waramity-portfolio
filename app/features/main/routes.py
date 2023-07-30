@@ -1,11 +1,13 @@
 
 from flask import (render_template, Blueprint, g, redirect,
-                   request, current_app, abort, url_for, jsonify, make_response)
+                   request, current_app, abort, url_for, jsonify, make_response, json)
 from flask_babel import _, refresh
+import os
 # from flask_login import login_required, current_user
 
 
 # from app import db, app, redis, user_db, feature_db
+from app import app
 #
 # from app.models import PromptCategory, PromptSubCategory, PromptDetailCategory, PromptSet, ModelCard
 
@@ -27,6 +29,14 @@ def before_request():
 
 # Multiligual End
 
+get_json_data = lambda filepath: open(f'static/{filepath}', 'r').read()
+
 @main.route('/')
 def index():
-    return render_template('main/index.html', title=_('waramity portfolio'))
+
+    filename = os.path.join(app.static_folder, 'data\\skillset.json')
+    with open(filename) as blog_file:
+        skillset_data = json.load(blog_file)
+
+    print(skillset_data)
+    return render_template('main/index.html', title=_('waramity portfolio'), skillset_data=skillset_data)
