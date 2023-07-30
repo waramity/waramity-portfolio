@@ -1,22 +1,22 @@
 [
   {
     "title": "Programming Languages",
-    "labels": ["Python", "Javascript", "HTML", "CSS"],
-    "experience": [6, 8, 10, 10]
+    "labels": ["Python", "Javascript", "HTML", "CSS"]
   },
   {
-    "title": "Machine Learning & AI"
+    "title": "Web & Mobile Development",
+    "labels": ["Flask", "SQLAlchemy", "React", "React Native", "Expo", "Socket.io"]
   },
   {
-    "title": "Containerization"
+    "title": "Machine Learning & AI",
+    "labels": ["Stable Diffusion", "TensorFlow"]
   },
   {
-    "title": "Web Development"
+    "title": "Cloud Services",
+    "labels": ["Docker", "Kubertenes", "Digital Ocean", "Heroku", "GoDaddy"]
   },
   {
-    "title": "Cloud Services"
-  },
-  {
-    "title": "Authentication"
+    "title": "Authentication",
+    "labels": ["OAuth", "LINE Official Account"]
   }
 ]

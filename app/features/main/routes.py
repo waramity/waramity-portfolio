@@ -31,10 +31,10 @@ def before_request():
 
 @main.route('/')
 def index():
-
     filename = os.path.join(app.static_folder, 'data/skillset/skillset.json')
-    with open(filename) as blog_file:
-        skillset_data = json.load(blog_file)
+    print('kuy')
+    with open(filename) as json_file:
+        skillset_data = json.load(json_file)
 
     return render_template('main/index.html', title=_('waramity portfolio'), skillset_data=skillset_data)
 
