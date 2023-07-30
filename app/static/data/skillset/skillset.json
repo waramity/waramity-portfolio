@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Programming Languages",
+    "labels": ["Python", "Javascript", "HTML", "CSS"],
+    "experience": [6, 8, 10, 10]
+  },
+  {
+    "title": "Machine Learning & AI"
+  },
+  {
+    "title": "Containerization"
+  },
+  {
+    "title": "Web Development"
+  },
+  {
+    "title": "Cloud Services"
+  },
+  {
+    "title": "Authentication"
+  }
+]

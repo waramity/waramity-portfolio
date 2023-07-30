@@ -29,14 +29,18 @@ def before_request():
 
 # Multiligual End
 
-get_json_data = lambda filepath: open(f'static/{filepath}', 'r').read()
-
 @main.route('/')
 def index():
 
-    filename = os.path.join(app.static_folder, 'data\\skillset.json')
+    filename = os.path.join(app.static_folder, 'data/skillset/skillset.json')
     with open(filename) as blog_file:
         skillset_data = json.load(blog_file)
 
-    print(skillset_data)
     return render_template('main/index.html', title=_('waramity portfolio'), skillset_data=skillset_data)
+
+@main.route('/get_chart_data/<int:index>')
+def get_chart_data(index):
+    index -= 1
+    if index < 1 or index > len(skillset_data):
+        return jsonify({"error": "Invalid index"})
+    return jsonify(skillset_data[index - 1])
