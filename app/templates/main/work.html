@@ -1,0 +1,355 @@
+<div class="section padding-top-big padding-bottom over-hide">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 section-title-wrap text-center parallax-fade-top">
+        <p class="primary-color">stories</p>
+        <h1>work<br />project</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section padding-bottom-big over-hide">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-12 text-center mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-1">
+          <div class="blog-post-box">
+            <h5>We want to share with you our mood after selection.</h5>
+            <p class="mb-0 mt-3">october 27, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5 mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-2">
+          <div class="blog-post-box">
+            <h5>Sleep, code, eat, travel. Repeat.</h5>
+            <p class="mb-0 mt-3">october 24, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5 mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-3">
+          <div class="blog-post-box">
+            <h5>Don’t get lost quoting your next projects.</h5>
+            <p class="mb-0 mt-3">october 22, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5 mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-4">
+          <div class="blog-post-box">
+            <h5>Don´t give up, keep on focus.</h5>
+            <p class="mb-0 mt-3">october 19, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5 mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-5">
+          <div class="blog-post-box">
+            <h5>Moments from a life. Day of photography.</h5>
+            <p class="mb-0 mt-3">october 15, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5 mb-3"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-6">
+          <div class="blog-post-box">
+            <h5>How you look at it is pretty much how you'll see it.</h5>
+            <p class="mb-0 mt-3">october 12, 2018</p>
+          </div>
+        </a>
+      </div>
+      <div
+        class="col-12 text-center mt-5"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="cursor-link-blog-post-7">
+          <div class="blog-post-box">
+            <h5>Don´t give up, keep on focus.</h5>
+            <p class="mb-0 mt-3">october 09, 2018</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section padding-top-bottom over-hide background-dark">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-12 text-center"
+        data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s"
+      >
+        <a href="#" class="blog-nav cursor-link">older news</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page cursor
+================================================== -->
+
+<div class="cursor cursor-shadow"></div>
+<div class="cursor cursor-dot"></div>
+
+<!-- Link to page
+================================================== -->
+
+<style media="screen">
+  /* #Cursor
+  ================================================== */
+
+  * {
+    cursor: none;
+  }
+  .cursor {
+    --size: 8px;
+    height: var(--size);
+    width: var(--size);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cursor.cursor-shadow {
+    background-color: transparent;
+    border: 1px solid #fff;
+    --size: 40px;
+    transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s,
+      background-color 0.2s, border-color 0.2s;
+    transition-timing-function: ease-out;
+  }
+  .cursor.cursor-dot {
+    background: #7f6ed2;
+    transition: width 0.2s, height 0.2s;
+  }
+  .cursor-shadow.active {
+    --size: 80px;
+    border-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .cursor-dot.active {
+    --size: 0;
+  }
+  a {
+    cursor: pointer;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+
+  /* #Blog post
+  ================================================== */
+
+  .blog-post-box {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .blog-post-box h5 {
+    position: relative;
+    text-transform: none;
+    cursor: pointer;
+    mix-blend-mode: difference;
+    z-index: 3;
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+  }
+  .blog-post-box:hover h5 {
+  }
+  .blog-post-box p {
+    position: relative;
+    color: #c4c3ca;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-block;
+    mix-blend-mode: luminosity;
+    padding: 4px 12px;
+    background-color: rgba(127, 110, 210, 0.8);
+    border-radius: 2px;
+    z-index: 4;
+  }
+
+  /* #Blog cursor images
+  ================================================== */
+
+  .cursor.cursor-dot.active-blog-post-1,
+  .cursor.cursor-dot.active-blog-post-2,
+  .cursor.cursor-dot.active-blog-post-3,
+  .cursor.cursor-dot.active-blog-post-4,
+  .cursor.cursor-dot.active-blog-post-5,
+  .cursor.cursor-dot.active-blog-post-6,
+  .cursor.cursor-dot.active-blog-post-7 {
+    opacity: 0;
+  }
+  .cursor-shadow.active-blog-post-1,
+  .cursor-shadow.active-blog-post-2,
+  .cursor-shadow.active-blog-post-3,
+  .cursor-shadow.active-blog-post-4,
+  .cursor-shadow.active-blog-post-5,
+  .cursor-shadow.active-blog-post-6,
+  .cursor-shadow.active-blog-post-7 {
+    --size: 160px;
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 0;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .cursor-shadow.active-blog-post-1 {
+    background-image: url("http://ivang-design.com/alke/img/blog/1.jpg");
+  }
+  .cursor-shadow.active-blog-post-2 {
+    background-image: url("http://ivang-design.com/alke/img/blog/2.jpg");
+  }
+  .cursor-shadow.active-blog-post-3 {
+    background-image: url("http://ivang-design.com/alke/img/blog/3.jpg");
+  }
+  .cursor-shadow.active-blog-post-4 {
+    background-image: url("http://ivang-design.com/alke/img/blog/4.jpg");
+  }
+  .cursor-shadow.active-blog-post-5 {
+    background-image: url("http://ivang-design.com/alke/img/blog/5.jpg");
+  }
+  .cursor-shadow.active-blog-post-6 {
+    background-image: url("http://ivang-design.com/alke/img/blog/6.jpg");
+  }
+  .cursor-shadow.active-blog-post-7 {
+    background-image: url("http://ivang-design.com/alke/img/blog/7.jpg");
+  }
+
+  /* #Blog nav link
+  ================================================== */
+
+  .blog-nav {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    color: #565b70;
+    font-size: 4vw;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+    transition-timing-function: ease-out;
+  }
+  .blog-nav:hover {
+    opacity: 0.7;
+    color: #565b70;
+  }
+
+  /* #Link to page
+  ================================================== */
+
+  @media (max-width: 991px) {
+    h5,
+    .h5 {
+      font-size: 1.2rem;
+    }
+    .section-title-wrap h1 {
+      font-size: 4rem;
+    }
+    .blog-nav {
+      font-size: 7vw;
+    }
+  }
+</style>
+<script type="text/javascript">
+  //Page cursors
+
+  $(window).mousemove(function (e) {
+    $(".cursor").css({
+      left: e.pageX,
+      top: e.pageY,
+    });
+  });
+  $(".cursor-link")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active");
+    });
+  //Blog page cursors with image
+  //Blog post 1:
+  $(".cursor-link-blog-post-1")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-1");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-1");
+    });
+  //Blog post 2:
+  $(".cursor-link-blog-post-2")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-2");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-2");
+    });
+  //Blog post 3:
+  $(".cursor-link-blog-post-3")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-3");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-3");
+    });
+  //Blog post 4:
+  $(".cursor-link-blog-post-4")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-4");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-4");
+    });
+  //Blog post 5:
+  $(".cursor-link-blog-post-5")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-5");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-5");
+    });
+  //Blog post 6:
+  $(".cursor-link-blog-post-6")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-6");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-6");
+    });
+  //Blog post 7:
+  $(".cursor-link-blog-post-7")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active-blog-post-7");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active-blog-post-7");
+    });
+</script>

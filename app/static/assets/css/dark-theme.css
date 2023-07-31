@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese");
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext");
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #c4c3ca;
+  overflow-x: hidden;
+  background-color: #14151a;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  margin-bottom: 0;
+  line-height: 1.35;
+  color: #fff;
+}
+h5,
+.h5 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+::selection {
+  color: #fff;
+}
+::-moz-selection {
+  color: #fff;
+}
+::selection {
+  background-color: #000;
+}
+::-moz-selection {
+  background-color: #000;
+}
+.section {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+.over-hide {
+  overflow: hidden;
+}
+.primary-color {
+  color: #7f6ed2;
+}
+.padding-top-bottom-big {
+  padding-top: 140px;
+  padding-bottom: 140px;
+}
+.padding-top-big {
+  padding-top: 140px;
+}
+.padding-bottom-big {
+  padding-bottom: 140px;
+}
+.padding-top-bottom {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+.padding-top {
+  padding-top: 100px;
+}
+.padding-bottom {
+  padding-bottom: 100px;
+}
+.section-title-wrap p {
+  letter-spacing: 2px;
+  font-size: 22px;
+  font-weight: 500;
+  padding: 0;
+}
+.section-title-wrap h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 1.1;
+}
+.background-dark {
+  background-color: #111;
+}

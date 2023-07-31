@@ -1,3 +1,39 @@
-<h1 class="display-3">
-  {{_('Work experience')}}
+<style media="screen">
+  .cursor.element-class {
+    background-image: url("http://ivang-design.com/alke/img/blog/1.jpg");
+  }
+</style>
+
+<h1 class="display-3 mb-5">
+  {{_('Experience')}}
 </h1>
+
+<p
+  id="myElement"
+  class="display-6 text-secondary"
+  style="font-size: 1.8rem; line-height: 1.7em; letter-spacing: 0.05em;"
+>
+  Born in <span class="fw-bold text-dark">Chonburi, Bangkok 1996</span>, I found
+  myself hooked on design while entering the labor market at the age of 15 in
+  <span class="fw-bold text-dark">Assumption College Sriracha</span>. I started
+  as a front-end developer and figured out my passion soon enough. You could say
+  I became the person I wanted to be when I grew up. In no time, I was working
+  as a graphic designer for small businesses, before moving to Leavingstone,
+  where in addition to Full Stack Developer, I spent most of the time explaining
+  what I did for a living to my family. Right about the time, when my family
+  understood (most part) my job description, I started winning awards and making
+  them proud at <span class="fw-bold text-dark">Course Square</span>. Having
+  spent almost 2 years at digital agencies, I decided to tackle bigger issues,
+</p>
+
+<script>
+  const element = document.getElementById("myElement");
+
+  element.addEventListener("mouseover", () => {
+    element.classList.add("element-class");
+  });
+
+  element.addEventListener("mouseout", () => {
+    element.classList.remove("element-class");
+  });
+</script>

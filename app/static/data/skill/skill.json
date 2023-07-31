@@ -8,6 +8,7 @@
     "title": "Web & Mobile Development",
     "labels": [
       "Flask",
+      "JQuery",
       "SQLAlchemy",
       "React",
       "React Native",
@@ -16,6 +17,7 @@
     ],
     "images": [
       "flask.png",
+      "jquery.png",
       "sqlachemy.png",
       "react.png",
       "react-native.png",
