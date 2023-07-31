@@ -30,11 +30,20 @@
   {% endfor %}
 </div>
 
-<div id="skill-section"></div>
+<div id="skill-section" class="row"></div>
 
 <template id="skill-item-template">
   <div class="col-3 pe-2 mb-3">
-    <div id="skill-title" class="border border-3 border-dark p-3"></div>
+    <div class="border border-3 border-dark p-3">
+      <div class="row">
+        <div class="col-5">
+          <img id="skill-image" src="/static/data/skill/" class="w-100" />
+        </div>
+        <div class="col-7">
+          <h3 id="skill-title"></h3>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,6 +69,7 @@
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          addSkillItem(data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -67,7 +77,21 @@
     });
   });
 
-  function addSkillItem(skill_item_json) {
+  function addSkillItem(skill_json) {
+    for (let i = 0; i < skill_json.labels.length; i++) {
+      createSkillItem(skill_json.labels[i], skill_json.images[i]);
+    }
+  }
+
+  function createSkillItem(label, image) {
     let skill_item_template_clone = skill_item_template.content.cloneNode(true);
+
+    skill_item_template_clone.querySelector(
+      "#skill-title"
+    ).innerHTML = `${label}`;
+
+    skill_item_template_clone.querySelector("#skill-image").src += `${image}`;
+
+    skill_section.appendChild(skill_item_template_clone.children[0]);
   }
 </script>
