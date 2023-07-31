@@ -1,4 +1,10 @@
-{% extends "base/_base.html" %} {% block content %} {% include
-"main/aboutme/index.html" %} {% include "main/skill/index.html" %}{% include
-"main/experience/index.html" %} {% include "main/work/index.html" %}
+{% extends "common/_base.html" %} 
+{% include "common/cursor.html" %}
+
+{% block content %} {% include
+"main/aboutme.html" %} {% include "main/skill.html" %}{% include
+"main/experience.html" %} {% include "main/work.html" %}
+
+{% include "main/want-to-up.html" %}
+
 {%endblock%}

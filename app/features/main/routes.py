@@ -37,13 +37,13 @@ def load_json(filename):
 
 @main.route('/')
 def index():
-    skill_data = load_json('data\\skill\\skill.json')
+    skill_data = load_json('data/skill/skill.json')
     return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data)
 
 @main.route('/get_skill_data/<int:index>')
 def get_skill_data(index):
     index -= 1
-    skill_data = load_json('data\\skill\\skill.json')
+    skill_data = load_json('data/skill/skill.json')
     if index < 1 or index > len(skill_data):
         return jsonify({"error": "Invalid index"})
     return jsonify(skill_data[index - 1])
