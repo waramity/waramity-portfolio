@@ -40,8 +40,8 @@ def index():
     skill_data = load_json('data\\skill\\skill.json')
     return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data)
 
-@main.route('/get_chart_data/<int:index>')
-def get_chart_data(index):
+@main.route('/get_skill_data/<int:index>')
+def get_skill_data(index):
     index -= 1
     skill_data = load_json('data\\skill\\skill.json')
     if index < 1 or index > len(skill_data):

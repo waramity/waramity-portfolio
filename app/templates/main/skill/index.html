@@ -6,7 +6,7 @@
   {% for item in skill_data %}
   <li class="nav-item" role="presentation">
     <button
-      class="nav-link {% if loop.index == 1 %}active text-dark{%else%} text-secondary{% endif %}"
+      class="nav-link text-secondary"
       id="{{ loop.index }}-skillset-tab"
       data-bs-toggle="tab"
       data-bs-target="#{{ loop.index }}-skillset-tab-pane"
@@ -20,16 +20,6 @@
   {% endfor %}
 </ul>
 
-<div class="row">
-  {% for item in skill_data %}
-  <div class="col-3 pe-2 mb-3">
-    <div class="border border-3 border-dark p-3">
-      {{ item.title }}
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
 <div id="skill-section" class="row"></div>
 
 <template id="skill-item-template">
@@ -37,7 +27,7 @@
     <div class="border border-3 border-dark p-3">
       <div class="row">
         <div class="col-5">
-          <img id="skill-image" src="/static/data/skill/" class="w-100" />
+          <img id="skill-image" src="/static/data/skill/" class="w-50" />
         </div>
         <div class="col-7">
           <h3 id="skill-title"></h3>
@@ -55,6 +45,14 @@
 
   let currentTabIndex = 1;
 
+  initialSkillSection();
+
+  function initialSkillSection() {
+    fetchSkillData(2);
+    buttons[1].classList.add("active");
+    buttons[1].classList.add("text-dark");
+  }
+
   buttons.forEach((button, index) => {
     button.addEventListener("click", () => {
       buttons[currentTabIndex - 1].classList.remove("active");
@@ -65,19 +63,33 @@
 
       currentTabIndex = index + 1;
 
-      fetch(`/en/get_chart_data/${currentTabIndex}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          addSkillItem(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
+      fetchSkillData(currentTabIndex);
     });
   });
 
-  function addSkillItem(skill_json) {
+  function fetchSkillData(currentTabIndex) {
+    fetch(`/en/get_skill_data/${currentTabIndex}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        removeSkillSectionContent();
+        addSkillItems(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }
+
+  function removeSkillSectionContent() {
+    skill_section.innerHTML = "";
+    console.log(skill_section.innerHTML);
+  }
+
+  function addSkillItems(skill_json) {
     for (let i = 0; i < skill_json.labels.length; i++) {
       createSkillItem(skill_json.labels[i], skill_json.images[i]);
     }
