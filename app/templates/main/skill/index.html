@@ -1,14 +1,12 @@
-
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <h1 class="display-4">Skill-Set</h1>
 
 <ul class="nav nav-underline mb-3">
-  {% for item in skillset_data %}
+  {% for item in skill_data %}
   <li class="nav-item" role="presentation">
     <button
-		    class="nav-link {% if loop.index == 1 %}active text-dark{%else%} text-secondary{% endif %}"
+      class="nav-link {% if loop.index == 1 %}active text-dark{%else%} text-secondary{% endif %}"
       id="{{ loop.index }}-skillset-tab"
       data-bs-toggle="tab"
       data-bs-target="#{{ loop.index }}-skillset-tab-pane"
@@ -23,33 +21,28 @@
 </ul>
 
 <div class="row">
-  {% for item in skillset_data %}
+  {% for item in skill_data %}
   <div class="col-3 pe-2 mb-3">
-	  <div class=" border border-3 border-dark p-3">
+    <div class="border border-3 border-dark p-3">
       {{ item.title }}
-</div>
-</div>
+    </div>
+  </div>
   {% endfor %}
 </div>
 
-<div id="skill-section">
-
-</div>
+<div id="skill-section"></div>
 
 <template id="skill-item-template">
-
   <div class="col-3 pe-2 mb-3">
-	  <div id="skill-title" class=" border border-3 border-dark p-3">
-</div>
-</div>
+    <div id="skill-title" class="border border-3 border-dark p-3"></div>
+  </div>
 </template>
 
-
 <script>
-let skill_item_template = document.querySelector("#skill-item-template");
-let skill_section = document.querySelector("#skill-section");
+  let skill_item_template = document.querySelector("#skill-item-template");
+  let skill_section = document.querySelector("#skill-section");
 
-const buttons = document.querySelectorAll('.nav-link');
+  const buttons = document.querySelectorAll(".nav-link");
 
   let currentTabIndex = 1;
 
@@ -64,21 +57,17 @@ const buttons = document.querySelectorAll('.nav-link');
       currentTabIndex = index + 1;
 
       fetch(`/en/get_chart_data/${currentTabIndex}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
+        .catch((error) => {
+          console.error("Error fetching data:", error);
         });
     });
   });
 
-
-function addSkillItem(skill_item_json) {
-	  let skill_item_template_clone = skill_item_template.content.cloneNode(true);
-
-}
-
-
-
+  function addSkillItem(skill_item_json) {
+    let skill_item_template_clone = skill_item_template.content.cloneNode(true);
+  }
 </script>

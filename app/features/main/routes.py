@@ -29,18 +29,21 @@ def before_request():
 
 # Multiligual End
 
+def load_json(filename):
+    filename = os.path.join(app.static_folder, filename)
+    with open(filename) as json_file:
+        json_data = json.load(json_file)
+    return json_data
+
 @main.route('/')
 def index():
-    filename = os.path.join(app.static_folder, 'data/skillset/skillset.json')
-    print('kuy')
-    with open(filename) as json_file:
-        skillset_data = json.load(json_file)
-
-    return render_template('main/index.html', title=_('waramity portfolio'), skillset_data=skillset_data)
+    skill_data = load_json('data\\skill\\skill.json')
+    return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data)
 
 @main.route('/get_chart_data/<int:index>')
 def get_chart_data(index):
     index -= 1
-    if index < 1 or index > len(skillset_data):
+    skill_data = load_json('data\\skill\\skill.json')
+    if index < 1 or index > len(skill_data):
         return jsonify({"error": "Invalid index"})
-    return jsonify(skillset_data[index - 1])
+    return jsonify(skill_data[index - 1])
