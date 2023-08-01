@@ -2,18 +2,14 @@
   <div class="container">
     <div class="row">
       <div class="col-12 section-title-wrap text-center parallax-fade-top">
-        <p class="primary-color">always</p>
+        <p class="primary-color">my</p>
         <h1>work</h1>
       </div>
     </div>
   </div>
 </div>
 
-
-
-
 <style media="screen">
-
   .blog-post-box {
     position: relative;
     display: inline-block;
@@ -76,7 +72,6 @@
     background-image: url("http://ivang-design.com/alke/img/blog/7.jpg");
   }
 
-
   @media (max-width: 991px) {
     .h5 {
       font-size: 1.2rem;
@@ -91,7 +86,6 @@
 </style>
 
 <script type="text/javascript">
-
   $(window).mousemove(function (e) {
     $(".cursor").css({
       left: e.pageX,
@@ -105,16 +99,16 @@
     .on("mouseleave", function () {
       $(".cursor").removeClass("active");
     });
-for (let i = 1; i <= 7; i++) {
-  const linkClass = `.cursor-link-blog-post-${i}`;
-  const cursorClass = `active-blog-post-${i}`;
+  for (let i = 1; i <= 7; i++) {
+    const linkClass = `.cursor-link-blog-post-${i}`;
+    const cursorClass = `active-blog-post-${i}`;
 
-  $(linkClass)
-    .on("mouseenter", function () {
-      $(".cursor").addClass(cursorClass);
-    })
-    .on("mouseleave", function () {
-      $(".cursor").removeClass(cursorClass);
-    });
-}
+    $(linkClass)
+      .on("mouseenter", function () {
+        $(".cursor").addClass(cursorClass);
+      })
+      .on("mouseleave", function () {
+        $(".cursor").removeClass(cursorClass);
+      });
+  }
 </script>
