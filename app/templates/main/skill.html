@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<h1 class="display-4">Skill-Set</h1>
+<h1 class="display-4 mb-4">Skill-Set</h1>
 
 <ul class="nav nav-underline mb-3">
   {% for item in skill_data %}
@@ -50,16 +50,14 @@
   function initialSkillSection() {
     fetchSkillData(2);
     buttons[1].classList.add("active");
-    buttons[1].classList.add("text-dark");
   }
 
   buttons.forEach((button, index) => {
     button.addEventListener("click", () => {
       buttons[currentTabIndex - 1].classList.remove("active");
-      buttons[currentTabIndex - 1].classList.remove("text-dark");
+      buttons[currentTabIndex - 1].classList.add("text-secondary");
 
       button.classList.add("active");
-      button.classList.add("text-dark");
 
       currentTabIndex = index + 1;
 
