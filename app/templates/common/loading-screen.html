@@ -1,0 +1,74 @@
+<div id="loading-screen"></div>
+
+<style>
+
+#loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+@keyframes rotationCycle {
+  0% { transform: rotate(-90deg) scale(0) }
+  40% { transform: rotate(0deg) scale(1) }
+  50% { transform: rotate(0deg) scale(1) }
+  100% { transform: rotate(90deg) scale(0) }
+}
+
+#loading-screen img {
+  animation-name: rotationCycle;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+  height: 60px;
+  width: auto;
+}
+
+#container img:nth-child(2) { animation-delay: 10ms }
+#container img:nth-child(3) { animation-delay: 50ms }
+#container img:nth-child(4) { animation-delay: 100ms }
+</style>
+
+<script>
+let images = ['/static/assets/images/square.png', '/static/assets/images/circle.png', '/static/assets/images/x.png', '/static/assets/images/triangle.png']
+
+let firstImage = document.createElement("img"),
+    secondImage = document.createElement("img"),
+    thirdImage = document.createElement("img"),
+    fourthImage = document.createElement("img");
+
+let orderedImages = images.sort(() => Math.random() - 0.5);
+
+firstImage.src = orderedImages[0];
+secondImage.src = orderedImages[1];
+thirdImage.src = orderedImages[2];
+fourthImage.src = orderedImages[3];
+
+let container = document.getElementById('loading-screen')
+
+container.appendChild(firstImage);
+container.appendChild(secondImage);
+container.appendChild(thirdImage);
+container.appendChild(fourthImage);
+</script>
+
+<script>
+	// main.js
+
+// Wait for the entire page to load
+window.addEventListener('load', function () {
+    // Hide the loading screen
+	    setTimeout(function () {
+
+    var loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'none';
+
+    // Show the main content
+    var mainContent = document.getElementById('main-content');
+    mainContent.style.display = 'block';
+		        }, 1500); // Delay time in milliseconds (1.5 seconds in this example)
+
+});
+
+	</script>

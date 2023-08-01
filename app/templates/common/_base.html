@@ -31,8 +31,13 @@
 
   <body>
     {% include "common/nav.html" %}
-    <div class="mb-5">
+
+    {% include "common/loading-screen.html" %}
+    <div id="main-content" class="mb-5" style="display: none">
       {% block content %} {% endblock %}
+    </div>
+
+
     </div>
     {% include "common/footer.html" %}
     <script
