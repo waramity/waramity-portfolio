@@ -1,45 +1,39 @@
 
 <style>
-* {
-	cursor: none;
-}
-.cursor {
+  * {
+    cursor: none;
+  }
+  .cursor {
     --size: 8px;
     height: var(--size);
-    width:  var(--size);
+    width: var(--size);
     border-radius: 50%;
     position: absolute;
     z-index: 10000;
     transform: translate(-50%, -50%);
     pointer-events: none;
-}
-.cursor.cursor-shadow {
+  }
+  .cursor.cursor-shadow {
     background-color: transparent;
     border: 1px solid #fff;
     --size: 40px;
-    transition: top .2s, left .2s,
-                width .2s, height .2s,
-                background-color .2s, border-color 0.2s;
+    transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s,
+      background-color 0.2s, border-color 0.2s;
     transition-timing-function: ease-out;
-}
-.cursor.cursor-dot {
+  }
+  .cursor.cursor-dot {
     background: #7f6ed2;
-    transition: width .2s, height .2s;
-}
-.cursor-shadow.active {
+    transition: width 0.2s, height 0.2s;
+  }
+  .cursor-shadow.active {
     --size: 80px;
-    border-color: rgba(255,255,255, 0);
-    background-color: rgba(255,255,255,.1);
-}
-.cursor-dot.active {
-	  --size: 0;
-}
-a {
-	  cursor: pointer;
-}
-a:hover {
-  	text-decoration: none;
-}</style>
+    border-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .cursor-dot.active {
+    --size: 0;
+  }
+</style>
 
 <div class="cursor cursor-shadow"></div>
 <div class="cursor cursor-dot"></div>
