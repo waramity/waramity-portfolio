@@ -33,6 +33,9 @@ h5,
   font-size: 1.8rem;
   font-weight: 500;
 }
+a {
+	text-decoration: none
+} 
 ::selection {
   color: #fff;
 }
