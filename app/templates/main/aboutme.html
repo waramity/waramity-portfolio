@@ -1,15 +1,15 @@
 <style>
-  h1::before {
+  .intro-header::before {
     transform: scaleX(0);
     transform-origin: bottom right;
   }
 
-  h1:hover::before {
+  .intro-header:hover::before {
     transform: scaleX(1);
     transform-origin: bottom left;
   }
 
-  h1::before {
+  .intro-header::before {
     content: " ";
     display: block;
     position: absolute;
@@ -23,11 +23,11 @@
     transition: transform 0.3s ease;
   }
 
-  h1 {
+  .intro-header {
     position: relative;
   }
 </style>
 
-<h1 class="display-3">
+<h1 class="display-3 intro-header">
   {{_('Hello, I\'m Full stack Developer')}}
 </h1>
