@@ -1,8 +1,11 @@
 {% extends "common/_base.html" %} {% include "common/cursor.html" %} {% block
-content %} 
-<div style="margin-top: 20rem; margin-bottom: 20rem">
-{% include "main/aboutme.html" %}
+content %}
+<div class="ms-5" style="margin-top: 30em; margin-bottom: 30rem;">
+  {% include "main/aboutme.html" %}
 </div>
- {% include "main/experience.html"
-%} {% include "main/skill.html" %}{% include "main/work.html" %} {% include
-"main/want-to-up.html" %} {%endblock%}
+
+<div class="container">
+  {% include "main/experience.html" %} {% include "main/skill.html" %}
+</div>
+
+{% include "main/work.html" %} {% include "main/want-to-up.html" %} {%endblock%}
