@@ -2,7 +2,7 @@
   {
     "title": "Programming Languages",
     "labels": ["Python", "Javascript", "HTML", "CSS"],
-    "images": ["python.png", "javascript.png", "html.png", "css.png"]
+    "images": ["python.png", "javascript.png", "html.png", "css.jpeg"]
   },
   {
     "title": "Web & Mobile Development",
@@ -18,9 +18,9 @@
     "images": [
       "flask.png",
       "jquery.png",
-      "sqlachemy.png",
+      "sqlalchemy.png",
       "react.png",
-      "react-native.png",
+      "react-native.jpeg",
       "expo.png",
       "socket-io.png"
     ]
@@ -34,8 +34,8 @@
     "title": "Cloud Services",
     "labels": ["Docker", "Kubertenes", "Digital Ocean", "Heroku", "GoDaddy"],
     "images": [
-      "docker.png",
-      "kubertenes.png",
+      "docker.webp",
+      "kubernetes.png",
       "digital-ocean.png",
       "heroku.png",
       "go-daddy.png"
@@ -45,11 +45,8 @@
     "title": "Authentication",
     "labels": ["OAuth", "LINE Official Account"],
     "images": [
-      "docker.png",
-      "kubertenes.png",
-      "digital-ocean.png",
-      "heroku.png",
-      "go-daddy.png"
+      "oauth.png",
+      "line-official-account.png"
     ]
   }
 ]
