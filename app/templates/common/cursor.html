@@ -37,3 +37,31 @@
 
 <div class="cursor cursor-shadow"></div>
 <div class="cursor cursor-dot"></div>
+
+<script type="text/javascript">
+  $(window).mousemove(function (e) {
+    $(".cursor").css({
+      left: e.pageX,
+      top: e.pageY,
+    });
+  });
+  $(".cursor-link")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active");
+    });
+  for (let i = 1; i <= 7; i++) {
+    const linkClass = `.cursor-link-blog-post-${i}`;
+    const cursorClass = `active-blog-post-${i}`;
+
+    $(linkClass)
+      .on("mouseenter", function () {
+        $(".cursor").addClass(cursorClass);
+      })
+      .on("mouseleave", function () {
+        $(".cursor").removeClass(cursorClass);
+      });
+  }
+</script>
