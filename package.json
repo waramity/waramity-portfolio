@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "dev": "webpack serve --mode development --open"
+    "dev": "npx webpack serve"
   },
   "dependencies": {
     "@babel/core": "^7.22.9",
