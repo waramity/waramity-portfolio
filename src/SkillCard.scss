@@ -9,18 +9,7 @@
   --card-width: calc(var(--card-height) / 1.5);
 }
 
-body {
-  min-height: 100vh;
-  background: #212534;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  box-sizing: border-box;
-}
-
-.card {
+.skill-card {
   background: #191c29;
   width: var(--card-width);
   height: var(--card-height);
@@ -33,21 +22,10 @@ body {
   display: flex;
   font-size: 1.5em;
   color: rgba(88, 199, 250, 0);
-  cursor: pointer;
   font-family: cursive;
 }
 
-.card:hover {
-  color: rgba(88, 199, 250, 1);
-  transition: color 1s;
-}
-.card:hover:before,
-.card:hover:after {
-  animation: none;
-  opacity: 0;
-}
-
-.card::before {
+.skill-card::before {
   content: "";
   width: 104%;
   height: 102%;
@@ -65,7 +43,7 @@ body {
   animation: spin 2.5s linear infinite;
 }
 
-.card::after {
+.skill-card::after {
   position: absolute;
   content: "";
   top: calc(var(--card-height) / 6);
