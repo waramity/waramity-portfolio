@@ -2,13 +2,16 @@
   {
     "title": "Programming Languages",
     "labels": ["Python", "Javascript", "HTML", "CSS"],
-    "images": ["python.png", "javascript.png", "html.png", "css.jpeg"]
+    "images": ["python.png", "javascript.png", "html.png", "css.png"]
   },
   {
     "title": "Web & Mobile Development",
     "labels": [
-      "Flask",
       "JQuery",
+      "SCSS",
+      "TypeScript",
+      "Babel",
+      "Flask",
       "SQLAlchemy",
       "React",
       "React Native",
@@ -16,8 +19,11 @@
       "Socket.io"
     ],
     "images": [
-      "flask.png",
       "jquery.png",
+      "scss.png",
+      "type-script.png",
+      "babel.png",
+      "flask.png",
       "sqlalchemy.png",
       "react.png",
       "react-native.jpeg",
@@ -44,9 +50,6 @@
   {
     "title": "Authentication",
     "labels": ["OAuth", "LINE Official Account"],
-    "images": [
-      "oauth.png",
-      "line-official-account.png"
-    ]
+    "images": ["oauth.png", "line-official-account.png"]
   }
 ]
