@@ -15,7 +15,7 @@ const Card = ({ title, content }) => (
 
 const SkillCard = () => (
   <div className="mt-5">
-    <Card title={"Card " + 1} content="dasfjar" />
+    <Card title={"Card " + 1} content="dddddddddddasdad" />
   </div>
 );
 

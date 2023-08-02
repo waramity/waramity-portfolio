@@ -5,15 +5,16 @@ module.exports = {
   entry: "./src/index.js",
   output: {
     filename: "index.js",
-    publicPath: "app/static", // instead of publicPath: '/build/'
+    publicPath: path.resolve(__dirname, "app/static"), // instead of publicPath: '/build/'
     path: path.resolve(__dirname, "app/static"),
   },
   devServer: {
+    hot: true,
     liveReload: true,
     static: {
       directory: path.join(__dirname, "app/static"),
     },
-    watchFiles: ["src/*.js", "app/static/*.js"],
+    watchFiles: ["./src/*.js", path.join(__dirname, "app/static")],
     compress: true,
     port: 9000,
   },
