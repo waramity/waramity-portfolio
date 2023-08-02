@@ -1,14 +1,15 @@
 {% extends "common/_base.html" %} {% include "common/cursor.html" %} {% block
 content %}
-<div class="ms-5" style="margin-top: 30em; margin-bottom: 30rem; "">
+<div class="ms-5" style="margin-top: 30em; margin-bottom: 30rem;">
   {% include "main/aboutme.html" %}
 </div>
 
-<div class="container" >
+<div class="container">
   {% include "main/experience.html" %} {% include "main/skill.html" %}
 </div>
 
-{% include "main/work.html" %} {% include "main/want-to-up.html" %} 
-
+{% include "main/work.html" %} {% include "main/want-to-up.html" %}
+<div id="root"></div>
+<script src="/static/index.js"></script>
 
 {%endblock%}
