@@ -78,30 +78,70 @@ interface CardData {
   title: string;
 }
 
+interface CurrentCard {
+  images: string[];
+  labels: string[];
+}
+
 const SkillCard: React.FC = () => {
   const [cardsData, setCardsData] = useState<CardData[]>(); // Use a more specific type if possible
+  const [currentCard, setCurrentCard] = useState<CurrentCard>(); // Use the initial image source here
 
   useEffect(() => {
     fetch("/en/get_skill_nav")
       .then((response) => response.json())
       .then((data) => {
         setCardsData(data);
+        setCurrentCard({ labels: data[0].labels, images: data[0].images });
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  const handleCardChange = (card: CurrentCard) => {
+    setCurrentCard(card);
+  };
+
   return (
     <div className="row">
-      <div className="col-4"></div>
-      <div className="col-8">
+      <div className="col-6">
+        <ul className="nav nav-underline mb-3 flex-column">
+          {cardsData ? (
+            cardsData.map((item: CardData, i: number) => (
+              <li className="nav-item" role="presentation">
+                <button
+                  onClick={() =>
+                    handleCardChange({
+                      labels: item.labels,
+                      images: item.images,
+                    })
+                  }
+                  className={`nav-link text-secondary ${
+                    i === 0 ? "active" : ""
+                  }`}
+                  style={
+                    {
+                      fontSize: "1.33rem",
+                    } as CSSProperties
+                  }
+                >
+                  {item.title}
+                </button>
+              </li>
+            ))
+          ) : (
+            <p>Loading data...</p>
+          )}
+        </ul>
+      </div>
+      <div className="col-6">
         <div className="mt-5">
           <Carousel>
-            {cardsData ? (
-              cardsData[0].labels.map((label: string, i: number) => (
+            {currentCard ? (
+              currentCard.labels.map((label: string, i: number) => (
                 <Card
                   key={i}
                   title={label}
-                  image={"/static/data/skill/" + cardsData[0].images[i]}
+                  image={"/static/data/skill/" + currentCard.images[i]}
                 />
               ))
             ) : (
