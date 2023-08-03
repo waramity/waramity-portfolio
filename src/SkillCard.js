@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
@@ -57,14 +57,35 @@ const Carousel = ({ children }) => {
   );
 };
 
-const SkillCard = () => (
-  <div className="mt-5">
-    <Carousel>
-      {[...new Array(CARDS)].map((_, i) => (
-        <Card title={"Card " + (i + 1)} content="" />
-      ))}
-    </Carousel>
-  </div>
-);
+const SkillCard = () => {
+  const [cardsData, setCardsData] = useState();
+
+  useEffect(() => {
+    fetch("/en/get_skill_data/2")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setCardsData(data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  console.log(cardsData);
+  console.log(typeof cardsData);
+
+  return (
+    <div className="mt-5">
+      <Carousel>
+        {cardsData ? (
+          cardsData.labels.map((label, i) => (
+            <Card key={i} title={label} content="" />
+          ))
+        ) : (
+          <p>Loading data...</p>
+        )}
+      </Carousel>
+    </div>
+  );
+};
 
 export default SkillCard;
