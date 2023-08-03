@@ -10,13 +10,17 @@ const MAX_VISIBILITY: number = 3;
 
 interface CardProps {
   title: string;
-  content: string;
+  image: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, content }) => (
-  <div className="skill-card">
-    <h2>{title}</h2>
-    <p>{content}</p>
+const Card: React.FC<CardProps> = ({ title, image }) => (
+  <div className="skill-card row">
+    <div className="col-12 text-center">
+      <img src={image} alt={title} className="w-50" />
+    </div>
+    <div className="col-12">
+      <h2>{title}</h2>
+    </div>
   </div>
 );
 
@@ -25,7 +29,7 @@ interface CarouselProps {
 }
 
 const Carousel: React.FC<CarouselProps> = ({ children }) => {
-  const [active, setActive] = useState<number>(2);
+  const [active, setActive] = useState<number>(0);
   const count: number = React.Children.count(children);
 
   return (
@@ -75,21 +79,21 @@ const SkillCard: React.FC = () => {
     fetch("/en/get_skill_data/2")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setCardsData(data);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
-
-  console.log(cardsData);
-  console.log(typeof cardsData);
 
   return (
     <div className="mt-5">
       <Carousel>
         {cardsData ? (
           cardsData.labels.map((label: string, i: number) => (
-            <Card key={i} title={label} content="" />
+            <Card
+              key={i}
+              title={label}
+              image={"/static/data/skill/" + cardsData.images[i]}
+            />
           ))
         ) : (
           <p>Loading data...</p>

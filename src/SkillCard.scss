@@ -2,7 +2,8 @@ $color-purple: #8b5cf6;
 $color-pink: #ec4899;
 $color-gray: #9ca3af;
 $color-black: #1f2937;
-$card-size: 23rem;
+$card-width: 15rem;
+$card-height: 15rem;
 
 @property --rotate {
   syntax: "<angle>";
@@ -21,7 +22,7 @@ $card-size: 23rem;
   height: var(--card-height);
   padding: 3px;
   position: relative;
-  border-radius: 6px;
+  border-radius: 50%;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -35,7 +36,7 @@ $card-size: 23rem;
   content: "";
   width: 104%;
   height: 102%;
-  border-radius: 8px;
+  border-radius: 50%;
   background-image: linear-gradient(
     var(--rotate),
     #5ddcff,
@@ -87,8 +88,8 @@ $card-size: 23rem;
 
 .carousel {
   position: relative;
-  width: $card-size;
-  height: $card-size;
+  width: $card-width;
+  height: $card-height;
   perspective: 500px;
   transform-style: preserve-3d;
 }
@@ -109,7 +110,6 @@ $card-size: 23rem;
   width: 100%;
   height: 100%;
   padding: 2rem;
-  border-radius: 1rem;
   color: $color-gray;
   text-align: justify;
   transition: all 0.3s ease-out;
