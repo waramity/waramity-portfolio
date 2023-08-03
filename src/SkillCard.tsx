@@ -26,10 +26,12 @@ const Card: React.FC<CardProps> = ({ title, image }) => (
 
 interface CarouselProps {
   children: React.ReactNode;
+  active: number; // Add the active prop
+  setActive: React.Dispatch<React.SetStateAction<number>>; // Add the setActive prop
 }
 
-const Carousel: React.FC<CarouselProps> = ({ children }) => {
-  const [active, setActive] = useState<number>(0);
+const Carousel: React.FC<CarouselProps> = ({ children, active, setActive }) => {
+  // const [active, setActive] = useState<number>(0);
   const count: number = React.Children.count(children);
 
   return (
@@ -87,6 +89,10 @@ const SkillCard: React.FC = () => {
   const [cardsData, setCardsData] = useState<CardData[]>(); // Use a more specific type if possible
   const [currentCard, setCurrentCard] = useState<CurrentCard>(); // Use the initial image source here
 
+  const [active, setActive] = useState<number>(0); // Move active state here
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
     fetch("/en/get_skill_nav")
       .then((response) => response.json())
@@ -97,8 +103,11 @@ const SkillCard: React.FC = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const handleCardChange = (card: CurrentCard) => {
+  const handleCardChange = (card: CurrentCard, index: number) => {
     setCurrentCard(card);
+    setActive(0);
+
+    setActiveIndex(index);
   };
 
   return (
@@ -110,13 +119,16 @@ const SkillCard: React.FC = () => {
               <li className="nav-item" role="presentation">
                 <button
                   onClick={() =>
-                    handleCardChange({
-                      labels: item.labels,
-                      images: item.images,
-                    })
+                    handleCardChange(
+                      {
+                        labels: item.labels,
+                        images: item.images,
+                      },
+                      i // Pass the current index here
+                    )
                   }
                   className={`nav-link text-secondary ${
-                    i === 0 ? "active" : ""
+                    i === activeIndex ? "active" : ""
                   }`}
                   style={
                     {
@@ -135,7 +147,7 @@ const SkillCard: React.FC = () => {
       </div>
       <div className="col-6">
         <div className="mt-5">
-          <Carousel>
+          <Carousel active={active} setActive={setActive}>
             {currentCard ? (
               currentCard.labels.map((label: string, i: number) => (
                 <Card
