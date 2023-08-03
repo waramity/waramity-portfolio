@@ -47,3 +47,8 @@ def get_skill_data(index):
     if index < 1 or index > len(skill_data):
         return jsonify({"error": "Invalid index"})
     return jsonify(skill_data[index - 1])
+
+@main.route('/get_skill_nav')
+def get_skill_nav():
+    skill_data = load_json('data/skill/skill.json')
+    return jsonify(skill_data)

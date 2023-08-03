@@ -14,12 +14,12 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ title, image }) => (
-  <div className="skill-card row">
-    <div className="col-12 text-center">
+  <div className="skill-card row p-5">
+    <div className="col-12 text-center pt-3 mt-2">
       <img src={image} alt={title} className="w-50" />
     </div>
     <div className="col-12">
-      <h2>{title}</h2>
+      <h2 className="text-white">{title}</h2>
     </div>
   </div>
 );
@@ -72,11 +72,17 @@ const Carousel: React.FC<CarouselProps> = ({ children }) => {
   );
 };
 
+interface CardData {
+  images: string[];
+  labels: string[];
+  title: string;
+}
+
 const SkillCard: React.FC = () => {
-  const [cardsData, setCardsData] = useState<any>(); // Use a more specific type if possible
+  const [cardsData, setCardsData] = useState<CardData[]>(); // Use a more specific type if possible
 
   useEffect(() => {
-    fetch("/en/get_skill_data/2")
+    fetch("/en/get_skill_nav")
       .then((response) => response.json())
       .then((data) => {
         setCardsData(data);
@@ -85,20 +91,25 @@ const SkillCard: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-5">
-      <Carousel>
-        {cardsData ? (
-          cardsData.labels.map((label: string, i: number) => (
-            <Card
-              key={i}
-              title={label}
-              image={"/static/data/skill/" + cardsData.images[i]}
-            />
-          ))
-        ) : (
-          <p>Loading data...</p>
-        )}
-      </Carousel>
+    <div className="row">
+      <div className="col-4"></div>
+      <div className="col-8">
+        <div className="mt-5">
+          <Carousel>
+            {cardsData ? (
+              cardsData[0].labels.map((label: string, i: number) => (
+                <Card
+                  key={i}
+                  title={label}
+                  image={"/static/data/skill/" + cardsData[0].images[i]}
+                />
+              ))
+            ) : (
+              <p>Loading data...</p>
+            )}
+          </Carousel>
+        </div>
+      </div>
     </div>
   );
 };
