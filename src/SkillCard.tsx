@@ -153,7 +153,7 @@ const SkillCard: React.FC = () => {
                 <Card
                   key={i}
                   title={label}
-                  image={"/static/data/skill/" + currentCard.images[i]}
+                  image={"/static/data/main/" + currentCard.images[i]}
                 />
               ))
             ) : (

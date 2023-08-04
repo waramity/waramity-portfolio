@@ -1,0 +1,17 @@
+<h2 class="text-white">this website create from:</h2>
+
+{% for item in skill_data %}
+<li class="nav-item" role="presentation">
+  <button
+    class="nav-link text-secondary"
+    id="{{ loop.index }}-skillset-tab"
+    data-bs-toggle="tab"
+    data-bs-target="#{{ loop.index }}-skillset-tab-pane"
+    type="button"
+    role="tab"
+    aria-controls="{{ loop.index }}-skillset-tab-pane"
+  >
+    {{ item.title }}
+  </button>
+</li>
+{% endfor %}
