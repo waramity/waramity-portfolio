@@ -1,17 +1,15 @@
-<h2 class="text-white">this website create from:</h2>
+<style media="screen">
+  .sa-icon {
+    filter: grayscale(100%);
+  }
+</style>
 
-{% for item in skill_data %}
-<li class="nav-item" role="presentation">
-  <button
-    class="nav-link text-secondary"
-    id="{{ loop.index }}-skillset-tab"
-    data-bs-toggle="tab"
-    data-bs-target="#{{ loop.index }}-skillset-tab-pane"
-    type="button"
-    role="tab"
-    aria-controls="{{ loop.index }}-skillset-tab-pane"
-  >
-    {{ item.title }}
-  </button>
-</li>
-{% endfor %}
+<h2 class="text-white mb-5 text-center display-6">This website create from:</h2>
+
+<div class="row">
+  {% for icon in system_architecture_icons %}
+  <div class="col">
+    <img src="/static/data/main/{{icon}}" class="w-100 sa-icon" />
+  </div>
+  {% endfor %}
+</div>

@@ -38,7 +38,8 @@ def load_json(filename):
 @main.route('/')
 def index():
     skill_data = load_json('data/main/skill.json')
-    return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data)
+    system_architecture_icons = ['python.png', 'javascript.png', 'html.png', 'css.png', 'jquery.png', 'scss.png', 'type-script.png', 'babel.png', 'flask.png', 'sqlalchemy.png', 'react.png', 'socket-io.png']
+    return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data, system_architecture_icons=system_architecture_icons)
 
 @main.route('/get_skill_data/<int:index>')
 def get_skill_data(index):

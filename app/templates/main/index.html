@@ -5,8 +5,14 @@ content %}
 </div>
 
 <div class="container">
-  {% include "main/experience.html" %} {% include "main/skill.html" %} {%
-  include "main/system-architecture.html" %}
+  {% include "main/experience.html" %}
+  <div class="p-5">
+    {% include "main/skill.html" %}
+  </div>
+
+  <div class="m-5" style="margin-top: 10rem;">
+    {% include "main/system-architecture.html" %}
+  </div>
 </div>
 
 {% include "main/work.html" %} {% include "main/want-to-up.html" %} {%endblock%}
