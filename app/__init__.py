@@ -3,10 +3,14 @@ from flask_babel import Babel
 from config import Config
 
 from pycoingecko import CoinGeckoAPI
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 babel = Babel(app)
 coin_gecko = CoinGeckoAPI()
+socketio = SocketIO()
+
+socketio.init_app(app, manage_session=False)
 
 app.config.from_object(Config)
 
