@@ -2,6 +2,8 @@
 from flask import (render_template, Blueprint, g, redirect,
                    request, current_app, abort, url_for, jsonify, make_response, json)
 
+from flask_babel import _, refresh
+
 crypto = Blueprint('crypto', __name__, template_folder='templates', url_prefix='/<lang_code>' )
 
 # Multiligual Start
@@ -19,3 +21,7 @@ def before_request():
         abort(404)
 
 # Multiligual End
+
+@crypto.route('/crypto')
+def index():
+    return render_template('crypto/index.html', title=_('waramity portfolio'))

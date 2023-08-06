@@ -26,3 +26,5 @@ def index():
     if not g.get('lang_code', None):
         get_locale()
     return redirect(url_for('main.index'))
+
+    
