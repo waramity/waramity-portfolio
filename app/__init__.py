@@ -2,6 +2,7 @@ from flask import Flask, g, request, redirect, url_for
 from flask_babel import Babel
 from config import Config
 
+
 app = Flask(__name__)
 
 app.config.from_object(Config)
@@ -26,5 +27,3 @@ def index():
     if not g.get('lang_code', None):
         get_locale()
     return redirect(url_for('main.index'))
-
-    
