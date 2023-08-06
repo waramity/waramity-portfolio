@@ -1,45 +1,47 @@
 <div class="bg-dark text-white">
   <footer class="row p-5 border-top">
-
     <div class="col-3">
-      <h5>Section</h5>
+      <h5 class="fw-bold mb-3">Thank you!</h5>
       <ul class="nav flex-column">
-        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Home</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Features</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Pricing</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">FAQs</a></li>
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link p-0 text-white">Home</a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="#experience-section" class="nav-link p-0 text-white"
+            >Experience</a
+          >
+        </li>
+        <li class="nav-item mb-2">
+          <a href="#skill-section" class="nav-link p-0 text-white">Skill</a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="#work-section" class="nav-link p-0 text-white">Work</a>
+        </li>
       </ul>
     </div>
 
     <div class="col-6 text-center">
-
-          <img src="{{ url_for('static', filename='assets/images/cropped-logo-black.png') }}" class="w-50 pb-2 pt-4"/>
+      <img
+        src="{{ url_for('static', filename='assets/images/cropped-logo-black.png') }}"
+        class="w-50 pb-2 pt-4"
+      />
       <p>Copyright © 2023</p>
     </div>
 
-
     <div class="col-3">
-	    <div class="row border border-2">
-	    <div class="col-7 pt-4  pe-2">
+      <div class="row border border-2">
+        <div class="col-7 pt-4 pe-2">
+          <h3 class="fw-bold border-bottom border-2 pb-2">CONTACT ME .</h3>
+          <p class="">Send via Email</p>
+        </div>
 
-		    <h3 class="fw-bold border-bottom border-2 pb-2">CONTACT ME .</h3>
-		    <p class="">Send via Email</p>
-
-
+        <div class="col-5" style="border-left: 3px dashed #ffffff;">
+          <img
+            src="{{ url_for('static', filename='assets/images/contact-me-qrcode.png') }}"
+            class="w-100 pt-3 pb-3"
+          />
+        </div>
+      </div>
     </div>
-
-	    <div class="col-5" style="  border-left: 3px dashed #FFFFFF;
-">
-	    
-          <img src="{{ url_for('static', filename='assets/images/contact-me-qrcode.png') }}" class="w-100 pt-3 pb-3"/>
-
-
-    </div>
-
-    </div>
-    </div>
-
-    </div>
-
   </footer>
 </div>

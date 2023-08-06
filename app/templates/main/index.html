@@ -5,14 +5,19 @@ content %}
 </div>
 
 <div class="container">
-  {% include "main/experience.html" %}
-  <div class="p-5">
+  <div class="p-5" id="experience-section">
+    {% include "main/experience.html" %}
+  </div>
+  <div class="p-5" id="skill-section">
     {% include "main/skill.html" %}
   </div>
 
-  <div class="m-5" style="margin-top: 10rem;">
+  <div id="system-architecture-section" class="m-5" style="margin-top: 10rem;">
     {% include "main/system-architecture.html" %}
   </div>
 </div>
 
-{% include "main/work.html" %} {% include "main/want-to-up.html" %} {%endblock%}
+<div id="work-section">
+  {% include "main/work.html" %}
+</div>
+{% include "main/want-to-up.html" %} {%endblock%}
