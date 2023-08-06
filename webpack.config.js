@@ -4,7 +4,7 @@ module.exports = {
   mode: "development", // Set it to 'development' or 'production' as needed.
   entry: "./src/index.tsx",
   output: {
-    filename: "index.js",
+    filename: "bundle.js",
     publicPath: path.resolve(__dirname, "app/static"), // instead of publicPath: '/build/'
     path: path.resolve(__dirname, "app/static"),
   },
