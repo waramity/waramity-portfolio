@@ -133,6 +133,7 @@ const SkillCard: React.FC = () => {
                   style={
                     {
                       fontSize: "1.33rem",
+                      cursor: "none",
                     } as CSSProperties
                   }
                 >
