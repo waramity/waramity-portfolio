@@ -4,7 +4,7 @@ from flask import (render_template, Blueprint, g, redirect,
 
 from flask_babel import _, refresh
 
-from app import coin_gecko
+from app import coin_gecko, socketio
 
 crypto = Blueprint('crypto', __name__, template_folder='templates', url_prefix='/<lang_code>' )
 
@@ -26,6 +26,13 @@ def before_request():
 
 coin = coin_gecko.get_coin_market_chart_by_id(id="bitcoin", vs_currency="thb", days="1")
 print(coin)
+
 @crypto.route('/crypto')
 def index():
     return render_template('crypto/index.html', title=_('waramity portfolio'))
+
+@socketio.on('tick')
+def handle_tick(data):
+    global tick_count
+    tick_count += 1
+    socketio.emit('tick', {'tick_count': tick_count}, broadcast=True)

@@ -20,7 +20,6 @@ app.register_blueprint(main_blueprint)
 from app.features.crypto import crypto as crypto_blueprint
 app.register_blueprint(crypto_blueprint)
 
-
 @babel.localeselector
 def get_locale():
     if not g.get('lang_code', None):
