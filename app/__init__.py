@@ -2,8 +2,11 @@ from flask import Flask, g, request, redirect, url_for
 from flask_babel import Babel
 from config import Config
 
+from pycoingecko import CoinGeckoAPI
 
 app = Flask(__name__)
+babel = Babel(app)
+coin_gecko = CoinGeckoAPI()
 
 app.config.from_object(Config)
 
@@ -13,7 +16,6 @@ app.register_blueprint(main_blueprint)
 from app.features.crypto import crypto as crypto_blueprint
 app.register_blueprint(crypto_blueprint)
 
-babel = Babel(app)
 
 @babel.localeselector
 def get_locale():
