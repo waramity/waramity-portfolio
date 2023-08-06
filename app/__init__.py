@@ -9,6 +9,9 @@ app.config.from_object(Config)
 from app.features.main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
+from app.features.crypto import crypto as crypto_blueprint
+app.register_blueprint(crypto_blueprint)
+
 babel = Babel(app)
 
 @babel.localeselector
