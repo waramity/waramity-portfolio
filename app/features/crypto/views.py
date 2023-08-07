@@ -1,2 +1,36 @@
-def tick():
-    print('tick')
+from app import coin_gecko
+from flask_socketio import SocketIO
+
+# def ping_in_intervals():
+#     while True:
+#         socketio.sleep(10)
+#         socketio.emit('ping')
+#
+# def ping():
+#     print('ping')
+#     socketio.emit('ping', {'message': 'ping'}, broadcast=True)
+
+socketio = SocketIO()
+
+coin = coin_gecko.get_coin_market_chart_by_id(id="bitcoin", vs_currency="thb", days="1")
+print(coin)
+
+# thread = socketio.start_background_task(ping_in_intervals)
+@socketio.on('connect', namespace='/crypto')
+def on_connect():
+    print('Client connected to crypto page')
+
+@socketio.on('disconnect', namespace='/crypto')
+def on_disconnect():
+    print('Client disconnected from crypto page')
+
+@socketio.on('custom_event', namespace='/crypto')
+def on_custom_event(data):
+    print('Custom event received:', data)
+
+@socketio.on('my_ping', namespace='/crypto')
+def on_my_ping():
+    print('Received ping from client')
+
+
+# Schedule the trigger_tick_update function to run every 5 seconds

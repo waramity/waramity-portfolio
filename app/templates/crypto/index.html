@@ -6,8 +6,31 @@ crypto!!!
   crossorigin="anonymous"
 ></script>
 <script type="text/javascript">
-  var socket = io();
-  socket.on("tick", (payload) => {
-    console.log(payload);
+  // var socket = io();
+
+  const socket = io("/crypto");
+
+  socket.on("connect", () => {
+    console.log("Connected to server");
+    setInterval(() => {
+      // socket.emit('my_event', {data: 'I\'m connected!'});
+      // socket.emit("ping");
+
+      // socket.emit("connect");
+      socket.emit("my_ping");
+      console.log("kuy");
+    }, 1000); // Send a ping every second
   });
+
+  // socket.on("my_response", function (msg, cb) {
+  //   console.log("sis");
+  // });
+
+  // socket.on("pong", () => {
+  //   console.log("Received pong from server");
+  // });
+  // socket.on("ping", (payload) => {
+  //   console.log("ping");
+  //   console.log(payload);
+  // });
 </script>

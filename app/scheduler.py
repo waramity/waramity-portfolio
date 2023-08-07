@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from app.features.crypto import tick
+# from app.features.crypto import ping
 
 job_defaults = {
     'coalesce': False,
@@ -7,4 +7,4 @@ job_defaults = {
 }
 
 sched = BackgroundScheduler(job_defaults=job_defaults)
-sched.add_job(tick, 'interval', seconds=3)
+# sched.add_job(ping, 'interval', seconds=3)
