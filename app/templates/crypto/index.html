@@ -7,6 +7,8 @@ crypto!!!
   integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
   crossorigin="anonymous"
 ></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script type="text/javascript">
   // var socket = io();
 
@@ -55,35 +57,74 @@ crypto!!!
     setTimeout(startClock, 1000);
   }
 
-  // Start the clock
   startClock();
 </script>
 
 <script type="text/javascript">
-  async prepareOrderBook() {
-     await fetch('https://api.binance.com/api/v3/depth?symbol=' + this.ticker + '&limit=100')
-     .then(response => response.text())
-     .then(data => {
-       console.log(data)
-       // let depth = JSON.parse(data);
-       // this.asks = depth.asks;
-       // this.bids = depth.bids;
-       //
-       // for (let i = 0; i < this.asks.length; i++) {
-       //   var arr = this.asks.map(x => {
-       //     return Number(x[1]);
-       //   });
-       //   this.asks[i].push(arr.slice(0, i+1).reduce((a,b)=>a+b))
-       // }
-       // for (let i = 0; i < this.bids.length; i++) {
-       //   var arr = this.bids.map(x => {
-       //     return Number(x[1]);
-       //   });
-       //   this.bids[i].push(arr.slice(0, i+1).reduce((a,b)=>a+b))
-       // }
-     });
+  async function prepareOrderBook() {
+    await fetch(
+      `https://api.binance.com/api/v3/depth?symbol=${this.ticker}&limit=100`
+    )
+      .then((response) => response.text())
+      .then((data) => {
+        let depth = JSON.parse(data);
+        this.asks = depth.asks;
+        this.bids = depth.bids;
 
-     // this.maxAsk = Math.max(...this.asks.map(x => { return x[2] }));
-     // setTimeout(async () => { await this.prepareOrderBook() }, 500);
-   }
+        for (let i = 0; i < this.asks.length; i++) {
+          var arr = this.asks.map((x) => {
+            return Number(x[1]);
+          });
+          this.asks[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+        }
+        for (let i = 0; i < this.bids.length; i++) {
+          var arr = this.bids.map((x) => {
+            return Number(x[1]);
+          });
+          this.bids[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+        }
+      });
+
+    this.maxAsk = Math.max(
+      ...this.asks.map((x) => {
+        return x[2];
+      })
+    );
+
+    setTimeout(async () => {
+      await prepareOrderBook.call(this);
+    }, 500);
+  }
+
+  const order_book_context = {
+    ticker: "BTCUSDT",
+    asks: [],
+    bids: [],
+    maxAsk: 0,
+  };
+
+  prepareOrderBook.call(order_book_context);
+</script>
+
+<div id="vm" class="container">
+  <p>[[ greeting ]]</p>
+  <p>[[ flaskGreeting ]]</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script type="text/javascript">
+  const apiEndpoint = "/en/crypto/";
+
+  const vm = new Vue({
+    el: "#vm",
+    delimiters: ["[[", "]]"],
+    data: {
+      greeting: "Hello, Vue!",
+      flaskGreeting: "flaskGreeting",
+    },
+    created: async function () {
+      const gResponse = await fetch(apiEndpoint + "greeting");
+      const gObject = await gResponse.json();
+      this.flaskGreeting = gObject.greeting;
+    },
+  });
 </script>
