@@ -1,5 +1,7 @@
 crypto!!!
 
+<p id="clock"></p>
+
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
   integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -33,4 +35,55 @@ crypto!!!
   //   console.log("ping");
   //   console.log(payload);
   // });
+</script>
+
+<script type="text/javascript">
+  function startClock() {
+    const currentDate = new Date();
+    const options = {
+      timeZone: "Asia/Bangkok",
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    const digitalClock = currentDate.toLocaleTimeString("th-TH", options);
+
+    const clockElement = document.getElementById("clock");
+    clockElement.textContent = digitalClock;
+
+    setTimeout(startClock, 1000);
+  }
+
+  // Start the clock
+  startClock();
+</script>
+
+<script type="text/javascript">
+  async prepareOrderBook() {
+     await fetch('https://api.binance.com/api/v3/depth?symbol=' + this.ticker + '&limit=100')
+     .then(response => response.text())
+     .then(data => {
+       console.log(data)
+       // let depth = JSON.parse(data);
+       // this.asks = depth.asks;
+       // this.bids = depth.bids;
+       //
+       // for (let i = 0; i < this.asks.length; i++) {
+       //   var arr = this.asks.map(x => {
+       //     return Number(x[1]);
+       //   });
+       //   this.asks[i].push(arr.slice(0, i+1).reduce((a,b)=>a+b))
+       // }
+       // for (let i = 0; i < this.bids.length; i++) {
+       //   var arr = this.bids.map(x => {
+       //     return Number(x[1]);
+       //   });
+       //   this.bids[i].push(arr.slice(0, i+1).reduce((a,b)=>a+b))
+       // }
+     });
+
+     // this.maxAsk = Math.max(...this.asks.map(x => { return x[2] }));
+     // setTimeout(async () => { await this.prepareOrderBook() }, 500);
+   }
 </script>
