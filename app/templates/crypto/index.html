@@ -55,194 +55,218 @@
       </div>
     </div>
   </Transition>
+  <div class="row">
+    <div class="col-3">
+      <div class="mb-3">
+        <input
+          v-model="inputSearch"
+          name="query"
+          placeholder="Search..."
+          type="text"
+          class="form-control"
+        />
+      </div>
 
-  <input
-    v-model="inputSearch"
-    class="w-full h-10 bg-transparent focus:outline-none"
-    name="query"
-    placeholder="Search..."
-    type="text"
-  />
-  <ul class="flex gap-2 justify-between h-10">
-    <li
-      @click="filterAsset( 'USDT' )"
-      :class="[asset === 'USDT' ? 'active' : '']"
-      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
-    >
-      USDT
-    </li>
-    <li
-      @click="filterAsset( 'BTC' )"
-      :class="[asset === 'BTC' ? 'active' : '']"
-      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
-    >
-      BTC
-    </li>
-    <li
-      @click="filterAsset( 'FAV' )"
-      :class="[asset === 'FAV' ? 'active' : '']"
-      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
-    >
-      FAV
-    </li>
-  </ul>
-  <div
-    @click="sortBy( 'token', 'desc' )"
-    :class="[sort === 'token' ? 'font-bold' : '']"
-    class="w-1/4"
-  >
-    Pair
-  </div>
-  <div
-    @click="sortBy( 'close', 'desc' )"
-    :class="[sort === 'close' ? 'font-bold' : '']"
-    class="w-1/4 text-end"
-  >
-    Price
-  </div>
-  <div
-    @click="sortBy( 'percent', 'desc' )"
-    :class="[sort === 'percent' ? 'font-bold' : '']"
-    class="w-1/4 text-center"
-  >
-    Change
-  </div>
-  <div
-    @click="sortBy( 'assetVolume', 'desc' )"
-    :class="[sort === 'assetVolume' ? 'font-bold' : '']"
-    class="w-1/4 text-end pr-4"
-  >
-    Volume
-  </div>
-  <div class="body h-[454px] relative overflow-y-scroll px-2">
-    <div
-      v-if="Object.keys(tickers).length < 200"
-      class="h-full flex items-center justify-center"
-    >
-      <svg
-        class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        ></circle>
-        <path
-          class="opacity-75"
-          fill="var(--color-primary-yellow)"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        ></path>
-      </svg>
-    </div>
-    <div v-else>
-      <div
-        @click="changeTicker(ticker.symbol)"
-        v-for="ticker in filterTickers"
-        :key="ticker.symbol"
-        class="flex hover:bg-[#eab30840] cursor-pointer"
-        style="font-family: 'Roboto Mono', monospace;"
-      >
-        <div class="w-1/4 dotdotdot silver">
-          <!-- <img src="ticker.icon" /> -->{*ticker.pair*}
+      <ul class="nav nav-pills nav-fill">
+        <li
+          @click="filterAsset( 'USDT' )"
+          :class="[asset === 'USDT' ? 'active' : '']"
+          class="nav-link"
+        >
+          USDT
+        </li>
+        <li
+          @click="filterAsset( 'BTC' )"
+          :class="[asset === 'BTC' ? 'active' : '']"
+          class="nav-link"
+        >
+          BTC
+        </li>
+        <li
+          @click="filterAsset( 'FAV' )"
+          :class="[asset === 'FAV' ? 'active' : '']"
+          class="nav-link"
+        >
+          FAV
+        </li>
+      </ul>
+
+      <div class="row">
+        <div
+          @click="sortBy( 'token', 'desc' )"
+          :class="[sort === 'token' ? 'font-bold' : '']"
+          class="col-3"
+        >
+          Pair
         </div>
-        <div :class="ticker.style" class="w-1/4 dotdotdot text-end">
-          {*ticker.close*}
+        <div
+          @click="sortBy( 'close', 'desc' )"
+          :class="[sort === 'close' ? 'font-bold' : '']"
+          class="col-3"
+        >
+          Price
         </div>
-        <div :class="ticker.style" class="w-1/4 dotdotdot text-center">
-          {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
+        <div
+          @click="sortBy( 'percent', 'desc' )"
+          :class="[sort === 'percent' ? 'font-bold' : '']"
+          class="col-3"
+        >
+          Change
         </div>
-        <div class="w-1/4 dotdotdot silver text-end pr-4">
-          {*ticker.assetVolume*}
+        <div
+          @click="sortBy( 'assetVolume', 'desc' )"
+          :class="[sort === 'assetVolume' ? 'font-bold' : '']"
+          class="col-3"
+        >
+          Volume
         </div>
       </div>
-    </div>
-  </div>
 
-  <div :id="container_id"></div>
-
-  <div
-    v-for="order in bids"
-    class="flex gap-2"
-    :style="`background: linear-gradient(to left, #00ff0030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
-  >
-    <div class="w-1/3 flex-1 text-[--color-primary-silver]">
-      {*parseNumber((order[0] * order[1]), asset)*}
-    </div>
-    <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
-      {*parseFloat((order[1]))*}
-    </div>
-    <div class="w-1/3 flex-1 text-end text-[--color-primary-green]">
-      {*parseFloat(order[0])*}
-    </div>
-  </div>
-  <div
-    v-for="order in asks"
-    class="flex gap-2"
-    :style="`background: linear-gradient(to right, #ff000030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
-  >
-    <div class="w-1/3 flex-1 text-left">{*parseFloat(order[0])*}</div>
-    <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
-      {*parseFloat((order[1]))*}
-    </div>
-    <div class="w-1/3 flex-1 text-end text-[--color-primary-silver]">
-      {*parseNumber((order[0] * order[1]), asset)*}
-    </div>
-  </div>
-  <div class="tickers w-[500px] flex flex-col gap-4">
-    <div class="w-full">
-      <div class="flex justify-between items-center">
-        <h2 class="text-glow font-bold text-xl h-[50px] flex items-center">
-          Latest Trades
-        </h2>
+      <div style="height: 50em; overflow-x: hidden;">
         <div
-          @click="toggleLatestTrades"
-          class="relative z-10 silver cursor-pointer"
+          v-if="Object.keys(tickers).length < 200"
+          class="h-full flex items-center justify-center"
         >
           <svg
-            :class="showLatestTrades ? 'fill-[--color-primary-green] hover:fill-[--color-primary-red]' : 'fill-[--color-primary-red] hover:fill-[--color-primary-green]'"
-            class="w-6"
-            clip-rule="evenodd"
-            fill-rule="evenodd"
-            stroke-linejoin="round"
-            stroke-miterlimit="2"
-            viewBox="0 0 24 24"
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
             xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
           >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
             <path
-              d="m11.998 5c-4.078 0-7.742 3.093-9.853 6.483-.096.159-.145.338-.145.517s.048.358.144.517c2.112 3.39 5.776 6.483 9.854 6.483 4.143 0 7.796-3.09 9.864-6.493.092-.156.138-.332.138-.507s-.046-.351-.138-.507c-2.068-3.403-5.721-6.493-9.864-6.493zm8.413 7c-1.837 2.878-4.897 5.5-8.413 5.5-3.465 0-6.532-2.632-8.404-5.5 1.871-2.868 4.939-5.5 8.404-5.5 3.518 0 6.579 2.624 8.413 5.5zm-8.411-4c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm0 1.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"
-              fill-rule="nonzero"
-            />
+              class="opacity-75"
+              fill="var(--color-primary-yellow)"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
         </div>
-      </div>
-
-      <div class="delimiter2 my-4"></div>
-      <div class="cb pb-4">
-        <div class="header flex items-center h-8 px-2">
-          <div class="w-1/3">Time</div>
-          <div class="w-1/3 text-end">Price</div>
-          <div class="w-1/3 text-end pr-4">Volume</div>
-        </div>
-        <div class="h-[250px] mr-4 relative overflow-y-scroll px-2">
+        <div v-else>
           <div
-            v-for="(trade, index) in latestTrades()"
-            class="flex"
+            @click="changeTicker(ticker.symbol)"
+            v-for="ticker in filterTickers"
+            :key="ticker.symbol"
+            class="flex hover:bg-[#eab30840] cursor-pointer"
             style="font-family: 'Roboto Mono', monospace;"
           >
-            <div class="w-1/3 silver">{*timestampToDate(trade[0])*}</div>
-            <div
-              :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'red' : 'green']"
-              class="w-1/3 text-end"
-            >
-              {*parseFloat(trade[1])*}
+            <div class="row">
+              <div class="col">
+                {*ticker.pair*}
+              </div>
+              <div :class="ticker.style" class="col">
+                {*ticker.close*}
+              </div>
+              <div :class="ticker.style" class="col">
+                {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
+              </div>
+              <div class="col">
+                {*ticker.assetVolume*}
+              </div>
             </div>
-            <div class="w-1/3 silver text-end">{*parseFloat(trade[2])*}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div :id="container_id"></div>
+    </div>
+    <div class="row col-3">
+      <div class="col-6">
+        <div
+          v-for="order in bids"
+          class="flex gap-2"
+          :style="`background: linear-gradient(to left, #00ff0030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
+        >
+          <div class="w-1/3 flex-1 text-[--color-primary-silver]">
+            {*parseNumber((order[0] * order[1]), asset)*}
+          </div>
+          <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
+            {*parseFloat((order[1]))*}
+          </div>
+          <div class="w-1/3 flex-1 text-end text-[--color-primary-green]">
+            {*parseFloat(order[0])*}
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div
+          v-for="order in asks"
+          class="flex gap-2"
+          :style="`background: linear-gradient(to right, #ff000030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
+        >
+          <div class="w-1/3 flex-1 text-left">{*parseFloat(order[0])*}</div>
+          <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
+            {*parseFloat((order[1]))*}
+          </div>
+          <div class="w-1/3 flex-1 text-end text-[--color-primary-silver]">
+            {*parseNumber((order[0] * order[1]), asset)*}
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="tickers w-[500px] flex flex-col gap-4">
+          <div class="w-full">
+            <div class="flex justify-between items-center">
+              <h2
+                class="text-glow font-bold text-xl h-[50px] flex items-center"
+              >
+                Latest Trades
+              </h2>
+              <div
+                @click="toggleLatestTrades"
+                class="relative z-10 silver cursor-pointer"
+              >
+                <svg
+                  :class="showLatestTrades ? 'fill-[--color-primary-green] hover:fill-[--color-primary-red]' : 'fill-[--color-primary-red] hover:fill-[--color-primary-green]'"
+                  class="w-6"
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  stroke-linejoin="round"
+                  stroke-miterlimit="2"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m11.998 5c-4.078 0-7.742 3.093-9.853 6.483-.096.159-.145.338-.145.517s.048.358.144.517c2.112 3.39 5.776 6.483 9.854 6.483 4.143 0 7.796-3.09 9.864-6.493.092-.156.138-.332.138-.507s-.046-.351-.138-.507c-2.068-3.403-5.721-6.493-9.864-6.493zm8.413 7c-1.837 2.878-4.897 5.5-8.413 5.5-3.465 0-6.532-2.632-8.404-5.5 1.871-2.868 4.939-5.5 8.404-5.5 3.518 0 6.579 2.624 8.413 5.5zm-8.411-4c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm0 1.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"
+                    fill-rule="nonzero"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="delimiter2 my-4"></div>
+            <div class="cb pb-4">
+              <div class="header flex items-center h-8 px-2">
+                <div class="w-1/3">Time</div>
+                <div class="w-1/3 text-end">Price</div>
+                <div class="w-1/3 text-end pr-4">Volume</div>
+              </div>
+              <div class="h-[250px] mr-4 relative overflow-y-scroll px-2">
+                <div
+                  v-for="(trade, index) in latestTrades()"
+                  class="flex"
+                  style="font-family: 'Roboto Mono', monospace;"
+                >
+                  <div class="w-1/3 silver">{*timestampToDate(trade[0])*}</div>
+                  <div
+                    :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'red' : 'green']"
+                    class="w-1/3 text-end"
+                  >
+                    {*parseFloat(trade[1])*}
+                  </div>
+                  <div class="w-1/3 silver text-end">
+                    {*parseFloat(trade[2])*}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -750,5 +774,11 @@
     },
   });
 </script>
+
+<style media="screen">
+  #vue-trading-view {
+    height: 600px;
+  }
+</style>
 
 {%endblock%}
