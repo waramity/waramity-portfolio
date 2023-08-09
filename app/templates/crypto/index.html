@@ -1,52 +1,58 @@
-crypto!!!
+{% extends "common/_base_crypto.html" %} {% block content %}
 
 <div id="vm">
-  <div :class="[status === 0 ? 'red' : 'green']" class="status mx-3"></div>
-  <div class="clock">{*digitalClock*}</div>
   <Transition>
-    <div
-      v-if="!tickers[ticker]"
-      class="flex flex-grow justify-center absolute w-full"
-    >
-      <span class="animate-pulse">
-        {*statusMsg*}
-      </span>
+    <div v-if="!tickers[ticker]">
+      {*statusMsg*}
     </div>
   </Transition>
 
   <Transition>
-    <div
-      v-if="tickers[ticker]"
-      class="flex gap-2 flex-grow items-center justify-between delay-200"
-    >
-      <small>{*tickers[ticker]['pair']*}</small>
-      <span :class="tickers[ticker]['style']">
-        <span class="mr-1">{*tickers[ticker]['arrow']*}</span>
-        <span>{*tickers[ticker]['percent']*}%</span>
-      </span>
-      <span :class="tickers[ticker]['style']"
-        >{*parseNumber(tickers[ticker]['close'],
-        tickers[ticker]['asset'])*}</span
-      >
-      <small class="block">24H Highest</small>
-      <span
-        >{*parseNumber(tickers[ticker]['high'],
-        tickers[ticker]['asset'])*}</span
-      >
-      <small class="block">24H Lowest</small>
-      <span
-        >{*parseNumber(tickers[ticker]['low'], tickers[ticker]['asset'])*}</span
-      >
-      <small class="block">24H Volume</small>
-      <span
-        >{*parseNumber(tickers[ticker]['tokenVolume'],
-        tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
-      >
-      <small class="block">24H Value</small>
-      <span
-        >{*parseNumber(tickers[ticker]['assetVolume'],
-        tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
-      >
+    <div v-if="tickers[ticker]" class="row">
+      <div class="col">{*digitalClock*}</div>
+      <div :class="[status === 0 ? 'text-danger' : 'text-success']" class="col">
+        Status
+      </div>
+      <div class="col">
+        <small>{*tickers[ticker]['pair']*}</small>
+        <span :class="tickers[ticker]['style']">
+          <span>{*tickers[ticker]['arrow']*}</span>
+          <span>{*tickers[ticker]['percent']*}%</span>
+        </span>
+
+        <span :class="tickers[ticker]['style']"
+          >{*parseNumber(tickers[ticker]['close'],
+          tickers[ticker]['asset'])*}</span
+        >
+      </div>
+      <div class="col">
+        <small>24H Highest</small>
+        <span
+          >{*parseNumber(tickers[ticker]['high'],
+          tickers[ticker]['asset'])*}</span
+        >
+      </div>
+      <div class="col">
+        <small>24H Lowest</small>
+        <span
+          >{*parseNumber(tickers[ticker]['low'],
+          tickers[ticker]['asset'])*}</span
+        >
+      </div>
+      <div class="col">
+        <small>24H Volume</small>
+        <span
+          >{*parseNumber(tickers[ticker]['tokenVolume'],
+          tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
+        >
+      </div>
+      <div class="col">
+        <small>24H Value</small>
+        <span
+          >{*parseNumber(tickers[ticker]['assetVolume'],
+          tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
+        >
+      </div>
     </div>
   </Transition>
 
@@ -468,8 +474,8 @@ crypto!!!
         ].join(" ");
         let style = "";
 
-        if (percent > 0) style = "green";
-        if (percent < 0) style = "red";
+        if (percent > 0) style = "text-sucess";
+        if (percent < 0) style = "text-danger";
 
         return {
           symbol,
@@ -744,3 +750,5 @@ crypto!!!
     },
   });
 </script>
+
+{%endblock%}
