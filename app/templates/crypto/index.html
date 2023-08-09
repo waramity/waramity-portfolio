@@ -1,7 +1,40 @@
 crypto!!!
 
 <p id="clock"></p>
-
+<div id="vm">
+    <Transition>
+        <div v-if="tickers[ticker]" class="flex gap-2 flex-grow items-center justify-between delay-200">
+          <div class="w-1/2">
+            <div class="flex gap-2">
+              <small>[[tickers[ticker]['pair']]]</small>
+              <span :class="tickers[ticker]['style']">
+                <span class="mr-1">[[tickers[ticker]['arrow']]]</span>
+                <span>[[tickers[ticker]['percent'].toFixed(2)]]%</span>
+              </span>
+            </div>
+            <div>
+              <span :class="tickers[ticker]['style']">[[parseNumber(tickers[ticker]['close'], tickers[ticker]['asset'])]]</span>
+            </div>
+          </div>
+          <div class="w-1/2">
+            <small class="block">24H Highest</small>
+            <span>[[parseNumber(tickers[ticker]['high'], tickers[ticker]['asset'])]]</span>
+          </div>
+          <div class="w-1/2">
+            <small class="block">24H Lowest</small>
+            <span>[[parseNumber(tickers[ticker]['low'], tickers[ticker]['asset'])]]</span>
+          </div>
+          <div class="w-1/2">
+            <small class="block">24H Volume</small>
+            <span>[[parseNumber(tickers[ticker]['tokenVolume'], tickers[ticker]['token'])]] [[tickers[ticker]['token']]]</span>
+          </div>
+          <div class="w-1/2">
+            <small class="block">24H Value</small>
+	    <span>[[parseNumber(tickers[ticker]['assetVolume'], tickers[ticker]['asset'])]] [[tickers[ticker]['asset']]]</span>
+          </div>
+        </div>
+      </Transition>
+      </div>
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
   integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -106,20 +139,73 @@ crypto!!!
   prepareOrderBook.call(order_book_context);
 </script>
 
-<div id="vm" class="container">
-  <p>[[ greeting ]]</p>
-  <p>[[ flaskGreeting ]]</p>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 <script type="text/javascript">
-  const apiEndpoint = "/en/crypto/";
+const apiEndpoint = `/en/crypto/`;
+const SCRIPT_ID = 'tradingview-widget-script';
+const CONTAINER_ID = 'vue-trading-view';
 
   const vm = new Vue({
     el: "#vm",
     delimiters: ["[[", "]]"],
     data: {
-      greeting: "Hello, Vue!",
-      flaskGreeting: "flaskGreeting",
+      sock: null,
+      status: 0,
+      tickers: {},
+      cache: [],
+      trades: [],
+      interval: '1d',
+      digitalClock: null,
+      asks: [],
+      bids: [],
+      maxAsk: 0,
+      bgImageUrl: null,
+      showSettings: false,
+      showLatestTrades: true,
+      inputSearch: '',
+      asset: 'USDT',
+      sort: 'assetVolume',
+      order: 'desc', 
+      //chart
+      ticker: 'BTCUSDT',
+      container_id: CONTAINER_ID,
+      change: 'change',
+      options: {
+        autosize: true,
+        symbol: 'BINANCE:BTCUSDT',
+        interval: '5',
+        timezone: 'Asia/Jerusalem',
+        theme: 'dark',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        allow_symbol_change: true,
+        save_image: true,
+        // watchlist: [
+        //   'BITMEX:XBTUSD.P',
+        //   'BINANCE:XMRBTC',
+        // ],
+        details: false,
+        hotlist: false,
+        studies: [
+          // 'IchimokuCloud@tv-basicstudies',
+          {
+            id: 'VWAP@tv-basicstudies',
+          },
+          {
+            id: 'MAExp@tv-basicstudies',
+            inputs: {
+              length: 200
+            },
+            styles: {
+            }
+          }
+        ],
+      }
+
     },
     created: async function () {
       const gResponse = await fetch(apiEndpoint + "greeting");
@@ -128,3 +214,6 @@ crypto!!!
     },
   });
 </script>
+
+<script type="text/javascript">
+	</script>
