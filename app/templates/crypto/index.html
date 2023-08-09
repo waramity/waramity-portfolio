@@ -360,7 +360,6 @@ crypto!!!
       },
       toggleLatestTrades() {
         this.showLatestTrades = !this.showLatestTrades;
-        console.log(this.showLatestTrades);
       },
       sockInit() {
         if (this.status > 0) return;
@@ -687,7 +686,6 @@ crypto!!!
         if (!this.showLatestTrades) {
           return;
         }
-        console.log(this.trades);
         return this.trades;
       },
       timestampToDate(timestamp) {
