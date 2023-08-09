@@ -188,6 +188,60 @@ crypto!!!
       {*parseNumber((order[0] * order[1]), asset)*}
     </div>
   </div>
+  <div class="tickers w-[500px] flex flex-col gap-4">
+    <div class="w-full">
+      <div class="flex justify-between items-center">
+        <h2 class="text-glow font-bold text-xl h-[50px] flex items-center">
+          Latest Trades
+        </h2>
+        <div
+          @click="toggleLatestTrades"
+          class="relative z-10 silver cursor-pointer"
+        >
+          <svg
+            :class="showLatestTrades ? 'fill-[--color-primary-green] hover:fill-[--color-primary-red]' : 'fill-[--color-primary-red] hover:fill-[--color-primary-green]'"
+            class="w-6"
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            stroke-linejoin="round"
+            stroke-miterlimit="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m11.998 5c-4.078 0-7.742 3.093-9.853 6.483-.096.159-.145.338-.145.517s.048.358.144.517c2.112 3.39 5.776 6.483 9.854 6.483 4.143 0 7.796-3.09 9.864-6.493.092-.156.138-.332.138-.507s-.046-.351-.138-.507c-2.068-3.403-5.721-6.493-9.864-6.493zm8.413 7c-1.837 2.878-4.897 5.5-8.413 5.5-3.465 0-6.532-2.632-8.404-5.5 1.871-2.868 4.939-5.5 8.404-5.5 3.518 0 6.579 2.624 8.413 5.5zm-8.411-4c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm0 1.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="delimiter2 my-4"></div>
+      <div class="cb pb-4">
+        <div class="header flex items-center h-8 px-2">
+          <div class="w-1/3">Time</div>
+          <div class="w-1/3 text-end">Price</div>
+          <div class="w-1/3 text-end pr-4">Volume</div>
+        </div>
+        <div class="h-[250px] mr-4 relative overflow-y-scroll px-2">
+          <div
+            v-for="(trade, index) in latestTrades()"
+            class="flex"
+            style="font-family: 'Roboto Mono', monospace;"
+          >
+            <div class="w-1/3 silver">{*timestampToDate(trade[0])*}</div>
+            <div
+              :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'red' : 'green']"
+              class="w-1/3 text-end"
+            >
+              {*parseFloat(trade[1])*}
+            </div>
+            <div class="w-1/3 silver text-end">{*parseFloat(trade[2])*}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
@@ -303,6 +357,10 @@ crypto!!!
         setTimeout(() => {
           this.startClock();
         }, 250);
+      },
+      toggleLatestTrades() {
+        this.showLatestTrades = !this.showLatestTrades;
+        console.log(this.showLatestTrades);
       },
       sockInit() {
         if (this.status > 0) return;
@@ -624,6 +682,23 @@ crypto!!!
         setTimeout(async () => {
           await this.prepareOrderBook();
         }, 500);
+      },
+      latestTrades() {
+        if (!this.showLatestTrades) {
+          return;
+        }
+        console.log(this.trades);
+        return this.trades;
+      },
+      timestampToDate(timestamp) {
+        var options = {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false,
+          timeZone: "Asia/Jerusalem",
+        };
+        return new Intl.DateTimeFormat("en-GB", options).format(timestamp);
       },
     },
     mounted() {
