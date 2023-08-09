@@ -157,6 +157,24 @@ crypto!!!
       </div>
     </div>
   </div>
+
+  <div :id="container_id"></div>
+
+  <div
+    v-for="order in bids"
+    class="flex gap-2"
+    :style="`background: linear-gradient(to left, #00ff0030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
+  >
+    <div class="w-1/3 flex-1 text-[--color-primary-silver]">
+      {*parseNumber((order[0] * order[1]), asset)*}
+    </div>
+    <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
+      {*parseFloat((order[1]))*}
+    </div>
+    <div class="w-1/3 flex-1 text-end text-[--color-primary-green]">
+      {*parseFloat(order[0])*}
+    </div>
+  </div>
 </div>
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
@@ -477,12 +495,129 @@ crypto!!!
       filterAsset(asset) {
         this.asset = String(asset || this.asset);
       },
+      changeTicker(symbol) {
+        this.unsubscribeTicker();
+        this.ticker = symbol;
+        this.setSymbol(symbol);
+        this.subscribeTicker();
+      },
+      unsubscribeTicker() {
+        this.trades = [];
+        this.depth = [];
+        let streams = {
+          method: "UNSUBSCRIBE",
+          params: [
+            this.ticker.toLowerCase() + "@aggTrade",
+            this.ticker.toLowerCase() + "@depth",
+            // this.ticker.toLowerCase() + "@kline_"+this.interval
+          ],
+          id: 2,
+        };
+        this.sock.send(JSON.stringify(streams));
+      },
+      setSymbol(symbol) {
+        var elIframeWidget = document.querySelectorAll(
+          "iframe[id*=tradingview_]"
+        )[0];
+
+        if (!elIframeWidget || !elIframeWidget.contentWindow) {
+          return;
+        }
+
+        elIframeWidget.contentWindow.postMessage(
+          {
+            name: "set-symbol",
+            data: {
+              symbol: symbol,
+            },
+          },
+          "*"
+        );
+      },
+      appendScript(onload) {
+        if (!this.canUseDOM()) {
+          onload();
+          return;
+        }
+
+        if (this.scriptExists()) {
+          if (typeof TradingView === "undefined") {
+            this.updateOnloadListener(onload);
+            return;
+          }
+          onload();
+          return;
+        }
+        const script = document.createElement("script");
+        script.id = SCRIPT_ID;
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = "https://s3.tradingview.com/tv.js";
+        script.onload = onload;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      },
+      canUseDOM() {
+        return (
+          typeof window !== "undefined" &&
+          window.document &&
+          window.document.createElement
+        );
+      },
+      scriptExists() {
+        return this.getScriptElement() !== null;
+      },
+      getScriptElement() {
+        return document.getElementById(SCRIPT_ID);
+      },
+      initWidget() {
+        if (typeof TradingView === "undefined") {
+          return;
+        }
+        const widget = new window.TradingView.widget(
+          Object.assign({ container_id: this.container_id }, this.options)
+        );
+      },
+      async prepareOrderBook() {
+        await fetch(
+          "https://api.binance.com/api/v3/depth?symbol=" +
+            this.ticker +
+            "&limit=100"
+        )
+          .then((response) => response.text())
+          .then((data) => {
+            let depth = JSON.parse(data);
+            this.asks = depth.asks;
+            this.bids = depth.bids;
+
+            for (let i = 0; i < this.asks.length; i++) {
+              var arr = this.asks.map((x) => {
+                return Number(x[1]);
+              });
+              this.asks[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+            }
+            for (let i = 0; i < this.bids.length; i++) {
+              var arr = this.bids.map((x) => {
+                return Number(x[1]);
+              });
+              this.bids[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+            }
+          });
+
+        this.maxAsk = Math.max(
+          ...this.asks.map((x) => {
+            return x[2];
+          })
+        );
+        setTimeout(async () => {
+          await this.prepareOrderBook();
+        }, 500);
+      },
     },
     mounted() {
       this.sockInit();
       this.startClock();
-      // this.appendScript(this.initWidget);
-      // this.prepareOrderBook();
+      this.appendScript(this.initWidget);
+      this.prepareOrderBook();
     },
     unmounted() {
       this.sockClose();
