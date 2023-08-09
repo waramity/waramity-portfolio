@@ -19,24 +19,144 @@ crypto!!!
       v-if="tickers[ticker]"
       class="flex gap-2 flex-grow items-center justify-between delay-200"
     >
-      kuy
-      <div class="w-1/2">
-        <div class="flex gap-2">
-          <small>{*tickers[ticker]['pair']*}</small>
-          <span :class="tickers[ticker]['style']">
-            <span class="mr-1">{*tickers[ticker]['arrow']*}</span>
-            <span>{*tickers[ticker]['percent']*}%</span>
-          </span>
+      <small>{*tickers[ticker]['pair']*}</small>
+      <span :class="tickers[ticker]['style']">
+        <span class="mr-1">{*tickers[ticker]['arrow']*}</span>
+        <span>{*tickers[ticker]['percent']*}%</span>
+      </span>
+      <span :class="tickers[ticker]['style']"
+        >{*parseNumber(tickers[ticker]['close'],
+        tickers[ticker]['asset'])*}</span
+      >
+      <small class="block">24H Highest</small>
+      <span
+        >{*parseNumber(tickers[ticker]['high'],
+        tickers[ticker]['asset'])*}</span
+      >
+      <small class="block">24H Lowest</small>
+      <span
+        >{*parseNumber(tickers[ticker]['low'], tickers[ticker]['asset'])*}</span
+      >
+      <small class="block">24H Volume</small>
+      <span
+        >{*parseNumber(tickers[ticker]['tokenVolume'],
+        tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
+      >
+      <small class="block">24H Value</small>
+      <span
+        >{*parseNumber(tickers[ticker]['assetVolume'],
+        tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
+      >
+    </div>
+  </Transition>
+
+  <input
+    v-model="inputSearch"
+    class="w-full h-10 bg-transparent focus:outline-none"
+    name="query"
+    placeholder="Search..."
+    type="text"
+  />
+  <ul class="flex gap-2 justify-between h-10">
+    <li
+      @click="filterAsset( 'USDT' )"
+      :class="[asset === 'USDT' ? 'active' : '']"
+      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
+    >
+      USDT
+    </li>
+    <li
+      @click="filterAsset( 'BTC' )"
+      :class="[asset === 'BTC' ? 'active' : '']"
+      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
+    >
+      BTC
+    </li>
+    <li
+      @click="filterAsset( 'FAV' )"
+      :class="[asset === 'FAV' ? 'active' : '']"
+      class="cb2 flex flex-grow items-center justify-center cursor-pointer"
+    >
+      FAV
+    </li>
+  </ul>
+  <div
+    @click="sortBy( 'token', 'desc' )"
+    :class="[sort === 'token' ? 'font-bold' : '']"
+    class="w-1/4"
+  >
+    Pair
+  </div>
+  <div
+    @click="sortBy( 'close', 'desc' )"
+    :class="[sort === 'close' ? 'font-bold' : '']"
+    class="w-1/4 text-end"
+  >
+    Price
+  </div>
+  <div
+    @click="sortBy( 'percent', 'desc' )"
+    :class="[sort === 'percent' ? 'font-bold' : '']"
+    class="w-1/4 text-center"
+  >
+    Change
+  </div>
+  <div
+    @click="sortBy( 'assetVolume', 'desc' )"
+    :class="[sort === 'assetVolume' ? 'font-bold' : '']"
+    class="w-1/4 text-end pr-4"
+  >
+    Volume
+  </div>
+  <div class="body h-[454px] relative overflow-y-scroll px-2">
+    <div
+      v-if="Object.keys(tickers).length < 200"
+      class="h-full flex items-center justify-center"
+    >
+      <svg
+        class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="var(--color-primary-yellow)"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+    </div>
+    <div v-else>
+      <div
+        @click="changeTicker(ticker.symbol)"
+        v-for="ticker in filterTickers"
+        :key="ticker.symbol"
+        class="flex hover:bg-[#eab30840] cursor-pointer"
+        style="font-family: 'Roboto Mono', monospace;"
+      >
+        <div class="w-1/4 dotdotdot silver">
+          <!-- <img src="ticker.icon" /> -->{*ticker.pair*}
         </div>
-        <div>
-          <span :class="tickers[ticker]['style']"
-            >{*parseNumber(tickers[ticker]['close'],
-            tickers[ticker]['asset'])*}</span
-          >
+        <div :class="ticker.style" class="w-1/4 dotdotdot text-end">
+          {*ticker.close*}
+        </div>
+        <div :class="ticker.style" class="w-1/4 dotdotdot text-center">
+          {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
+        </div>
+        <div class="w-1/4 dotdotdot silver text-end pr-4">
+          {*ticker.assetVolume*}
         </div>
       </div>
     </div>
-  </Transition>
+  </div>
 </div>
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
@@ -317,6 +437,45 @@ crypto!!!
           minimumFractionDigits: 10,
           trailingZeroDisplay: "stripIfInteger",
         }).format(number);
+      },
+      quickSort(arr, key, order) {
+        if (arr.length <= 1) {
+          return arr;
+        }
+
+        const pivotIndex = Math.floor(arr.length / 2);
+        const pivot = arr[pivotIndex];
+        const left = [];
+        const right = [];
+
+        for (let i = 0; i < arr.length; i++) {
+          if (i === pivotIndex) {
+            continue;
+          }
+
+          if (order === "asc") {
+            arr[i][key] < pivot[key] ? left.push(arr[i]) : right.push(arr[i]);
+          } else {
+            arr[i][key] > pivot[key] ? left.push(arr[i]) : right.push(arr[i]);
+          }
+        }
+
+        return [
+          ...this.quickSort(left, key, order),
+          pivot,
+          ...this.quickSort(right, key, order),
+        ];
+      },
+      sortBy(key, order) {
+        if (this.sort !== key) {
+          this.order = order || "asc";
+        } else {
+          this.order = this.order === "asc" ? "desc" : "asc";
+        }
+        this.sort = key;
+      },
+      filterAsset(asset) {
+        this.asset = String(asset || this.asset);
       },
     },
     mounted() {
