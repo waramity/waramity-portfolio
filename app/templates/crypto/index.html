@@ -55,120 +55,88 @@
       </div>
     </div>
   </Transition>
-  <div class="row">
-    <div class="col-3">
-      <div class="mb-3">
+  <div class="grid grid-cols-3 gap-2">
+    <div>
+      <div class="mb-5">
         <input
           v-model="inputSearch"
           name="query"
           placeholder="Search..."
           type="text"
-          class="form-control"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none"
         />
       </div>
 
-      <ul class="nav nav-pills nav-fill">
+      <ul class="grid grid-cols-3 gap-2">
         <li
           @click="filterAsset( 'USDT' )"
-          :class="[asset === 'USDT' ? 'active' : '']"
-          class="nav-link"
+          :class="[asset === 'USDT' ? 'bg-blue-500' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
         >
           USDT
         </li>
         <li
           @click="filterAsset( 'BTC' )"
-          :class="[asset === 'BTC' ? 'active' : '']"
-          class="nav-link"
+          :class="[asset === 'BTC' ? 'bg-blue-500' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
         >
           BTC
         </li>
         <li
           @click="filterAsset( 'FAV' )"
-          :class="[asset === 'FAV' ? 'active' : '']"
-          class="nav-link"
+          :class="[asset === 'FAV' ? 'bg-blue-500' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
         >
           FAV
         </li>
       </ul>
 
-      <div class="row">
+      <div class="grid grid-cols-4 gap-2">
         <div
           @click="sortBy( 'token', 'desc' )"
           :class="[sort === 'token' ? 'font-bold' : '']"
-          class="col-3"
         >
           Pair
         </div>
         <div
           @click="sortBy( 'close', 'desc' )"
           :class="[sort === 'close' ? 'font-bold' : '']"
-          class="col-3"
         >
           Price
         </div>
         <div
           @click="sortBy( 'percent', 'desc' )"
           :class="[sort === 'percent' ? 'font-bold' : '']"
-          class="col-3"
         >
           Change
         </div>
         <div
           @click="sortBy( 'assetVolume', 'desc' )"
           :class="[sort === 'assetVolume' ? 'font-bold' : '']"
-          class="col-3"
         >
           Volume
         </div>
       </div>
 
-      <div style="height: 50em; overflow-x: hidden;">
+      <div>
         <div
-          v-if="Object.keys(tickers).length < 200"
-          class="h-full flex items-center justify-center"
+          @click="changeTicker(ticker.symbol)"
+          v-for="ticker in filterTickers"
+          :key="ticker.symbol"
+          class="hover:bg-[#eab30840] cursor-pointer"
         >
-          <svg
-            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="var(--color-primary-yellow)"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-        </div>
-        <div v-else>
-          <div
-            @click="changeTicker(ticker.symbol)"
-            v-for="ticker in filterTickers"
-            :key="ticker.symbol"
-            class="flex hover:bg-[#eab30840] cursor-pointer"
-            style="font-family: 'Roboto Mono', monospace;"
-          >
-            <div class="row">
-              <div class="col">
-                {*ticker.pair*}
-              </div>
-              <div :class="ticker.style" class="col">
-                {*ticker.close*}
-              </div>
-              <div :class="ticker.style" class="col">
-                {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
-              </div>
-              <div class="col">
-                {*ticker.assetVolume*}
-              </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div>
+              {*ticker.pair*}
+            </div>
+            <div :class="ticker.style">
+              {*ticker.close*}
+            </div>
+            <div :class="ticker.style">
+              {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
+            </div>
+            <div>
+              {*ticker.assetVolume*}
             </div>
           </div>
         </div>
@@ -357,7 +325,6 @@
             inputs: {
               length: 200,
             },
-            styles: {},
           },
         ],
       },
@@ -481,8 +448,8 @@
         ].join(" ");
         let style = "";
 
-        if (percent > 0) style = "text-sucess";
-        if (percent < 0) style = "text-danger";
+        if (percent > 0) style = "text-green-500";
+        if (percent < 0) style = "text-red-500";
 
         return {
           symbol,
