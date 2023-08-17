@@ -16,7 +16,9 @@
       "React",
       "React Native",
       "Expo",
-      "Socket.io"
+      "Socket.io",
+      "Tailwind CSS",
+      "Vue"
     ],
     "images": [
       "jquery.png",
@@ -28,7 +30,9 @@
       "react.png",
       "react-native.jpeg",
       "expo.png",
-      "socket-io.png"
+      "socket-io.png",
+      "tailwind.png",
+      "vue.png"
     ]
   },
   {
