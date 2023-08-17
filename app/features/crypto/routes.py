@@ -29,5 +29,5 @@ def index():
 
 @crypto.route("/crypto/greeting") # Blueprints don't use the Flask "app" context. They use their own
 def greeting():
-    print('nahee')
+    # print('nahee')
     return jsonify({'greeting': 'Hello from Flask!'})

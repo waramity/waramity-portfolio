@@ -122,7 +122,9 @@
         </div>
       </div>
 
-      <div>
+      <div
+        class="overflow-auto h-screen bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+      >
         <div
           @click="changeTicker(ticker.symbol)"
           v-for="ticker in filterTickers"
@@ -148,11 +150,33 @@
     </div>
     <div>
       <div :id="container_id"></div>
+      <div class="relative my-20 mx-5 pt-1">
+        <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100 text-xs">
+          <div
+            style="width: 10%;"
+            class="bg-green-500 transition-all duration-500 ease-out"
+          ></div>
+          <div
+            style="width: 25%;"
+            class="bg-yellow-500 transition-all duration-500 ease-out"
+          ></div>
+          <div
+            style="width: 20%;"
+            class="bg-red-500 transition-all duration-500 ease-out"
+          ></div>
+        </div>
+        <div class="mb-2 flex items-center justify-between text-xs">
+          <div class="text-gray-600">Progress</div>
+          <div class="text-gray-600">100%</div>
+        </div>
+      </div>
     </div>
 
-    <div class="col-3">
-      <div class="row">
-        <div class="col-6">
+    <div>
+      <div
+        class="grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+      >
+        <div>
           <div
             v-for="order in bids"
             class="flex gap-2"
@@ -169,7 +193,7 @@
             </div>
           </div>
         </div>
-        <div class="col-6">
+        <div>
           <div
             v-for="order in asks"
             class="flex gap-2"
@@ -185,41 +209,27 @@
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="tickers w-[500px] flex flex-col gap-4">
-          <div class="w-full">
-            <div class="flex justify-between items-center">
-              <h2
-                class="text-glow font-bold text-xl h-[50px] flex items-center"
-              >
-                Latest Trades
-              </h2>
-            </div>
+      <div class="tickers w-full">
+        <h2 class="text-glow font-bold">
+          Latest Trades
+        </h2>
 
-            <div class="row">
-              <div class="col">Time</div>
-              <div class="col">Price</div>
-              <div class="col">Volume</div>
-            </div>
+        <div class="flex">
+          <div class="w-1/2">Time</div>
+          <div class="w-1/2">Price</div>
+          <div class="w-1/2">Volume</div>
+        </div>
 
-            <div style="height: 50em; overflow-x: hidden;">
-              <div class="2">
-                <div v-for="(trade, index) in latestTrades" class="flex">
-                  <div class="row">
-                    <div class="col">{*timestampToDate(trade[0])*}</div>
-                    <div
-                      :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'red' : 'green']"
-                      class="col"
-                    >
-                      {*parseFloat(trade[1])*}
-                    </div>
-                    <div class="col">
-                      {*parseFloat(trade[2])*}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div v-for="(trade, index) in latestTrades" class="flex">
+          <div class="w-1/2">{*timestampToDate(trade[0])*}</div>
+          <div
+            :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'text-red-500' : 'text-green-500']"
+            class="w-1/2"
+          >
+            {*parseFloat(trade[1])*}
+          </div>
+          <div class="w-1/2">
+            {*parseFloat(trade[2])*}
           </div>
         </div>
       </div>
@@ -344,9 +354,7 @@
         try {
           this.status = 0;
 
-          this.sock = new WebSocket(
-            "wss://stream.binance.com:9443/ws/!ticker@arr"
-          );
+          this.sock = new WebSocket("wss://fstream.binance.com/ws/!ticker@arr");
           this.sock.addEventListener("open", this.onSockOpen);
           this.sock.addEventListener("close", this.onSockClose);
           this.sock.addEventListener("error", this.onSockError);
@@ -621,7 +629,7 @@
         await fetch(
           "https://api.binance.com/api/v3/depth?symbol=" +
             this.ticker +
-            "&limit=100"
+            "&limit=1000"
         )
           .then((response) => response.text())
           .then((data) => {
