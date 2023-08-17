@@ -150,24 +150,16 @@
     </div>
     <div>
       <div :id="container_id"></div>
-      <div class="relative my-20 mx-5 pt-1">
+      <div class="my-20 mx-5 pt-1">
         <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100 text-xs">
           <div
-            style="width: 10%;"
+            :style="{ width: greenTradePercentage }"
             class="bg-green-500 transition-all duration-500 ease-out"
           ></div>
           <div
-            style="width: 25%;"
-            class="bg-yellow-500 transition-all duration-500 ease-out"
-          ></div>
-          <div
-            style="width: 20%;"
+            :style="{ width: redTradePercentage }"
             class="bg-red-500 transition-all duration-500 ease-out"
           ></div>
-        </div>
-        <div class="mb-2 flex items-center justify-between text-xs">
-          <div class="text-gray-600">Progress</div>
-          <div class="text-gray-600">100%</div>
         </div>
       </div>
     </div>
@@ -304,6 +296,12 @@
       container_id: CONTAINER_ID,
       change: "change",
       numberOfTradesToShow: 10, // Set the number of trades to show
+      greenTradePercentage: "50%",
+      redTradePercentage: "50%",
+      totalTradeVolume: 0,
+      greenTradeVolume: 0,
+      redTradeVolume: 0,
+
       options: {
         autosize: true,
         symbol: "BINANCE:BTCUSDT",
@@ -548,6 +546,7 @@
         this.ticker = symbol;
         this.setSymbol(symbol);
         this.subscribeTicker();
+        this.resetTradeProportions();
       },
       unsubscribeTicker() {
         this.trades = [];
@@ -629,7 +628,7 @@
         await fetch(
           "https://api.binance.com/api/v3/depth?symbol=" +
             this.ticker +
-            "&limit=1000"
+            "&limit=100"
         )
           .then((response) => response.text())
           .then((data) => {
@@ -670,6 +669,29 @@
         };
         return new Intl.DateTimeFormat("en-GB", options).format(timestamp);
       },
+      calculateTradeProportions() {
+        for (const trade of this.trades) {
+          this.totalTradeVolume += trade[0];
+          if (trade[3]) {
+            this.greenTradeVolume += trade[0];
+          } else {
+            this.redTradeVolume += trade[0];
+          }
+        }
+
+        const greenProportion = this.greenTradeVolume / this.totalTradeVolume;
+        const redProportion = this.redTradeVolume / this.totalTradeVolume;
+
+        this.greenTradePercentage = greenProportion * 100 + "%";
+        this.redTradePercentage = redProportion * 100 + "%";
+      },
+      resetTradeProportions() {
+        this.totalTradeVolume = 0;
+        this.greenTradeVolume = 0;
+        this.redTradeVolume = 0;
+        this.greenTradePercentage = "0%";
+        this.redTradePercentage = "0%";
+      },
     },
     mounted() {
       this.sockInit();
@@ -695,6 +717,7 @@
         return msg;
       },
       latestTrades() {
+        this.calculateTradeProportions();
         return this.trades.slice(0, this.numberOfTradesToShow);
       },
       filterTickers() {
