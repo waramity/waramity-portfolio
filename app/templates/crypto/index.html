@@ -280,7 +280,7 @@
 
       // socket.emit("connect");
       socket.emit("my_ping");
-      console.log("kuy");
+      // console.log("kuy");
     }, 1000); // Send a ping every second
   });
 
@@ -327,6 +327,7 @@
       ticker: "BTCUSDT",
       container_id: CONTAINER_ID,
       change: "change",
+      numberOfTradesToShow: 10, // Set the number of trades to show
       options: {
         autosize: true,
         symbol: "BINANCE:BTCUSDT",
@@ -348,7 +349,6 @@
         details: false,
         hotlist: false,
         studies: [
-          // 'IchimokuCloud@tv-basicstudies',
           {
             id: "VWAP@tv-basicstudies",
           },
@@ -512,7 +512,6 @@
           params: [
             this.ticker.toLowerCase() + "@aggTrade",
             this.ticker.toLowerCase() + "@depth",
-            // this.ticker.toLowerCase() + "@kline_"+this.interval
           ],
           id: 1,
         };
@@ -520,13 +519,6 @@
         this.sock.send(JSON.stringify(streams));
       },
       parseNumber(number, currency = "") {
-        // const formatters = {
-        //     default: new Intl.NumberFormat(),
-        //     currency: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }),
-        //     whole: new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 }),
-        //     oneDecimal: new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 1, maximumFractionDigits: 1 }),
-        //     twoDecimal: new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-        // };
         if (currency.includes(["USDT"])) {
           return new Intl.NumberFormat("en-US", {
             style: "currency",
@@ -701,7 +693,7 @@
           minute: "numeric",
           second: "numeric",
           hour12: false,
-          timeZone: "Asia/Jerusalem",
+          timeZone: "Asia/Bangkok",
         };
         return new Intl.DateTimeFormat("en-GB", options).format(timestamp);
       },
@@ -730,7 +722,9 @@
         return msg;
       },
       latestTrades() {
-        return this.trades;
+        return this.trades.slice(0, this.numberOfTradesToShow);
+        // return this.removeFirstTrade(this.trades);
+        // return this.trades;
       },
       filterTickers() {
         let tickers = this.cache;
