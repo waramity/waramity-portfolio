@@ -55,8 +55,8 @@
       </div>
     </div>
   </Transition>
-  <div class="grid grid-cols-3 gap-2">
-    <div>
+  <div class="grid grid-cols-8 gap-2">
+    <div class="col-span-2" :class="{ 'col-span-1': fullScreenChart }">
       <div class="mb-5">
         <input
           v-model="inputSearch"
@@ -148,8 +148,33 @@
         </div>
       </div>
     </div>
-    <div>
-      <div :id="container_id"></div>
+    <div class="col-span-4" :class="{ 'col-span-7': fullScreenChart }">
+      <div
+        :id="container_id"
+        class="h-[70vh] mb-2"
+        :class="{ 'h-[80vh]': fullScreenChart }"
+      ></div>
+      <button
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+        @click="toggleFullScreenChart()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="fill-current w-4 h-4 mr-2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+        <span>Full Screen</span>
+      </button>
+
       <div class="my-20 mx-5 pt-1">
         <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100">
           <div
@@ -169,7 +194,10 @@
       </div>
     </div>
 
-    <div>
+    <div
+      class="col-span-2"
+      :class="{ 'col-span-8 grid grid-cols-2': fullScreenChart }"
+    >
       <div
         class="grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
       >
@@ -306,7 +334,7 @@
       totalTradeVolume: 0,
       greenTradeVolume: 0,
       redTradeVolume: 0,
-
+      fullScreenChart: false,
       options: {
         autosize: true,
         symbol: "BINANCE:BTCUSDT",
@@ -638,6 +666,7 @@
           .then((response) => response.text())
           .then((data) => {
             let depth = JSON.parse(data);
+            console.log(depth);
             this.asks = depth.asks;
             this.bids = depth.bids;
 
@@ -660,6 +689,7 @@
             return x[2];
           })
         );
+        console.log(this.maxAsk);
         setTimeout(async () => {
           await this.prepareOrderBook();
         }, 500);
@@ -699,6 +729,10 @@
         this.redTradeVolume = 0;
         this.greenTradePercentage = "0%";
         this.redTradePercentage = "0%";
+      },
+      toggleFullScreenChart() {
+        this.fullScreenChart = !this.fullScreenChart;
+        console.log(this.fullScreenChart);
       },
     },
     mounted() {
@@ -744,11 +778,5 @@
     },
   });
 </script>
-
-<style media="screen">
-  #vue-trading-view {
-    height: 600px;
-  }
-</style>
 
 {%endblock%}
