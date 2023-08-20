@@ -1,4 +1,3 @@
-from app import coin_gecko
 from flask_socketio import SocketIO
 
 # def ping_in_intervals():
@@ -12,8 +11,6 @@ from flask_socketio import SocketIO
 
 socketio = SocketIO()
 
-coin = coin_gecko.get_coin_market_chart_by_id(id="bitcoin", vs_currency="thb", days="1")
-print(coin)
 
 # thread = socketio.start_background_task(ping_in_intervals)
 @socketio.on('connect', namespace='/crypto')

@@ -1,0 +1,51 @@
+{% extends "dating/_base.html" %} {% block content %}
+<div class="row align-items-center">
+  <div class="col-12 col-lg-6 text-center">
+    <h1 class="display-2 mb-5 fw-bold mt-5">
+      {{_('คู่ชีวิตที่คุณตามหา .')}}
+    </h1>
+    <a
+      class="btn btn-primary w-50 btn-lg rounded-pill mb-5"
+      data-bs-toggle="modal"
+      data-bs-target="#loginModal"
+      role="button"
+      >{{_('สร้างบัญชี')}}</a
+    >
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">
+              {{_('เข้าสู่ระบบ')}}
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <a class="btn btn-lg btn-outline-secondary" href="/google-auth"
+              ><img
+                src="https://img.icons8.com/color/16/000000/google-logo.png"
+              />
+              {{_('เข้าสู่ระบบด้วย Google')}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6 text-center">
+    <img src="/static/imgs/main-marriage.jpg" class="w-75 rounded" />
+  </div>
+</div>
+{% endblock %}

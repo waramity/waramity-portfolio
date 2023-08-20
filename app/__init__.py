@@ -1,22 +1,37 @@
 from flask import Flask, g, request, redirect, url_for
 from flask_babel import Babel
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from oauthlib.oauth2 import WebApplicationClient
+import os
+
 from config import Config
+from dotenv import load_dotenv
 
-from pycoingecko import CoinGeckoAPI
+load_dotenv()
 
-from threading import Lock
-
-from flask_socketio import SocketIO, Namespace, emit
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
+
+app.debug = True  # Enable debug mode
+app.config.from_object(Config)
+
 babel = Babel(app)
-coin_gecko = CoinGeckoAPI()
+db = SQLAlchemy()
+print(app.config['GOOGLE_CLIENT_ID'])
+print(app.config['GOOGLE_CLIENT_SECRET'])
+client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+
 
 # socketio.init_app(app, manage_session=False)
 
-app.debug = True  # Enable debug mode
-
-app.config.from_object(Config)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 
 from app.features.main import main as main_blueprint
 app.register_blueprint(main_blueprint)
@@ -24,7 +39,18 @@ app.register_blueprint(main_blueprint)
 from app.features.crypto import crypto as crypto_blueprint, socketio as crypto_socket
 app.register_blueprint(crypto_blueprint)
 
+from app.features.dating import dating as dating_blueprint
+app.register_blueprint(dating_blueprint)
+
+from app.features.auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
+
 crypto_socket.init_app(app)
+db.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 @babel.localeselector
 def get_locale():
@@ -38,6 +64,8 @@ def index():
     if not g.get('lang_code', None):
         get_locale()
     return redirect(url_for('main.index'))
+
+
 
 
 # async_mode = None

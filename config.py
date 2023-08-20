@@ -1,4 +1,10 @@
 import os
+from dotenv import dotenv_values
+
+print(os.environ.get("GOOGLE_CLIENT_ID"))
+config = dotenv_values(".env")
+print()
+
 
 class Config:
     DEBUG = False
@@ -7,6 +13,11 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     LANGUAGES = ['th', 'en']
+    GOOGLE_CLIENT_ID = config["GOOGLE_CLIENT_ID"]
+    GOOGLE_CLIENT_SECRET = config["GOOGLE_CLIENT_SECRET"]
+    GOOGLE_DISCOVERY_URL = (
+        "https://accounts.google.com/.well-known/openid-configuration"
+    )
 
 class DevelopmentConfig(Config):
     DEBUG = True
