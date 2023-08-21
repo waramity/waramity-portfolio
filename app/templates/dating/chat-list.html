@@ -1,0 +1,204 @@
+<div id="chat-list" class="list-group"></div>
+
+<template id="chat-item-template">
+  <a
+    id="chat-item__link"
+    href="#"
+    class="list-group-item list-group-item-action"
+    aria-current="true"
+  >
+    <div class="row">
+      <div class="col-3">
+        <img
+          id="profile-image"
+          src=""
+          alt="profile-image"
+          class="w-100 h-100 rounded-circle"
+        />
+      </div>
+
+      <div class="col-9">
+        <div class="d-flex w-100 justify-content-between">
+          <p id="given-name" class="mb-1"></p>
+          <small id="updated-date">3 days ago</small>
+        </div>
+        <small id="last-message"></small>
+      </div>
+    </div>
+  </a>
+</template>
+
+<!-- template schema, hidden from the dom -->
+<script>
+  var chat_item_template = document.querySelector("#chat-item-template");
+  var chat_list = document.querySelector("#chat-list");
+
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
+
+  function createChatItem(
+    match_id,
+    user_id,
+    given_name,
+    profile_image_uri,
+    last_message
+  ) {
+    let template_clone = chat_item_template.content.cloneNode(true);
+    template_clone.querySelector("#given-name").innerHTML = `${given_name}`;
+
+    template_clone.querySelector(
+      "#profile-image"
+    ).src = `data:image/png;base64,${profile_image_uri}`;
+
+    if (last_message["message"] != null) {
+      template_clone.querySelector(
+        "#last-message"
+      ).innerHTML = `${last_message["message"]}`;
+      template_clone.querySelector("#updated-date").innerHTML = timeSince(
+        `${last_message["message"]["datetime"]}`
+      );
+    } else {
+      template_clone.querySelector(
+        "#last-message"
+      ).innerHTML = `คุณได้เชื่อมต่อกับ ${given_name} แล้ว`;
+    }
+
+    function toggleClose(user_id) {
+      return function (event) {
+        event.preventDefault();
+        if ($(this).hasClass("active")) {
+          $("#messaging").css({ "z-index": -1 });
+          $(this).toggleClass("active");
+          $(`#chat-item__link-${user_id}`).toggleClass("active");
+        }
+      };
+    }
+    function changeChat(user_id, match_id) {
+      return function (event) {
+        event.preventDefault();
+        if ($(this).hasClass("active")) {
+          $("#messaging").css({ "z-index": -1 });
+          $(this).toggleClass("active");
+          $("#messaging__close").toggleClass("active");
+          // $("input[class='write_msg']").unbind("submit");
+        } else {
+          $("#messaging").css({ "z-index": 2 });
+          $(this).toggleClass("active");
+          $("#messaging__close").toggleClass("active");
+          $("#messaging__close").click(toggleClose(user_id));
+
+          socket.emit("changeChat", user_id, match_id);
+
+          $("button.msg_send_btn")
+            .unbind("click")
+            .bind("click", (event) => {
+              event.preventDefault();
+              submitMessage();
+            });
+          $("input.write_msg").keyup(function (event) {
+            // 13 is ENTER
+            if (event.which === 13) {
+              event.preventDefault();
+              submitMessage();
+            }
+          });
+
+          function submitMessage(element) {
+            if ($("input.write_msg").val() != "") {
+              socket.emit("message", {
+                match_id: match_id,
+                recipient_id: user_id,
+                message: $("input.write_msg").val(),
+              });
+              $("input.write_msg").val("");
+            }
+            // console.log(element);
+          }
+          // $("form[name='sendNewMessageForm']").css("display", "none");
+          // $("form[name='sendMessageForm']").css("display", "block");
+          // $("form[name='sendMessageForm'] > .recipientContainer > div").html(
+          //   firstName
+          // );
+          // $(`.chatContainer[data-id="${chatID}"] .notificationDot`).css(
+          //   "visibility",
+          //   "hidden"
+          // );
+          //
+          // $("form[name='sendMessageForm']")
+          //   .unbind("submit")
+          //   .bind("submit", (event) => {
+          //     event.preventDefault();
+          //     socket.emit("message", {
+          //       datetime: new Date().toISOString(),
+          //       chatID: chatID,
+          //       recipientID: userID,
+          //       message: $("form[name='sendMessageForm'] #message").val(),
+          //     });
+          //     $("input[name='message']").val("");
+          //   });
+        }
+      };
+    }
+
+    template_clone
+      .querySelector("#chat-item__link")
+      .addEventListener("click", changeChat(user_id, match_id));
+
+    template_clone.querySelector(
+      "#chat-item__link"
+    ).id = `chat-item__link-${user_id}`;
+
+    // $("#messaging__close").toggleClass("active");
+
+    chat_list.insertBefore(template_clone.children[0], chat_list.children[0]);
+  }
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  socket.on("chatRooms", (chatRooms) => {
+    console.log(chatRooms);
+    // $(".chatsContainer").html("");
+    // // chatRooms is array of dictionary {chatID, userID}
+    for (const chatRoom of chatRooms) {
+      console.log(chatRoom);
+      const {
+        match_id,
+        user_id,
+        given_name,
+        profile_image_uri,
+        last_message,
+      } = chatRoom;
+      createChatItem(
+        match_id,
+        user_id,
+        given_name,
+        profile_image_uri,
+        last_message
+      );
+    }
+  });
+</script>

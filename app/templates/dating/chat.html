@@ -1,0 +1,309 @@
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+  crossorigin="anonymous"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment-with-locales.min.js"></script>
+<style media="screen">
+  img {
+    max-width: 100%;
+  }
+
+  .inbox_msg {
+    border: 1px solid #c4c4c4;
+    clear: both;
+    overflow: hidden;
+  }
+
+  .chat_list {
+    border-bottom: 1px solid #c4c4c4;
+    margin: 0;
+    padding: 18px 16px 10px;
+  }
+  .incoming_msg_img {
+    display: inline-block;
+    width: 6%;
+  }
+  .received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+  }
+  .received_withd_msg p {
+    background: #ebebeb none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+  }
+  .time_date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+  }
+  .received_withd_msg {
+    width: 57%;
+  }
+  .mesgs {
+    float: left;
+    padding: 30px 15px 0 25px;
+    width: 100%;
+  }
+
+  .sent_msg p {
+    background: #05728f none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0;
+    color: #fff;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+  }
+  .outgoing_msg {
+    overflow: hidden;
+    margin: 26px 0 26px;
+  }
+  .sent_msg {
+    float: right;
+    width: 46%;
+  }
+  .input_msg_write input {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #4c4c4c;
+    font-size: 15px;
+    min-height: 48px;
+    width: 100%;
+    outline: none;
+  }
+
+  .type_msg {
+    border-top: 1px solid #c4c4c4;
+    position: relative;
+  }
+  .msg_send_btn {
+    background: #05728f none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    height: 33px;
+    position: absolute;
+    right: 0;
+    top: 11px;
+    width: 33px;
+  }
+  .messaging {
+    padding: 0 0 50px 0;
+    z-index: -1;
+    background-color: white;
+  }
+  .msg_history {
+    height: 516px;
+    overflow-y: auto;
+  }
+</style>
+
+<div id="messaging" class="messaging">
+  <button
+    id="messaging__close"
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+  ></button>
+  <h3 class="text-center">Messaging</h3>
+  <div class="inbox_msg">
+    <div class="mesgs">
+      <div class="msg_history">
+        <div class="incoming_msg">
+          <div class="incoming_msg_img">
+            <img
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="sunil"
+            />
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>Test which is a new approach to have all solutions</p>
+              <span class="time_date"> 11:01 AM | June 9</span>
+            </div>
+          </div>
+        </div>
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>Test which is a new approach to have all solutions</p>
+            <span class="time_date"> 11:01 AM | June 9</span>
+          </div>
+        </div>
+        <div class="incoming_msg">
+          <div class="incoming_msg_img">
+            <img
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="sunil"
+            />
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>Test, which is a new approach to have</p>
+              <span class="time_date"> 11:01 AM | Yesterday</span>
+            </div>
+          </div>
+        </div>
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>Apollo University, Delhi, India Test</p>
+            <span class="time_date"> 11:01 AM | Today</span>
+          </div>
+        </div>
+        <div class="incoming_msg">
+          <div class="incoming_msg_img">
+            <img
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="sunil"
+            />
+          </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">
+              <p>
+                We work directly with our designers and suppliers, and sell
+                direct to you, which means quality, exclusive products, at a
+                price anyone can afford.
+              </p>
+              <span class="time_date"> 11:01 AM | Today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="type_msg">
+        <div class="input_msg_write">
+          <input
+            type="text"
+            class="write_msg"
+            placeholder="Type a message"
+            required
+          />
+          <button class="msg_send_btn" type="button">
+            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="incoming-msg__template">
+  <div class="incoming_msg">
+    <div class="incoming_msg_img">
+      <img id="profile_image" src="" alt="sunil" />
+    </div>
+    <div class="received_msg">
+      <div class="received_withd_msg">
+        <p class="message"></p>
+        <span class="time_date"></span>
+      </div>
+    </div>
+  </div>
+</template>
+<template id="outgoing-msg__template">
+  <div class="outgoing_msg">
+    <div class="sent_msg">
+      <p class="message"></p>
+      <span class="time_date"></span>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  socket.on("displayAllMessages", (payload) => {
+    $(".msg_history").html("");
+    let all_messages = payload["all_messages"];
+    let recipient_profile_image_uri = payload["profile_image_uri"];
+
+    for (const message_info of all_messages) {
+      const { match_id, message_type, created_date, message } = message_info;
+      if (message_type == "receivedMessage") {
+        displayReceivedMessage(
+          created_date,
+          message,
+          recipient_profile_image_uri
+        );
+      } else if (message_type == "sentMessage") {
+        displaySentMessage(created_date, message);
+      }
+    }
+
+    // $(".messagesContainer").html("");
+    // for (const messageInfo of allMessages) {
+    //   const { chatID, datetime, message, messageType } = messageInfo;
+    //   displayMessage(datetime, message, messageType);
+    // }
+    //
+    // $(".messagesContainer").scrollTop(
+    //   $(".messagesContainer").prop("scrollHeight")
+    // );
+  });
+
+  const convertDate = (datetime) => {
+    let date = moment.utc(datetime, "YYYY-MM-DD HH:mm:ss.SSS");
+    date = new Date(date);
+    date = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+    return date;
+  };
+
+  const displayReceivedMessage = (created_date, message, profile_image_uri) => {
+    const date = convertDate(created_date);
+    var message_box = document.querySelector(".msg_history");
+
+    var incoming_message_template = document.querySelector(
+      "#incoming-msg__template"
+    );
+
+    let template_clone = incoming_message_template.content.cloneNode(true);
+    template_clone.querySelector(
+      "#profile_image"
+    ).src = `data:image/png;base64,${profile_image_uri}`;
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${date}`;
+
+    message_box.append(template_clone.children[0]);
+  };
+
+  const displaySentMessage = (created_date, message) => {
+    const date = convertDate(created_date);
+    var message_box = document.querySelector(".msg_history");
+
+    var outgoing_message_template = document.querySelector(
+      "#outgoing-msg__template"
+    );
+
+    let template_clone = outgoing_message_template.content.cloneNode(true);
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${date}`;
+
+    message_box.append(template_clone.children[0]);
+  };
+
+  // const messageContainer = document.createElement("div");
+  // $(messageContainer).addClass("messageContainer");
+  //
+  // const innerMessageContainer = document.createElement("div");
+  // $(innerMessageContainer).addClass(messageType);
+  //
+  // const messageDiv = document.createElement("div");
+  // $(messageDiv).html(message).addClass("message");
+  //
+  // const datetimeDiv = document.createElement("div");
+  // $(datetimeDiv).html(date).addClass("date");
+  //
+  // $(innerMessageContainer).append(messageDiv).append(datetimeDiv);
+  // $(messageContainer).append(innerMessageContainer);
+  // $(".messagesContainer").append(messageContainer);
+</script>
