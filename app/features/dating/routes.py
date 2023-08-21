@@ -6,13 +6,17 @@ from flask_login import login_required, current_user
 
 import geocoder
 
-from app.models import Location, Preferences, User, Gender
+from app.models import Location, Preferences, User, Gender, Likes, Matches
 from app import db
 
 import datetime, time
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import func, and_
 import random
+from math import radians, cos, sin, asin, sqrt
+
+import uuid
+
 
 dating = Blueprint('dating', __name__, template_folder='templates', url_prefix='/<lang_code>' )
 
@@ -31,6 +35,23 @@ def before_request():
         abort(404)
 
 # Multiligual End
+
+def haversine(lat1, lon1, lat2, lon2):
+    """
+    Calculate the great circle distance in kilometers between two points
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a))
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+    return c * r
+
 
 @dating.route('/dating')
 def index():
@@ -126,53 +147,34 @@ def save_changes_preferences():
         #     user['distance'] = distance
         return make_response(jsonify(preferences), 200)
 
+def random_uuid(model):
+    unique_id = uuid.uuid4().hex
+    while model.query.filter_by(id=unique_id).first():
+        unique_id = uuid.uuid4().hex
+    return unique_id
 
 @dating.route('/update-like', methods=['POST'])
 @login_required
 def update_like():
     if request.method == 'POST' and request.json is not None:
         result = {}
-        # print(request.json["res_user_id"])
         from_user_like = Likes.query.filter(Likes.from_user_id==str(current_user.id), Likes.to_user_id==str(request.json["res_user_id"])).first()
-        # print(Likes.query.filter(Likes.to_user_id=="7215c992b5c945bfb09707c31f068f42").first())
-        # print(len(Likes.query.all()))
-        # if like is None:
-        #     like = Likes.query.filter(Likes.req_user_id==request.json["res_user_id"], Likes.res_user_id==current_user.id).first()
-        # print(like)
         if from_user_like is None:
-            # print(request.json["res_user_id"])
             from_user_like = Likes(id=random_uuid(Likes), from_user_id=current_user.id, to_user_id=str(request.json["res_user_id"]), like=bool(request.json["like"]))
-            # print(like)
             current_user.likes.append(from_user_like)
             db.session.add(from_user_like)
-            print(len(current_user.likes))
             if from_user_like.like is True:
                 to_user_like = Likes.query.filter(Likes.from_user_id==str(request.json["res_user_id"]), Likes.to_user_id==current_user.id, Likes.like==True).first()
-                print(to_user_like)
                 if to_user_like is not None:
                     match = Matches(id=random_uuid(Matches), sender_id=current_user.id, recipient_id=str(request.json["res_user_id"]))
                     db.session.add(match)
                     current_user.matches.append(match)
                     to_user = User.query.filter_by(id=str(request.json["res_user_id"])).first()
-                    # to_user_match = Matches(id=random_uuid(Matches), from_user_id=str(request.json["res_user_id"]), to_user_id=current_user.id)
                     to_user.matches.append(match)
-                    # db.session.add(to_user_match)
                     db.session.commit()
-                    print(current_user.matches)
                     result['result'] = 'Match'
                     result.update({'match_id': match.id, 'user_id': to_user.id, 'given_name': to_user.given_name, 'profile_image_uri': to_user.profile_images[0].rendered_data, 'last_message': {"message": None, "datetime": None}})
-                    # result['id'] = to_user.id
-                    # result['given_name'] = to_user.given_name,
-                    # result['profile_image_uri'] = to_user.profile_images[0].rendered_data,
-                    # result['updated_date'] = int(time.mktime(match.updated_date.timetuple())) * 1000
                     return make_response(jsonify(result), 200)
-
-        # like = Likes.query.all()
-        #
-        # print(like)
-
-
-            print(current_user.likes)
             db.session.commit()
             result["result"] = "Like"
             return make_response(jsonify(result), 200)

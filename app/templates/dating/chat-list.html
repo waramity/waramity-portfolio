@@ -120,7 +120,6 @@
               submitMessage();
             });
           $("input.write_msg").keyup(function (event) {
-            // 13 is ENTER
             if (event.which === 13) {
               event.preventDefault();
               submitMessage();
@@ -136,30 +135,7 @@
               });
               $("input.write_msg").val("");
             }
-            // console.log(element);
           }
-          // $("form[name='sendNewMessageForm']").css("display", "none");
-          // $("form[name='sendMessageForm']").css("display", "block");
-          // $("form[name='sendMessageForm'] > .recipientContainer > div").html(
-          //   firstName
-          // );
-          // $(`.chatContainer[data-id="${chatID}"] .notificationDot`).css(
-          //   "visibility",
-          //   "hidden"
-          // );
-          //
-          // $("form[name='sendMessageForm']")
-          //   .unbind("submit")
-          //   .bind("submit", (event) => {
-          //     event.preventDefault();
-          //     socket.emit("message", {
-          //       datetime: new Date().toISOString(),
-          //       chatID: chatID,
-          //       recipientID: userID,
-          //       message: $("form[name='sendMessageForm'] #message").val(),
-          //     });
-          //     $("input[name='message']").val("");
-          //   });
         }
       };
     }
@@ -172,19 +148,14 @@
       "#chat-item__link"
     ).id = `chat-item__link-${user_id}`;
 
-    // $("#messaging__close").toggleClass("active");
-
     chat_list.insertBefore(template_clone.children[0], chat_list.children[0]);
   }
 </script>
 
 <script type="text/javascript" charset="utf-8">
+  console.log("kuy");
   socket.on("chatRooms", (chatRooms) => {
-    console.log(chatRooms);
-    // $(".chatsContainer").html("");
-    // // chatRooms is array of dictionary {chatID, userID}
     for (const chatRoom of chatRooms) {
-      console.log(chatRoom);
       const {
         match_id,
         user_id,
@@ -192,6 +163,7 @@
         profile_image_uri,
         last_message,
       } = chatRoom;
+      console.log(chatRoom);
       createChatItem(
         match_id,
         user_id,

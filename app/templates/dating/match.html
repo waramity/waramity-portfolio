@@ -48,9 +48,10 @@
 </style>
 
 <script type="text/javascript">
-  var socket = io();
+  const socket = io("/dating");
   socket.on("connect", function () {
     socket.emit("userConnected");
+    console.log("sus");
   });
 </script>
 
