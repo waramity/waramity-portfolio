@@ -11,7 +11,7 @@ class Config:
     TESTING = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = config['SECRET_KEY']
     LANGUAGES = ['th', 'en']
     GOOGLE_CLIENT_ID = config["GOOGLE_CLIENT_ID"]
     GOOGLE_CLIENT_SECRET = config["GOOGLE_CLIENT_SECRET"]

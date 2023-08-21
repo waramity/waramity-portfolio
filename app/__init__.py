@@ -19,8 +19,6 @@ app.config.from_object(Config)
 
 babel = Babel(app)
 db = SQLAlchemy()
-print(app.config['GOOGLE_CLIENT_ID'])
-print(app.config['GOOGLE_CLIENT_SECRET'])
 client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 
 login_manager = LoginManager()
@@ -48,6 +46,8 @@ app.register_blueprint(auth_blueprint)
 crypto_socket.init_app(app)
 db.init_app(app)
 
+from .models import Social, User
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
@@ -66,6 +66,21 @@ def index():
     return redirect(url_for('main.index'))
 
 
+def social_generator():
+    social_names = ['google', 'facebook', 'twitter', 'apple']
+
+    for name in social_names:
+        social = Social(
+            name=name
+        )
+        db.session.add(social)
+
+    db.session.commit()
+
+
+with app.app_context():
+    db.create_all()
+    social_generator()
 
 
 # async_mode = None
