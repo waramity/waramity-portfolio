@@ -46,12 +46,6 @@ app.register_blueprint(auth_blueprint)
 crypto_socket.init_app(app)
 db.init_app(app)
 
-from .models import Social, User
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
 @babel.localeselector
 def get_locale():
     if not g.get('lang_code', None):
@@ -65,6 +59,12 @@ def index():
         get_locale()
     return redirect(url_for('main.index'))
 
+from .models import Social, User, Gender, Passion
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 
 def social_generator():
     social_names = ['google', 'facebook', 'twitter', 'apple']
@@ -77,10 +77,33 @@ def social_generator():
 
     db.session.commit()
 
+gender_names = ['Man', 'Woman']
+
+def gender_generator():
+    for name in gender_names:
+        gender = Gender(
+            name=name
+        )
+        db.session.add(gender)
+
+    db.session.commit()
+
+def passion_generator():
+    passion_names = ['Cycling', 'Outdoors', 'Walking', 'Cooking', 'Working out', 'Athlete', 'Craft Beer', 'Writer', 'Politics', 'Climbing', 'Foodie', 'Art', 'Karaoke', 'Yoga', 'Blogging', 'Disney', 'Surfing', 'Soccer', 'Dog lover', 'Cat lover', 'Movies', 'Swimming', 'Hiking', 'Running', 'Music', 'Fashion', 'Vlogging', 'Astrology', 'Coffee', 'Instagram', 'DIY', 'Board Games', 'Environmentalism', 'Dancing', 'Volunteering', 'Trivia', 'Reading', 'Tea', 'Language Exchange', 'Shopping', 'Wine', 'Travel']
+
+    for name in passion_names:
+        passion = Passion(
+            name=name
+        )
+        db.session.add(passion)
+
+    db.session.commit()
 
 with app.app_context():
     db.create_all()
     social_generator()
+    gender_generator()
+    passion_generator()
 
 
 # async_mode = None

@@ -289,7 +289,7 @@ def profile():
     if current_user.is_authenticated:
         return render_template('auth/profile.html')
 
-    return redirect(url_for("main.index"))
+    return redirect(url_for("dating.index"))
 
 @auth.route('/geolocation', methods=['GET', 'POST'])
 @login_required
@@ -297,6 +297,6 @@ def geolocation():
     if request.method == 'POST' and request.json['geolocation_permission'] is not None:
         current_user.geolocation_permission = request.json['geolocation_permission']
         db.session.commit()
-        return redirect(url_for('main.app'))
+        return redirect(url_for('dating.app'))
     else:
         return render_template('auth/geolocation.html')

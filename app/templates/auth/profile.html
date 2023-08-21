@@ -1,0 +1,11 @@
+{% extends "dating/_base.html" %} {% block content %}
+<h1>
+  Welcome, {{ current_user.given_name }}!!! {{ current_user.birthday }}!!! {{
+  current_user.gender }} {{ current_user.sexual_orientations }}{{
+  current_user.showmes }} {{ current_user.passions }}
+  {{current_user.profile_images}} {{current_user.geolocation_permission}}
+  {{current_user.last_location}} {{current_user.user_social}}
+</h1>
+{%for profile_image in current_user.profile_images %}
+<img src="data:image/png;base64,{{profile_image.rendered_data}}" alt="" />
+{%endfor%} {% endblock %}

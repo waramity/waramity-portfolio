@@ -1,0 +1,21 @@
+{% extends "dating/_base.html" %} {% block content %}
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  onclick="allowGeolocation()"
+>
+  Allow Geolocation
+</button>
+<script type="text/javascript">
+  let data = { geolocation_permission: true };
+  function allowGeolocation() {
+    fetch("{{url_for('auth.geolocation')}}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      window.location.replace(res.url);
+    });
+  }
+</script>
+{% endblock %}
