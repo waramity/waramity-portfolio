@@ -51,7 +51,27 @@
   const socket = io("/dating");
   socket.on("connect", function () {
     socket.emit("userConnected");
-    console.log("sus");
+  });
+  socket.on("chatRooms", (chatRooms) => {
+    for (const chatRoom of chatRooms) {
+      const {
+        match_id,
+        user_id,
+        given_name,
+        profile_image_uri,
+        last_message,
+      } = chatRoom;
+      console.log("Received chatRooms data:", chatRooms);
+      console.log(chatRoom);
+      console.log("nahee");
+      createChatItem(
+        match_id,
+        user_id,
+        given_name,
+        profile_image_uri,
+        last_message
+      );
+    }
   });
 </script>
 

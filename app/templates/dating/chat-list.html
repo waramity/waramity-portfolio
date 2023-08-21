@@ -151,26 +151,3 @@
     chat_list.insertBefore(template_clone.children[0], chat_list.children[0]);
   }
 </script>
-
-<script type="text/javascript" charset="utf-8">
-  console.log("kuy");
-  socket.on("chatRooms", (chatRooms) => {
-    for (const chatRoom of chatRooms) {
-      const {
-        match_id,
-        user_id,
-        given_name,
-        profile_image_uri,
-        last_message,
-      } = chatRoom;
-      console.log(chatRoom);
-      createChatItem(
-        match_id,
-        user_id,
-        given_name,
-        profile_image_uri,
-        last_message
-      );
-    }
-  });
-</script>

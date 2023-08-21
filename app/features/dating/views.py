@@ -37,7 +37,11 @@ def userConnected():
             message = {"message": None, "datetime": None}
         if recipient_user:
             all_chats.append({'match_id': match.id, 'user_id': user_id, 'given_name': recipient_user.given_name, 'last_message': message, 'profile_image_uri': recipient_user.profile_images[0].rendered_data})
-    socketio.emit("chatRooms", all_chats, room=current_user.id)
+
+    print(all_chats)
+    print(current_user.id)
+    print("Emitting chatRooms event")
+    socketio.emit("chatRooms", all_chats, room=current_user.id, namespace='/dating')
 
 def stringifyDateTime(dateTimeObject):
     if isinstance(dateTimeObject, datetime.datetime):
