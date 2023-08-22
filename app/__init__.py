@@ -26,15 +26,15 @@ app.config.from_object(Config)
 babel = Babel(app)
 db = SQLAlchemy()
 client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
+google_client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-mongo_client = MongoClient()
+mongo_client = MongoClient('localhost', 27017)
 user_db = mongo_client["user"]
 feature_db = mongo_client["feature"]
-
 
 
 # socketio.init_app(app, manage_session=False)
@@ -74,6 +74,7 @@ def index():
     return redirect(url_for('main.index'))
 
 from .models import Social, User as DatingUser, Gender, Passion
+from app.features.ai_hub.models import User as AIUser
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -82,43 +83,10 @@ def load_user(user_id):
         user_json = user_db.profile.find_one({'_id': user_id})
         if not user_json:
             return None
-        return User(user_json)
+        return AIUser(user_json)
     else:
         return DatingUser.query.get(user_id)
 
-class User(UserMixin):
-    def __init__(self, user_json):
-        # user_json['_id'] = str(user_json.get('_id'))
-        self.user_json = user_json
-
-    def get_id(self):
-        object_id = self.user_json.get('_id')
-        return object_id
-
-    def get_slug(self):
-        slug = self.user_json.get('slug')
-        return slug
-
-    def get_profile_name(self):
-        profile_name = self.user_json.get('profile_name')
-        if not profile_name:
-            return None
-        return str(profile_name)
-
-    def get_profile_image(self):
-        profile_image = self.user_json.get('image_url')
-        if not profile_image:
-            return None
-        return str(profile_image)
-
-    def is_authenticated():
-        return True
-
-    def is_active():
-        return True
-
-    def is_anonymous():
-        return True
 
 
 
