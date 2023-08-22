@@ -236,16 +236,6 @@
         displaySentMessage(created_date, message);
       }
     }
-
-    // $(".messagesContainer").html("");
-    // for (const messageInfo of allMessages) {
-    //   const { chatID, datetime, message, messageType } = messageInfo;
-    //   displayMessage(datetime, message, messageType);
-    // }
-    //
-    // $(".messagesContainer").scrollTop(
-    //   $(".messagesContainer").prop("scrollHeight")
-    // );
   });
 
   const convertDate = (datetime) => {
@@ -290,20 +280,4 @@
 
     message_box.append(template_clone.children[0]);
   };
-
-  // const messageContainer = document.createElement("div");
-  // $(messageContainer).addClass("messageContainer");
-  //
-  // const innerMessageContainer = document.createElement("div");
-  // $(innerMessageContainer).addClass(messageType);
-  //
-  // const messageDiv = document.createElement("div");
-  // $(messageDiv).html(message).addClass("message");
-  //
-  // const datetimeDiv = document.createElement("div");
-  // $(datetimeDiv).html(date).addClass("date");
-  //
-  // $(innerMessageContainer).append(messageDiv).append(datetimeDiv);
-  // $(messageContainer).append(innerMessageContainer);
-  // $(".messagesContainer").append(messageContainer);
 </script>
