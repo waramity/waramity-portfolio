@@ -5,9 +5,21 @@ from flask_login import login_required, current_user
 
 from app.models import Matches, Message, User
 
+import uuid
+import json
+import datetime, time
+
+from app import db
+
 socketio = SocketIO()
 
 print("nahee")
+
+def random_uuid(model):
+    unique_id = uuid.uuid4().hex
+    while model.query.filter_by(id=unique_id).first():
+        unique_id = uuid.uuid4().hex
+    return unique_id
 
 @socketio.on("userConnected", namespace='/dating')
 @login_required
@@ -64,7 +76,7 @@ def changeChat(user_id, match_id):
             message_type = "sentMessage"
         print(message_type)
         payload['all_messages'].append({"match_id": match_id, "message_type": message_type, "created_date": json.dumps(message.created_date, default=stringifyDateTime), "message": message.message})
-    socketio.emit("displayAllMessages", payload, room=current_user.id)
+    socketio.emit("displayAllMessages", payload, room=current_user.id, namespace='/dating')
 
 @socketio.on("message", namespace='/dating')
 def message(form):
@@ -81,8 +93,8 @@ def message(form):
     db.session.add(new_message)
     db.session.commit()
 
-    socketio.emit("sentMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime)}, room=current_user.id)
-    socketio.emit("receivedMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime), "firstName": current_user.given_name}, room=recipient_id)
+    socketio.emit("sentMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime)}, room=current_user.id, namespace='/dating')
+    socketio.emit("receivedMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime), "firstName": current_user.given_name}, room=recipient_id, namespace='/dating')
 
 
 
