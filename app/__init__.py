@@ -8,6 +8,11 @@ from flask_socketio import SocketIO
 
 from config import Config
 from dotenv import load_dotenv
+from pymongo import MongoClient
+from flask_login import UserMixin
+from bson import ObjectId
+
+
 
 load_dotenv()
 
@@ -25,6 +30,10 @@ client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
+
+mongo_client = MongoClient()
+user_db = mongo_client["user"]
+feature_db = mongo_client["feature"]
 
 
 
@@ -64,11 +73,52 @@ def index():
         get_locale()
     return redirect(url_for('main.index'))
 
-from .models import Social, User, Gender, Passion
+from .models import Social, User as DatingUser, Gender, Passion
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    if user_id.startswith('mongo_'):
+        user_id = ObjectId(user_id)
+        user_json = user_db.profile.find_one({'_id': user_id})
+        if not user_json:
+            return None
+        return User(user_json)
+    else:
+        return DatingUser.query.get(user_id)
+
+class User(UserMixin):
+    def __init__(self, user_json):
+        # user_json['_id'] = str(user_json.get('_id'))
+        self.user_json = user_json
+
+    def get_id(self):
+        object_id = self.user_json.get('_id')
+        return object_id
+
+    def get_slug(self):
+        slug = self.user_json.get('slug')
+        return slug
+
+    def get_profile_name(self):
+        profile_name = self.user_json.get('profile_name')
+        if not profile_name:
+            return None
+        return str(profile_name)
+
+    def get_profile_image(self):
+        profile_image = self.user_json.get('image_url')
+        if not profile_image:
+            return None
+        return str(profile_image)
+
+    def is_authenticated():
+        return True
+
+    def is_active():
+        return True
+
+    def is_anonymous():
+        return True
 
 
 def social_generator():

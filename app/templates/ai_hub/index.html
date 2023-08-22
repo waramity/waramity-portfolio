@@ -1,1 +1,98 @@
-kuy
+{% extends "ai_hub/_base.html" %} {% block content %}
+
+<h1 class="mb-4">Tutorial</h1>
+{%for model_card in model_cards%}
+<div class="card col-3">
+  <div class="card-body">
+    <h5 class="card-title">{{model_card.title}}</h5>
+    <p class="card-text">
+      {{model_card.short_description}}
+    </p>
+  </div>
+</div>
+{%endfor%}
+<h1 class="mb-4">Prompt builder</h1>
+<div class="row">
+  {%for prompt_builder in prompt_builders%} {{prompt_builder}}
+
+  <a href="{{ url_for('prompt_builder.main', slug=prompt_builder['slug']) }}">
+    <div class="card mb-3 col-4 p-0">
+      <div class="row g-0">
+        <div class="col-md-4">
+          {% if prompt_builder['cover_image_url'] == '' %}
+          <img
+            src="{{url_for('static', filename='/blank-image.png')}}"
+            class="img-fluid rounded-start w-100 h-100"
+            alt="{{prompt_builder['name']}}"
+          />
+          {%else%}
+          <img
+            src="{{prompt_builder['cover_image_url']}}"
+            class="img-fluid rounded-start w-100 h-100"
+            alt="{{prompt_builder['name']}}"
+          />
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              {{prompt_builder['name']}}
+            </h5>
+            <p id="description-{{prompt_builder['slug']}}" class="card-text">
+              {{prompt_builder['description']}}
+            </p>
+            <p class="card-text">
+              <small
+                id="last-updated-{{prompt_builder['slug']}}"
+                class="text-muted"
+              ></small>
+              <script type="text/javascript">
+                prompt_updated_date_str = "{{prompt_builder['updated_date']}}";
+                formatTimeDifference(
+                  prompt_updated_date_str,
+                  "last-updated-{{prompt_builder['slug']}}"
+                );
+              </script>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+  <script type="text/javascript">
+    description = $("#description-{{prompt_builder['slug']}}");
+    if (description.html().length > 10)
+      description.html(description.html().substring(0, 10));
+  </script>
+  {%endfor%}
+</div>
+
+<h1 class="mb-4">Prompt collection</h1>
+
+<!-- START: show information script -->
+<script type="text/javascript">
+  let prompt_updated_date_str = "";
+  let description = "";
+  function formatTimeDifference(date_str, element_id) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      document.getElementById(element_id).innerHTML =
+        diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      document.getElementById(element_id).innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      document.getElementById(element_id).innerHTML = diffDays + " days ago";
+    } else {
+      document.getElementById(element_id).innerHTML =
+        diffMonths + " months ago";
+    }
+  }
+</script>
+<!-- END:  show information script-->
+{% endblock %}
