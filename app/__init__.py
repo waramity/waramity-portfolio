@@ -44,6 +44,9 @@ app.register_blueprint(dating_blueprint)
 from app.features.auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
+from app.features.ai_hub import ai_hub as ai_hub_blueprint
+app.register_blueprint(ai_hub_blueprint)
+
 crypto_socket.init_app(app)
 dating_socket.init_app(app)
 db.init_app(app)
