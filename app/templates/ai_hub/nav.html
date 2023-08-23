@@ -78,14 +78,7 @@
           </div>
         </div>
         {% else %} {%if current_user.get_profile_name() %}
-        <a href="{{ url_for('prompt_builder.create') }}" class="nav-link">
-          {{_('+ สร้าง Prompt builder')}}
-        </a>
-
-        <a
-          href="{{ url_for('prompt_collection.upload_prompt') }}"
-          class="nav-link"
-        >
+        <a href="{{ url_for('ai_hub.upload_prompt') }}" class="nav-link">
           {{_('+ อัพโหลด Prompt')}}
         </a>
 
@@ -110,14 +103,14 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('profile.main', profile_name=current_user.get_profile_name()) }}"
+                href="{{ url_for('ai_hub.profile', profile_name=current_user.get_profile_name()) }}"
               >
                 <i class="bi bi-person-circle"></i>
                 {{_('โปรไฟล์')}}
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('profile.bookmark') }}">
+              <a class="dropdown-item" href="{{ url_for('ai_hub.bookmark') }}">
                 <i class="bi bi-bookmark"></i>
                 {{_('บุ๊คมาร์ค')}}
               </a>
@@ -125,7 +118,7 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('profile.edit_profile', profile_name=current_user.get_profile_name()) }}"
+                href="{{ url_for('ai_hub.edit_profile', profile_name=current_user.get_profile_name()) }}"
               >
                 <i class="bi bi-pencil-square"></i>
                 {{_('แก้ไขโปรไฟล์')}}

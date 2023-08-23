@@ -246,3 +246,74 @@ def submit_create_profile():
         return make_response(jsonify({'status': 1, 'message': 'สร้างโปรไฟล์แล้ว'}), 200)
 
     return make_response(jsonify({'status': 0, 'error_message': 'error_code in create_profile of auth'}), 200)
+
+@ai_hub.route('/upload-prompt', methods=['GET', 'POST'])
+@login_required
+def upload_prompt():
+    if request.method == 'GET':
+        return render_template('prompt_collection/upload.html', title=_('The deep pub'))
+    if request.method == 'POST' and request.json is not None:
+        try:
+            is_valid_topic(request.json['topic'])
+            is_valid_description(request.json['description'])
+            is_valid_model_name(request.json['model_name'])
+            is_valid_prompts(request.json['prompts'])
+
+            prompts = request.json['prompts']
+
+            for prompt in prompts:
+                utils.is_valid_base64_image(prompt['image_url'])
+
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        slug = uuid.uuid4().hex[:11]
+        while feature_db.prompt_collection.find_one({'slug': slug}):
+            slug = uuid.uuid4().hex[:11]
+
+        for prompt in prompts:
+            cdn_url = utils.upload_base64_to_spaces(current_user.get_profile_name(), 'prompt_collections/' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
+            prompt['image_url'] = cdn_url
+
+        prompt_collection_json = {
+            'topic': request.json['topic'],
+            'slug': slug,
+            'user_id': current_user.get_id(),
+            'description': request.json['description'],
+            'model_name': request.json['model_name'],
+            'created_date': datetime.datetime.now(),
+            'updated_date': datetime.datetime.now(),
+            'likes': 0,
+            'prompts': prompts,
+        }
+
+        prompt_collection = feature_db.prompt_collection.insert_one(prompt_collection_json)
+        return make_response(jsonify({"status": 1, "redirect_url": '/en/prompt-collection/' + slug}), 200)
+
+@ai_hub.route("/profile/<profile_name>", methods=['GET'])
+def profile(profile_name):
+    if request.method == 'GET':
+        user = user_db.profile.find_one({'profile_name': profile_name}, {'_id': 1, 'profile_name': 1, 'description': 1, 'image_url': 1, 'total_engagement': 1})
+        if user is not None:
+            followed = False
+            if current_user.is_authenticated:
+                follow = user_db.follow.find_one({'follower_id': current_user.get_id(), 'following_id': user['_id']})
+                followed = follow is not None
+            user.pop('_id', None)
+            return render_template('profile/profile.html', title=_('โปรไฟล์ของฉัน - The deep pub'), user=user, profile_name=profile_name, followed=followed)
+        else:
+            return redirect(url_for('main.index'))
+
+@ai_hub.route("/bookmark", methods=['GET'])
+@login_required
+def bookmark():
+    if request.method == 'GET':
+        return render_template('profile/bookmark.html', title=_('บุ๊คมาร์คของฉัน - The deep pub'))
+
+@ai_hub.route("/edit-profile/<profile_name>", methods=['GET'])
+@login_required
+def edit_profile(profile_name):
+    if request.method == 'GET':
+        if current_user.get_profile_name() == profile_name:
+            user = user_db.profile.find_one({'profile_name': current_user.get_profile_name()}, {'profile_name': 1, 'description': 1, 'image_url': 1})
+            return render_template('profile/edit-profile.html', title=_('แก้ไขโปรไฟล์ - The deep pub'), user=user)
