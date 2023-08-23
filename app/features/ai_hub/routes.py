@@ -78,7 +78,6 @@ def google_auth_callback():
     )
 
     google_client.parse_request_body_response(json.dumps(token_response.json()))
-    print('kuy')
 
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = google_client.add_token(userinfo_endpoint)
@@ -89,16 +88,7 @@ def google_auth_callback():
     else:
         return "User email not available or not verified by Google.", 400
 
-    print('nhee')
-    print(user_db)
-    print(user_db.profile)
-    print(social_auth_id)
-    print(user_db.profile.find_one({'social_auth.social_auth_id': social_auth_id}))
-
     user = user_db.profile.find_one({'social_auth.social_auth_id': social_auth_id})
-    print('sus')
-
-    print(user)
 
     if not user:
 
@@ -129,8 +119,6 @@ def google_auth_callback():
                 'followings': 0
             }
         }
-
-        print(user)
 
         # Insert the new user document into the collection
         result = user_db.profile.insert_one(user)
