@@ -9,6 +9,7 @@ import uuid
 from app import db, app, google_client, user_db
 import datetime
 from app.features.ai_hub.models import User
+import re
 
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
@@ -27,6 +28,62 @@ def before_request():
         abort(404)
 
 # Multiligual End
+
+def is_valid_profile_name(profile_name):
+    if not isinstance(profile_name, str):
+        raise Exception('ชื่อ Profile is not instance')
+
+    if not profile_name[0].isalpha():
+        raise Exception('ตัวอักษรแรกของชื่อ Profile ควรเป็นภาษาอังกฤษ')
+
+    pattern = re.compile("[A-Za-z0-9]+")
+
+    if pattern.fullmatch(profile_name) is None:
+        raise Exception('ชื่อ Profile ควรมีแค่ภาษาอังกฤษ, และตัวเลข')
+
+    if len(profile_name) >= 2 and len(profile_name) <= 15:
+        return True
+    else:
+        raise Exception('ชื่อ Profile ควรมีความยาวระหว่าง 2-15 ตัวอักษร')
+
+def is_valid_description(description):
+    if not isinstance(description, str):
+        raise Exception('Description is not instance')
+
+    if len(description) <= 188:
+        return True
+    else:
+        raise Exception('Description ควรต่ำกว่า 188 ตัวอักษร')
+
+def is_duplicate_profile_name(profile_name):
+    if user_db.profile.find_one({'profile_name': profile_name}) and profile_name != current_user.get_profile_name():
+        raise Exception('มีคนใช้งานชื่อ Profile นี้แล้ว')
+    else:
+        return True
+
+def is_valid_base64_image(image_string):
+    image_string = image_string.split(',', 1)[-1]
+
+    if len(image_string) * 3 / 4 > 2 * 1024 * 1024:
+        raise Exception('ขนาดของไฟล์ควรต่ำกว่า 2 MBs')
+
+    if is_valid_image(image_string):
+        image = base64.b64decode(image_string)
+        img = Image.open(io.BytesIO(image))
+        if img.width > 2048 or img.height > 2048:
+            raise Exception('ขนาดของภาพควรต่ำกว่า 2048px')
+        if img.format.lower() not in ["jpg", "jpeg", "png"]:
+            raise Exception('กรุณาอัพโหลดไฟล์นามสกุล jpg, jpeg หรือ png เท่านั้น')
+        return True
+    return False
+    
+def is_valid_image(image_string):
+    try:
+        image = base64.b64decode(image_string)
+        Image.open(io.BytesIO(image))
+        return True
+    except Exception:
+        raise Exception('Format ของภาพไม่ถูกต้อง')
 
 @ai_hub.route('/')
 def index():
@@ -139,3 +196,27 @@ def create_profile():
     if request.method == 'GET' and current_user.get_profile_name() is None:
         return render_template('ai_hub/create-profile.html', title=_('สร้างโปรไฟล์ - The deep pub'))
     return redirect(url_for('ai_hub.index'))
+
+
+@ai_hub.route("/submit-create-profile", methods=['PATCH'])
+@login_required
+def submit_create_profile():
+    if request.method == 'PATCH' and request.json is not None:
+        try:
+            print(request.json['profile']['name'])
+            is_valid_profile_name(request.json['profile']['name'])
+            is_valid_description(request.json['profile']['description'])
+            is_duplicate_profile_name(request.json['profile']['name'])
+            is_valid_base64_image(request.json['profile']['base64_image'])
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        cdn_url = utils.upload_base64_to_spaces(request.json['profile']['name'], 'profiles/' + request.json['profile']['name'] + '_' + current_user.get_slug(), request.json['profile']['base64_image'])
+        profile = {
+            "$set": {"profile_name": request.json['profile']['name'], "image_url": cdn_url, 'description': request.json['profile']['description']}
+        }
+
+        user_db.profile.update_one({"_id": current_user.get_id()}, profile)
+        return make_response(jsonify({'status': 1, 'message': 'สร้างโปรไฟล์แล้ว'}), 200)
+
+    return make_response(jsonify({'status': 0, 'error_message': 'error_code in create_profile of auth'}), 200)

@@ -61,9 +61,24 @@
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
 <!-- START: profile image script -->
 <script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+
   function processBase64Image(
     inputId,
     previewId,
@@ -125,7 +140,7 @@
       },
     };
 
-    fetch(`/en/submit-create-profile`, {
+    fetch(`/en/ai_hub/submit-create-profile`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
