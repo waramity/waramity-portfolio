@@ -251,7 +251,7 @@ def submit_create_profile():
 @login_required
 def upload_prompt():
     if request.method == 'GET':
-        return render_template('prompt_collection/upload.html', title=_('The deep pub'))
+        return render_template('ai_hub/upload.html', title=_('The deep pub'))
     if request.method == 'POST' and request.json is not None:
         try:
             is_valid_topic(request.json['topic'])
