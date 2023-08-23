@@ -5,7 +5,10 @@ from flask_babel import _, refresh
 from flask_login import login_user, logout_user, login_required, current_user
 
 import requests
+import uuid
 from app import db, app, google_client, user_db
+import datetime
+from app.features.ai_hub.models import User
 
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
@@ -103,7 +106,12 @@ def google_auth_callback():
         while user_db.profile.find_one({'slug': slug}):
             slug = uuid.uuid4().hex[:11]
 
+        user_id = 'mongo_' + uuid.uuid4().hex[:11]
+        while user_db.profile.find_one({'_id': user_id}):
+            user_id = 'mongo_' + uuid.uuid4().hex[:11]
+
         user = {
+            '_id': user_id,
             'registered_on': datetime.datetime.now(),
             'slug': slug,
             'social_auth': {
@@ -121,6 +129,8 @@ def google_auth_callback():
                 'followings': 0
             }
         }
+
+        print(user)
 
         # Insert the new user document into the collection
         result = user_db.profile.insert_one(user)
