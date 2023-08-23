@@ -10,6 +10,13 @@ from app import db, app, google_client, user_db
 import datetime
 from app.features.ai_hub.models import User
 import re
+import base64
+
+from PIL import Image
+import io
+import os
+import time
+
 
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
@@ -76,7 +83,7 @@ def is_valid_base64_image(image_string):
             raise Exception('กรุณาอัพโหลดไฟล์นามสกุล jpg, jpeg หรือ png เท่านั้น')
         return True
     return False
-    
+
 def is_valid_image(image_string):
     try:
         image = base64.b64decode(image_string)
@@ -84,6 +91,24 @@ def is_valid_image(image_string):
         return True
     except Exception:
         raise Exception('Format ของภาพไม่ถูกต้อง')
+
+def upload_base64_to_file_system(profile_name, directory_path, base64_data):
+    base64_data_without_prefix = base64_data.split(',', 1)[-1]
+    binary_data = base64.b64decode(base64_data_without_prefix)
+
+    unique_id = uuid.uuid4().hex
+    os.makedirs(directory_path, exist_ok=True)
+
+
+    # Define the path where you want to save the file on your local filesystem
+    file_path = os.path.join(directory_path, f'{profile_name}-{unique_id}-{time.time()}.png')
+
+    # Write the binary data to the local file
+    with open(file_path, 'wb') as file:
+        file.write(binary_data)
+
+    # Return the local file path (if needed)
+    return file_path
 
 @ai_hub.route('/')
 def index():
@@ -207,13 +232,14 @@ def submit_create_profile():
             is_valid_profile_name(request.json['profile']['name'])
             is_valid_description(request.json['profile']['description'])
             is_duplicate_profile_name(request.json['profile']['name'])
+            print(request.json['profile']['base64_image'])
             is_valid_base64_image(request.json['profile']['base64_image'])
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
 
-        cdn_url = utils.upload_base64_to_spaces(request.json['profile']['name'], 'profiles/' + request.json['profile']['name'] + '_' + current_user.get_slug(), request.json['profile']['base64_image'])
+        image_url = upload_base64_to_file_system(request.json['profile']['name'], 'profiles\\' + request.json['profile']['name'] + '_' + current_user.get_slug(), request.json['profile']['base64_image'])
         profile = {
-            "$set": {"profile_name": request.json['profile']['name'], "image_url": cdn_url, 'description': request.json['profile']['description']}
+            "$set": {"profile_name": request.json['profile']['name'], "image_url": image_url, 'description': request.json['profile']['description']}
         }
 
         user_db.profile.update_one({"_id": current_user.get_id()}, profile)
