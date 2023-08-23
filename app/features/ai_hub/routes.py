@@ -30,6 +30,9 @@ def before_request():
 
 @ai_hub.route('/')
 def index():
+    if current_user.is_authenticated:
+        if current_user.get_profile_name() is None:
+            return redirect(url_for('ai_hub.create_profile'))
     return render_template('ai_hub/index.html', title=_('waramity portfolio'))
 
 @ai_hub.route('/logout')
@@ -128,4 +131,11 @@ def google_auth_callback():
 
     user = User(user)
     login_user(user)
-    return redirect(url_for('main.index'))
+    return redirect(url_for('ai_hub.index'))
+
+@ai_hub.route("/create-profile", methods=['GET'])
+@login_required
+def create_profile():
+    if request.method == 'GET' and current_user.get_profile_name() is None:
+        return render_template('ai_hub/create-profile.html', title=_('สร้างโปรไฟล์ - The deep pub'))
+    return redirect(url_for('ai_hub.index'))
