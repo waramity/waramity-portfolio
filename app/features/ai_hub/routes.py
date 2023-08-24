@@ -472,4 +472,4 @@ def edit_profile(profile_name):
     if request.method == 'GET':
         if current_user.get_profile_name() == profile_name:
             user = user_db.profile.find_one({'profile_name': current_user.get_profile_name()}, {'profile_name': 1, 'description': 1, 'image_url': 1})
-            return render_template('profile/edit-profile.html', title=_('แก้ไขโปรไฟล์ - The deep pub'), user=user)
+            return render_template('ai_hub/edit-profile.html', title=_('แก้ไขโปรไฟล์ - The deep pub'), user=user)
