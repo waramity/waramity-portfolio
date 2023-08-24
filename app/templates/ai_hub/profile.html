@@ -80,14 +80,6 @@ current_user.get_profile_name() %}
           >Prompt collection</a
         >
       </li>
-      <li class="nav-item">
-        <a
-          id="prompt-builder-nav"
-          class="nav-link"
-          onclick="togglePromptBuilder()"
-          >Prompt builder</a
-        >
-      </li>
     </ul>
   </div>
   <div id="main" class="col-12 mb-5">
@@ -255,50 +247,6 @@ current_user.get_profile_name() %}
 
 <!-- START: prompt builder function -->
 <script type="text/javascript">
-  function appendPromptBuilder(prompt_builder) {
-    let prompt_builder_item_template_clone = prompt_builder_item_template.content.cloneNode(
-      true
-    );
-
-    prompt_builder_item_template_clone.querySelector(
-      "#prompt-builder-name"
-    ).innerHTML = `${prompt_builder["name"]}`;
-
-    if (prompt_builder["cover_image_url"] != "") {
-      prompt_builder_item_template_clone.querySelector(
-        "#prompt-builder-image"
-      ).src = `${prompt_builder["cover_image_url"]}`;
-    } else {
-      prompt_builder_item_template_clone.querySelector(
-        "#prompt-builder-image"
-      ).src = `/static/blank-image.png`;
-    }
-
-    formatTimeDifference(
-      prompt_builder["updated_date"],
-      prompt_builder_item_template_clone.querySelector(
-        "#prompt-builder-updated-date"
-      )
-    );
-
-    prompt_builder_item_template_clone.querySelector(
-      "#prompt-builder-link"
-    ).href = `/th/prompt-builder/${prompt_builder["slug"]}`;
-
-    main
-      .querySelector("#collections")
-      .insertBefore(
-        prompt_builder_item_template_clone.children[0],
-        main.querySelector("#collections").lastElementChild
-      );
-  }
-
-  function createPromptBuilders(prompt_builders) {
-    for (var i = 0; i < prompt_builders.length; i++) {
-      appendPromptBuilder(prompt_builders[i]);
-    }
-  }
-
   function appendPromptCollection(prompt_collection) {
     let prompt_collection_item_template_clone = prompt_collection_item_template.content.cloneNode(
       true
@@ -328,31 +276,10 @@ current_user.get_profile_name() %}
     }
   }
 
-  async function getPromptBuilder() {
-    fetch(`/en/get-prompt-builders-profile/{{profile_name}}`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    }).then((res) => {
-      res.json().then((data) => {
-        if (data["status"] == 0) {
-          removeErrorMessage();
-          showErrorMessage(data["error_message"]);
-        } else {
-          removeMessage();
-          if (data["message"]) {
-            showMessage(data["message"]);
-          } else {
-            createPromptBuilders(data["prompt_builders"]);
-          }
-        }
-      });
-    });
-  }
-
   async function getPromptCollection() {
     try {
       const res = await fetch(
-        `/en/get-prompt-collections-profile/{{profile_name}}`,
+        `/en/ai_hub/get-prompt-collections-profile/{{profile_name}}`,
         {
           method: "GET",
           headers: { Accept: "application/json" },

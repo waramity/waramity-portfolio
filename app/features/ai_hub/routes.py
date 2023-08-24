@@ -549,3 +549,19 @@ def get_prompt_collection_bookmarks():
 
         return make_response(jsonify({'status': 1, 'prompt_collections': prompt_collections}), 200)
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in get_prompt_collections of profile'}), 200)
+
+@ai_hub.route("/get-prompt-collections-profile/<profile_name>", methods=['GET'])
+def get_prompt_collections(profile_name):
+    if request.method == 'GET':
+        user = user_db.profile.find_one({'profile_name': profile_name})
+
+        prompt_collection = feature_db.prompt_collection.find_one({'user_id': user['_id']})
+
+        if prompt_collection is None:
+            return make_response(jsonify({'status': 1, 'message': 'ยังไม่เคยสร้าง Prompt collection'}), 200)
+
+        prompt_collections = list(feature_db.prompt_collection.find({'user_id': user['_id']}, {'_id': 0, "image_url": { "$arrayElemAt": ["$prompts.image_url", 0] }, 'slug': 1, "multiple_images": {
+            "$gt": [{ "$size": { "$ifNull": [ "$prompts.image_url", [] ] } }, 1]}}))
+
+        return make_response(jsonify({'status': 1, 'prompt_collections': prompt_collections}), 200)
+    return make_response(jsonify({"status": 0, 'error_message': 'error_code in get_prompt_collections of profile'}), 200)
