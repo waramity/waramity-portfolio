@@ -1,7 +1,21 @@
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='features/profile/index.css') }}"
-/>
+<!-- Profile Style -->
+<style media="screen">
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%;
+  }
+
+  .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+<!-- END Profile Style -->
 
 <nav class="navbar navbar-expand-lg navbar-light mb-5">
   <div class="container-fluid">
