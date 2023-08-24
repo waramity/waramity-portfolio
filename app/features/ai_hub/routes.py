@@ -132,6 +132,13 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     with open(file_path, 'wb') as file:
         file.write(binary_data)
 
+    file_path = file_path.split(os.path.sep)
+
+    # Remove the 'app' part if it exists
+    if file_path[0] == 'app':
+        file_path.pop(0)
+
+    file_path = "\\" + os.path.sep.join(file_path)
 
     # Return the local file path (if needed)
     return file_path
