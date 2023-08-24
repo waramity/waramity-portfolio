@@ -311,7 +311,98 @@ def upload_prompt():
         }
 
         prompt_collection = feature_db.prompt_collection.insert_one(prompt_collection_json)
-        return make_response(jsonify({"status": 1, "redirect_url": '/en/prompt-collection/' + slug}), 200)
+        return make_response(jsonify({"status": 1, "redirect_url": '/en/ai_hub/prompt-collection/' + slug}), 200)
+
+@ai_hub.route('/prompt-collection/<slug>', methods=['GET'])
+def prompt_collection(slug):
+    if request.method == 'GET':
+        prompt_collection = feature_db.prompt_collection.find_one({'slug': slug})
+        creator = user_db.profile.find_one({'_id': prompt_collection['user_id']})
+
+        liked = False
+        bookmarked = False
+        followed = False
+        if current_user.is_authenticated:
+            like = feature_db.engagement.find_one({'item_id': prompt_collection['_id'], 'user_id': current_user.get_id(), 'engage_type': 'like', 'item_type': 'prompt_collection'})
+            liked = like is not None
+
+            bookmark = feature_db.engagement.find_one({'item_id': prompt_collection['_id'], 'user_id': current_user.get_id(), 'engage_type': 'bookmark', 'item_type': 'prompt_collection'})
+            bookmarked = bookmark is not None
+
+            follow = user_db.follow.find_one({'follower_id': current_user.get_id(), 'following_id': prompt_collection['user_id']})
+            followed = follow is not None
+
+
+        prompt_collection = {
+            "topic": prompt_collection["topic"],
+            "slug": prompt_collection["slug"],
+            "prompts": prompt_collection["prompts"],
+            "created_date": prompt_collection["created_date"],
+            "description": prompt_collection["description"],
+            "likes": prompt_collection["likes"],
+            "model_name": prompt_collection["model_name"],
+        }
+
+        creator = {
+            "profile_name": creator["profile_name"],
+            "registered_on": creator["registered_on"],
+            "image_url": creator["image_url"],
+        }
+
+        return render_template('ai_hub/prompt_collection.html', title=_('The deep pub'), prompt_collection=prompt_collection, creator=creator, liked=liked, bookmarked=bookmarked, followed=followed)
+
+@ai_hub.route('/edit-prompt-collection/<profile_name>/<slug>', methods=['GET'])
+@login_required
+def edit_prompt(profile_name, slug):
+    if request.method == 'GET':
+        try:
+            prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, slug)
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+        return render_template('prompt_collection/edit.html', title=_('The deep pub'), slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
+    return make_response(jsonify({"status": 0, 'error_message': 'error_code in edit of prompt_collection'}), 200)
+
+@ai_hub.route('/destroy-prompt/<profile_name>/<slug>', methods=['GET', 'POST'])
+@login_required
+def destroy_prompt(profile_name, slug):
+    form = DestoryPromptCollectionForm(CombinedMultiDict((request.files, request.form)))
+
+    if request.method == 'POST' and form.validate_on_submit():
+        if slug == form.slug.data:
+            try:
+                prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, form.slug.data)
+            except Exception as e:
+                return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+            bookmark_result = feature_db.engagement.delete_many({ 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'bookmark'})
+            like_result = feature_db.engagement.delete_many({ 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'like'})
+            comment_like_result = feature_db.engagement.delete_many({ 'parent_id': prompt_collection['_id'], 'item_type': 'comment', 'engage_type': 'like'})
+
+            comments = list(feature_db.comment.find({ 'item.id': prompt_collection['_id'], 'item.type': 'prompt_collection'}))
+
+            for comment in comments:
+                for prompt in comment['prompts']:
+                    utils.delete_image_in_spaces(prompt['image_url'])
+
+            deleted_comment = feature_db.comment.delete_many({ 'item.id': prompt_collection['_id'], 'item.type': 'prompt_collection'})
+
+            user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count, 'total_engagement.bookmarks': -bookmark_result.deleted_count, 'total_engagement.comments': -deleted_comment.deleted_count}}, return_document=False)
+
+            for prompt in prompt_collection["prompts"]:
+                utils.delete_image_in_spaces(prompt['image_url'])
+            feature_db.prompt_collection.delete_one({'_id': prompt_collection['_id']})
+            return redirect('/')
+        else:
+            flash(_('กรุณาใส่ slug ให้ถูกต้อง'))
+            return redirect(url_for('prompt_collection.destroy', slug=slug, profile_name=profile_name))
+
+    if request.method == 'GET':
+        try:
+            prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, slug)
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+        return render_template('prompt_collection/destroy.html', title=_('The deep pub'), form=form, slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
+    return make_response(jsonify({"status": 0, 'error_message': 'error_code in destroy GET of prompt_collection'}), 200)
 
 @ai_hub.route("/profile/<profile_name>", methods=['GET'])
 def profile(profile_name):
