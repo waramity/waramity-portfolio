@@ -448,7 +448,7 @@
     }
     $("#heart-button").addClass("disabled");
     fetch(
-      `/en/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/like`,
+      `/en/ai_hub/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/like`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

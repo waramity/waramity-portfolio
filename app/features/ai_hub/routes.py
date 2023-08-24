@@ -404,6 +404,28 @@ def destroy_prompt(profile_name, slug):
         return render_template('prompt_collection/destroy.html', title=_('The deep pub'), form=form, slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in destroy GET of prompt_collection'}), 200)
 
+@ai_hub.route('/prompt-collection/<profile_name>/<slug>/like', methods=['POST'])
+@login_required
+def like(profile_name, slug):
+    if request.method == 'POST':
+        user = user_db.profile.find_one({'profile_name': profile_name})
+        prompt_collection = feature_db.prompt_collection.find_one({'user_id': user['_id'], 'slug': slug})
+
+        like = feature_db.engagement.find_one({'user_id': current_user.get_id(), 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'like'})
+
+        if like:
+            feature_db.engagement.delete_one({'_id': like['_id']})
+            feature_db.prompt_collection.find_one_and_update({'_id': prompt_collection['_id']}, {'$inc': {'likes': -1}}, return_document=False)
+            user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.likes': -1}}, return_document=False)
+            return make_response(jsonify({"status": 1}), 200)
+
+        like = {'user_id': current_user.get_id(), 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'like', 'created_at': datetime.datetime.now()}
+        feature_db.engagement.insert_one(like)
+        feature_db.prompt_collection.find_one_and_update({'_id': prompt_collection['_id']}, {'$inc': {'likes': 1}}, return_document=False)
+        user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.likes': 1}}, return_document=False)
+
+        return make_response(jsonify({"status": 1}), 200)
+
 @ai_hub.route("/profile/<profile_name>", methods=['GET'])
 def profile(profile_name):
     if request.method == 'GET':
