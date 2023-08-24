@@ -150,6 +150,8 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
         file_path.pop(0)
 
     file_path = "\\" + os.path.sep.join(file_path)
+    file_path = file_path.replace("/", "\\")
+    print(file_path)
 
     # Return the local file path (if needed)
     return file_path
@@ -170,6 +172,13 @@ def initial_upload_image(profile_name, image_url, directory_path, old_image_url=
         raise Exception('คุณไม่มี Permission สำหรับรูปนี้')
 
     return cdn_url
+
+def delete_image_in_spaces(image_url):
+    object_key = image_url.replace("https://tdp-public.sgp1.cdn.digitaloceanspaces.com/", "")
+    spaces_client.delete_object(Bucket='tdp-public', Key=object_key)
+
+def delete_file_in_local_system(file_path):
+    os.remove(file_path)
 
 @ai_hub.route('/ai_hub')
 def index():
@@ -426,9 +435,9 @@ def destroy_prompt(profile_name, slug):
             user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count, 'total_engagement.bookmarks': -bookmark_result.deleted_count, 'total_engagement.comments': -deleted_comment.deleted_count}}, return_document=False)
 
             for prompt in prompt_collection["prompts"]:
-                utils.delete_image_in_spaces(prompt['image_url'])
+                os.remove(os.getcwd() + '\\app' + prompt['image_url'])
             feature_db.prompt_collection.delete_one({'_id': prompt_collection['_id']})
-            return redirect('/')
+            return redirect(url_for('ai_hub.index'))
         else:
             flash(_('กรุณาใส่ slug ให้ถูกต้อง'))
             return redirect(url_for('prompt_collection.destroy', slug=slug, profile_name=profile_name))
