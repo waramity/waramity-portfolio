@@ -143,6 +143,23 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     # Return the local file path (if needed)
     return file_path
 
+def initial_upload_image(profile_name, image_url, directory_path, old_image_url=""):
+    print(image_url)
+    # return kuy
+    if not image_url.startswith('\\static\\assets\\images\\ai_hub\\'):
+        print('kuy')
+        utils.is_valid_base64_image(image_url)
+        if old_image_url is not "":
+            utils.delete_image_in_spaces(old_image_url)
+        cdn_url = utils.upload_base64_to_spaces(profile_name, directory_path, image_url)
+    elif image_url == current_user.get_profile_image():
+        print('sus')
+        cdn_url = image_url
+    else:
+        raise Exception('คุณไม่มี Permission สำหรับรูปนี้')
+
+    return cdn_url
+
 @ai_hub.route('/ai_hub')
 def index():
     if current_user.is_authenticated:
