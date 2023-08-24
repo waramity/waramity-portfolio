@@ -503,3 +503,49 @@ def submit_edit_profile():
         return make_response(jsonify({'status': 1, 'message': 'แก้ไขโปรไฟล์แล้ว'}), 200)
 
     return make_response(jsonify({'status': 0, 'error_message': 'error_code in create_profile of auth'}), 200)
+
+
+@ai_hub.route("/get-prompt-collection-bookmarks", methods=['GET'])
+@login_required
+def get_prompt_collection_bookmarks():
+    if request.method == 'GET':
+        user = user_db.profile.find_one({'_id': current_user.get_id()})
+
+        prompt_collection = feature_db.engagement.find_one({'user_id': user['_id'], 'item_type': 'prompt_collection', 'engage_type': 'bookmark'})
+
+        if prompt_collection is None:
+            return make_response(jsonify({'status': 1, 'message': 'ยังไม่เคยบุ๊คมาร์ค Prompt collection'}), 200)
+
+        pipeline = [
+            {
+                "$match": {
+                    "user_id": user['_id'],
+                    "item_type": "prompt_collection",
+                    "engage_type": "bookmark"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "prompt_collection",
+                    "localField": "item_id",
+                    "foreignField": "_id",
+                    "as": "prompt_collection"
+                }
+            },
+            {
+                "$unwind": "$prompt_collection"
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "image_url": { "$arrayElemAt": ["$prompt_collection.prompts.image_url", 0] },
+                    "slug": "$prompt_collection.slug",
+                    "multiple_images": { "$gt": [{ "$size": "$prompt_collection.prompts.image_url" }, 1] },
+                }
+            },
+        ]
+
+        prompt_collections = list(feature_db.engagement.aggregate(pipeline))
+
+        return make_response(jsonify({'status': 1, 'prompt_collections': prompt_collections}), 200)
+    return make_response(jsonify({"status": 0, 'error_message': 'error_code in get_prompt_collections of profile'}), 200)
