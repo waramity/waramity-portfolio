@@ -473,3 +473,23 @@ def edit_profile(profile_name):
         if current_user.get_profile_name() == profile_name:
             user = user_db.profile.find_one({'profile_name': current_user.get_profile_name()}, {'profile_name': 1, 'description': 1, 'image_url': 1})
             return render_template('ai_hub/edit-profile.html', title=_('แก้ไขโปรไฟล์ - The deep pub'), user=user)
+
+@ai_hub.route("/submit-edit-profile", methods=['PATCH'])
+@login_required
+def submit_edit_profile():
+    if request.method == 'PATCH' and request.json is not None:
+        try:
+            is_valid_description(request.json['profile']['description'])
+            user = user_db.profile.find_one({'_id': current_user.get_id()})
+            cdn_url = initial_upload_image(current_user.get_profile_name(), request.json['profile']['base64_image'], 'profiles/' + current_user.get_profile_name() + '_' + current_user.get_slug(), user['image_url'])
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        profile = {
+            "$set": {"image_url": cdn_url, 'description': request.json['profile']['description']}
+        }
+
+        user_db.profile.update_one({"_id": current_user.get_id()}, profile)
+        return make_response(jsonify({'status': 1, 'message': 'แก้ไขโปรไฟล์แล้ว'}), 200)
+
+    return make_response(jsonify({'status': 0, 'error_message': 'error_code in create_profile of auth'}), 200)
