@@ -474,7 +474,7 @@ def profile(profile_name):
 @login_required
 def bookmark():
     if request.method == 'GET':
-        return render_template('profile/bookmark.html', title=_('บุ๊คมาร์คของฉัน - The deep pub'))
+        return render_template('ai_hub/bookmark.html', title=_('บุ๊คมาร์คของฉัน - The deep pub'))
 
 @ai_hub.route("/edit-profile/<profile_name>", methods=['GET'])
 @login_required
