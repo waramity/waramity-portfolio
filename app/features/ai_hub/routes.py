@@ -426,6 +426,26 @@ def like(profile_name, slug):
 
         return make_response(jsonify({"status": 1}), 200)
 
+@ai_hub.route('/prompt-collection/<profile_name>/<slug>/bookmark', methods=['POST'])
+@login_required
+def bookmark_prompt(profile_name, slug):
+    if request.method == 'POST':
+        user = user_db.profile.find_one({'profile_name': profile_name})
+        prompt_collection = feature_db.prompt_collection.find_one({'user_id': user['_id'], 'slug': slug})
+
+        bookmark = feature_db.engagement.find_one({'user_id': current_user.get_id(), 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'bookmark'})
+
+        if bookmark:
+            feature_db.engagement.delete_one({'_id': bookmark['_id']})
+            user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.bookmarks': -1}}, return_document=False)
+            return make_response(jsonify({"status": 1}), 200)
+
+        bookmark = {'user_id': current_user.get_id(), 'item_id': prompt_collection['_id'], 'item_type': 'prompt_collection', 'engage_type': 'bookmark', 'created_at': datetime.datetime.now()}
+        feature_db.engagement.insert_one(bookmark)
+        user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.bookmarks': 1}}, return_document=False)
+
+        return make_response(jsonify({"status": 1}), 200)
+
 @ai_hub.route("/profile/<profile_name>", methods=['GET'])
 def profile(profile_name):
     if request.method == 'GET':

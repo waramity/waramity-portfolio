@@ -481,7 +481,7 @@
     }
     $("#bookmark-button").addClass("disabled");
     fetch(
-      `/en/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/bookmark`,
+      `/en/ai_hub/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/bookmark`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
