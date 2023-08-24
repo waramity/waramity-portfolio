@@ -17,6 +17,10 @@ import io
 import os
 import time
 
+from .forms import DestoryPromptCollectionForm
+from werkzeug.datastructures import CombinedMultiDict
+
+
 
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
@@ -35,6 +39,13 @@ def before_request():
         abort(404)
 
 # Multiligual End
+
+def is_valid_permission(profile_name, slug):
+    prompt_collection = feature_db.prompt_collection.find_one({'slug': slug})
+    prompt_collection_creator = user_db.profile.find_one({'_id': prompt_collection['user_id'], 'profile_name': profile_name}, {'profile_name': 1})
+    if not prompt_collection_creator or prompt_collection_creator['_id'] != current_user.get_id() or profile_name != current_user.get_profile_name():
+        raise Exception('permission_denied')
+    return prompt_collection, prompt_collection_creator
 
 def is_valid_profile_name(profile_name):
     if not isinstance(profile_name, str):
@@ -278,7 +289,6 @@ def create_profile():
 def submit_create_profile():
     if request.method == 'PATCH' and request.json is not None:
         try:
-            print(request.json['profile']['name'])
             is_valid_profile_name(request.json['profile']['name'])
             is_valid_description(request.json['profile']['description'])
             is_duplicate_profile_name(request.json['profile']['name'])
@@ -428,7 +438,7 @@ def destroy_prompt(profile_name, slug):
             prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, slug)
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
-        return render_template('prompt_collection/destroy.html', title=_('The deep pub'), form=form, slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
+        return render_template('ai_hub/destroy_prompt.html', title=_('The deep pub'), form=form, slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in destroy GET of prompt_collection'}), 200)
 
 @ai_hub.route('/prompt-collection/<profile_name>/<slug>/like', methods=['POST'])
