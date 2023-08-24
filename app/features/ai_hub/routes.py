@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 import requests
 import uuid
-from app import db, app, google_client, user_db
+from app import db, app, google_client, user_db, feature_db
 import datetime
 from app.features.ai_hub.models import User
 import re
@@ -91,6 +91,29 @@ def is_valid_image(image_string):
         return True
     except Exception:
         raise Exception('Format ของภาพไม่ถูกต้อง')
+
+def is_valid_topic(topic):
+    if len(topic) > 0 and len(topic) <= 32:
+        return True
+    elif len(topic) == 0:
+        raise Exception('กรุณาใส่ Topic')
+    else:
+        raise Exception('Topic ควรต่ำกว่า 32 ตัวอักษร')
+
+def is_valid_model_name(model_name):
+    if len(model_name) <= 100:
+        return True
+    else:
+        raise Exception('ชื่่อโมเดลควรต่ำกว่า 100 ตัวอักษร')
+
+def is_valid_prompts(prompts):
+    if len(prompts) == 0:
+        raise Exception('กรุณาอัพโหลดภาพ')
+
+    elif len(prompts) > 6:
+        raise Exception('ควรอัพโหลดภาพต่ำกว่า 6 รูป')
+    else:
+        return True
 
 def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     base64_data_without_prefix = base64_data.split(',', 1)[-1]
@@ -262,7 +285,7 @@ def upload_prompt():
             prompts = request.json['prompts']
 
             for prompt in prompts:
-                utils.is_valid_base64_image(prompt['image_url'])
+                is_valid_base64_image(prompt['image_url'])
 
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
@@ -272,8 +295,8 @@ def upload_prompt():
             slug = uuid.uuid4().hex[:11]
 
         for prompt in prompts:
-            cdn_url = utils.upload_base64_to_spaces(current_user.get_profile_name(), 'prompt_collections/' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
-            prompt['image_url'] = cdn_url
+            image_url = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections/' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
+            prompt['image_url'] = image_url
 
         prompt_collection_json = {
             'topic': request.json['topic'],
