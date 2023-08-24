@@ -120,8 +120,10 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     binary_data = base64.b64decode(base64_data_without_prefix)
 
     unique_id = uuid.uuid4().hex
-    os.makedirs(directory_path, exist_ok=True)
 
+    directory_path = "app\\static\\assets\\images\\ai_hub\\" + directory_path
+
+    os.makedirs(directory_path, exist_ok=True)
 
     # Define the path where you want to save the file on your local filesystem
     file_path = os.path.join(directory_path, f'{profile_name}-{unique_id}-{time.time()}.png')
@@ -130,10 +132,11 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     with open(file_path, 'wb') as file:
         file.write(binary_data)
 
+
     # Return the local file path (if needed)
     return file_path
 
-@ai_hub.route('/')
+@ai_hub.route('/ai_hub')
 def index():
     if current_user.is_authenticated:
         if current_user.get_profile_name() is None:
