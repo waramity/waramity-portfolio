@@ -582,3 +582,46 @@ def get_prompt_collections(profile_name):
 
         return make_response(jsonify({'status': 1, 'prompt_collections': prompt_collections}), 200)
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in get_prompt_collections of profile'}), 200)
+
+@ai_hub.route('/get-comments/<item_type>/<item_slug>', methods=['GET'])
+def get_comments(item_type, item_slug):
+    if request.method == 'GET':
+
+        if item_type == "prompt_collection":
+            item_collection = feature_db.prompt_collection.find_one({'slug': item_slug})
+        elif item_type == "prompt_builder":
+            item_collection = feature_db.prompt_builder.find_one({'slug': item_slug})
+
+        match_comments = feature_db.comment.find({'item.id': item_collection['_id'], 'item.type': item_type})
+
+        comments = []
+        for comment in match_comments:
+            user_id = comment['user_id']
+            user_profile = user_db.profile.find_one({'_id': user_id}, {'_id': 0, 'profile_name': 1, 'image_url': 1, 'slug': 1})
+            tmp_comment = {
+                'user': {
+                    'profile_name': user_profile['profile_name'],
+                    'image_url': user_profile['image_url'],
+                    'slug': user_profile['slug']
+                },
+                'slug': comment['slug'],
+                'comment': comment['comment'],
+                'created_date': comment['created_date'].isoformat(),
+                'total_engagement': {
+                    'likes': comment['total_engagement']['likes'],
+                },
+                'prompts': comment['prompts'],
+                'current_user_liked': False,
+            }
+
+            if current_user.is_authenticated:
+                comment_liked = feature_db.engagement.find_one({'user_id': current_user.get_id(), 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like'})
+                if comment_liked:
+                    tmp_comment['current_user_liked'] = True
+
+            comments.append(tmp_comment)
+
+        if len(comments) != 0:
+            return make_response(jsonify({'status': 1, 'comments': comments}), 200)
+        else:
+            return make_response(jsonify({'status': 1, 'message': 'ยังไม่มีคอมเมนท์'}), 200)

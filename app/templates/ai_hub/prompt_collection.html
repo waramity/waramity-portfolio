@@ -701,7 +701,7 @@
   <button type="button" class="btn btn-outline-primary">
     <a
       class="dropdown-item"
-      href="/en/comment/prompt_collection/{{prompt_collection['slug']}}"
+      href="/en/ai_hub/comment/prompt_collection/{{prompt_collection['slug']}}"
     >
       Add Comment
     </a>
@@ -775,7 +775,7 @@
       return;
     }
     $(`#like-button-${comment_slug}`).addClass("disabled");
-    fetch(`/en/comment/${item_type}/${item_slug}/${comment_slug}/like`, {
+    fetch(`/en/ai_hub/comment/${item_type}/${item_slug}/${comment_slug}/like`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
@@ -906,7 +906,7 @@
       const link = profile_links[i];
       link.setAttribute(
         "href",
-        `/th/profile/${comment["user"]["profile_name"]}`
+        `/th/ai_hub/profile/${comment["user"]["profile_name"]}`
       );
     }
 
@@ -926,7 +926,7 @@
   }
 
   function getComments(item_type, item_slug, user_slug) {
-    fetch(`/en/get-comments/${item_type}/${item_slug}`, {
+    fetch(`/en/ai_hub/get-comments/${item_type}/${item_slug}`, {
       method: "GET",
       headers: { Accept: "application/json" },
     }).then((res) => {
