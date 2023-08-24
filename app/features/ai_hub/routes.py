@@ -456,9 +456,9 @@ def profile(profile_name):
                 follow = user_db.follow.find_one({'follower_id': current_user.get_id(), 'following_id': user['_id']})
                 followed = follow is not None
             user.pop('_id', None)
-            return render_template('profile/profile.html', title=_('โปรไฟล์ของฉัน - The deep pub'), user=user, profile_name=profile_name, followed=followed)
+            return render_template('ai_hub/profile.html', title=_('โปรไฟล์ของฉัน - The deep pub'), user=user, profile_name=profile_name, followed=followed)
         else:
-            return redirect(url_for('main.index'))
+            return redirect(url_for('ai_hub.index'))
 
 @ai_hub.route("/bookmark", methods=['GET'])
 @login_required
