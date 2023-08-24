@@ -56,7 +56,26 @@
 </script>
 <!-- END: main script -->
 
-<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
+<!-- Message script -->
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+</script>
+<!-- END Message script -->
+
 <!-- START: error message script -->
 <script type="text/javascript">
   function removeCollections() {
