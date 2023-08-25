@@ -714,3 +714,32 @@ def create_comment(item_type, item_slug):
         return render_template('ai_hub/create_comment.html', title=_('The deep pub'), item_type=item_type, item_slug=item_slug)
 
     return make_response(jsonify({"status": 0, 'message': 'error in post comment.'}), 200)
+
+@ai_hub.route('/comment/<item_type>/<item_slug>/<comment_slug>/like', methods=['POST'])
+@login_required
+def like_comment(item_type, item_slug, comment_slug):
+    if request.method == 'POST':
+        if item_type == "prompt_collection":
+            item_collection = feature_db.prompt_collection
+
+        elif item_type == "prompt_builder":
+            item_collection = feature_db.prompt_builder
+
+        item = item_collection.find_one({'slug': item_slug})
+
+        comment = feature_db.comment.find_one({'item.id': item['_id'], 'slug': comment_slug})
+        like = feature_db.engagement.find_one({'user_id': current_user.get_id(), 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like', 'parent_id': item['_id']})
+
+        if like:
+            feature_db.engagement.delete_one({'_id': like['_id']})
+            feature_db.comment.update_one({'_id': comment['_id']}, {"$inc": {"total_engagement.likes": -1}} )
+            user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -1}}, return_document=False)
+            return make_response(jsonify({"status": 1}), 200)
+
+        like = {'user_id': current_user.get_id(), 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like', 'created_at': datetime.datetime.now(), 'parent_id': item['_id']}
+        feature_db.engagement.insert_one(like)
+
+        feature_db.comment.update_one({'_id': comment['_id']}, {"$inc": {"total_engagement.likes": 1}} )
+        user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': 1}}, return_document=False)
+
+        return make_response(jsonify({"status": 1}), 200)
