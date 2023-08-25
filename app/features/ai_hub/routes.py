@@ -743,3 +743,21 @@ def like_comment(item_type, item_slug, comment_slug):
         user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': 1}}, return_document=False)
 
         return make_response(jsonify({"status": 1}), 200)
+
+@ai_hub.route('/delete-comment/<comment_slug>', methods=['POST'])
+@login_required
+def delete_comment(comment_slug):
+    if request.method == 'POST':
+        comment = feature_db.comment.find_one({'slug': comment_slug})
+
+        if comment['user_id'] == current_user.get_id():
+
+            like_result = feature_db.engagement.delete_many({ 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like'})
+            user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count}}, return_document=False)
+
+            for prompt in comment["prompts"]:
+                utils.delete_image_in_spaces(prompt['image_url'])
+
+            feature_db.comment.delete_one({'_id': comment['_id']})
+
+            return make_response(jsonify({'status': 1}), 200)

@@ -950,7 +950,7 @@
   }
 
   async function deleteComment(comment_slug) {
-    fetch(`/en/delete-comment/${comment_slug}`, {
+    fetch(`/en/ai_hub/delete-comment/${comment_slug}`, {
       method: "POST",
       headers: { Accept: "application/json" },
     }).then((res) => {
