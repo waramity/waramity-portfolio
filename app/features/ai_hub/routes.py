@@ -20,6 +20,8 @@ import time
 from .forms import DestoryPromptCollectionForm
 from werkzeug.datastructures import CombinedMultiDict
 
+from urllib.parse import urlparse
+
 
 
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
@@ -168,17 +170,14 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     return file_path
 
 def initial_upload_image(profile_name, image_url, directory_path, old_image_url=""):
-    print(image_url)
     # return kuy
     if not image_url.startswith('\\static\\assets\\images\\ai_hub\\'):
-        print('kuy')
         is_valid_base64_image(image_url)
         if old_image_url is not "":
             # utils.delete_image_in_spaces(old_image_url)
             os.remove(os.getcwd() + '\\app' + old_image_url)
         cdn_url = upload_base64_to_file_system(profile_name, directory_path, image_url)
     elif image_url == current_user.get_profile_image():
-        print('sus')
         cdn_url = image_url
     else:
         raise Exception('คุณไม่มี Permission สำหรับรูปนี้')
@@ -453,11 +452,17 @@ def submit_edit_prompt(slug):
         prompts = []
 
         for prompt in new_prompts[:]:
+            print(prompt['image_url'])
+            print(urlparse(prompt['image_url']).path)
+            print(original_prompt_urls)
+            prompt['image_url'] = urlparse(prompt['image_url']).path
+            prompt['image_url'] = prompt['image_url'].replace("/", "\\")
+            print(prompt['image_url'])
             if prompt['image_url'] in original_prompt_urls:
                 prompts.append(prompt)
                 original_prompts.remove(prompt)
-            elif not prompt['image_url'].startswith('https://tdp-public.sgp1.cdn.digitaloceanspaces.com/') and utils.is_valid_base64_image(prompt['image_url']):
-                prompt['image_url'] = utils.upload_base64_to_spaces(current_user.get_profile_name(), 'prompt_collections/' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
+            elif 'static/assets/images/ai_hub/' not in prompt['image_url'] and is_valid_base64_image(prompt['image_url']):
+                prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections\\' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
                 prompts.append(prompt)
 
         if len(prompts) == 0:
@@ -477,7 +482,7 @@ def submit_edit_prompt(slug):
         }
 
         feature_db.prompt_collection.update_one({'_id': prompt_collection['_id'], 'user_id': prompt_collection_creator['_id']},  prompt_collection_json)
-        return make_response(jsonify({"status": 1, "redirect_url": '/en/prompt-collection/' + slug}), 200)
+        return make_response(jsonify({"status": 1, "redirect_url": '/en/ai_hub/prompt-collection/' + slug}), 200)
 
 
 @ai_hub.route('/destroy-prompt/<profile_name>/<slug>', methods=['GET', 'POST'])
