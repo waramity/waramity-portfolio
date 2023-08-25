@@ -126,6 +126,12 @@ def is_valid_prompts(prompts):
     else:
         return True
 
+def is_valid_prompts_comment(prompts):
+    if len(prompts) > 6:
+        raise Exception('ควรอัพโหลดภาพต่ำกว่า 6 รูป')
+    else:
+        return True
+
 def is_valid_comment(comment):
     if comment == "":
         raise Exception('กรุณาเขียนคอมเมนต์')
@@ -656,7 +662,7 @@ def create_comment(item_type, item_slug):
         try:
             print(request.json['comment'])
             is_valid_comment(request.json['comment'])
-            is_valid_prompts(request.json['prompts'])
+            is_valid_prompts_comment(request.json['prompts'])
 
             for prompt in prompts:
                 utils.is_valid_base64_image(prompt['image_url'])
@@ -671,11 +677,7 @@ def create_comment(item_type, item_slug):
         if item_type == "prompt_collection":
             item_collection = feature_db.prompt_collection
             spaces_path = 'comments/' + 'collection_' + current_user.get_profile_name() + '_' + comment_slug
-            redirect_url = '/en/prompt-collection/'
-        elif item_type == "prompt_builder":
-            item_collection = feature_db.prompt_builder
-            spaces_path = 'comments/' + 'builder_' + current_user.get_profile_name() + '_' + comment_slug
-            redirect_url = '/en/prompt-builder/'
+            redirect_url = '/en/ai_hub/prompt-collection/'
 
         for prompt in prompts:
             prompt['image_url'] = utils.upload_base64_to_spaces(current_user.get_profile_name(), spaces_path, prompt['image_url'])
