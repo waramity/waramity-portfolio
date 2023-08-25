@@ -645,3 +645,71 @@ def get_comments(item_type, item_slug):
             return make_response(jsonify({'status': 1, 'comments': comments}), 200)
         else:
             return make_response(jsonify({'status': 1, 'message': 'ยังไม่มีคอมเมนท์'}), 200)
+
+@ai_hub.route('/comment/<item_type>/<item_slug>', methods=['POST', 'GET'])
+@login_required
+def create_comment(item_type, item_slug):
+
+    if request.method == 'POST' and request.json is not None:
+
+        prompts = request.json['prompts']
+        comment = request.json['comment']
+
+        try:
+            is_valid_comment(request.json['comment'])
+            is_valid_prompts(request.json['prompts'])
+
+            for prompt in prompts:
+                utils.is_valid_base64_image(prompt['image_url'])
+
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        comment_slug = uuid.uuid4().hex[:11]
+        while feature_db.comment.find_one({'slug': comment_slug}):
+            comment_slug = uuid.uuid4().hex[:11]
+
+        if item_type == "prompt_collection":
+            item_collection = feature_db.prompt_collection
+            spaces_path = 'comments/' + 'collection_' + current_user.get_profile_name() + '_' + comment_slug
+            redirect_url = '/en/prompt-collection/'
+        elif item_type == "prompt_builder":
+            item_collection = feature_db.prompt_builder
+            spaces_path = 'comments/' + 'builder_' + current_user.get_profile_name() + '_' + comment_slug
+            redirect_url = '/en/prompt-builder/'
+
+        for prompt in prompts:
+            prompt['image_url'] = utils.upload_base64_to_spaces(current_user.get_profile_name(), spaces_path, prompt['image_url'])
+
+        item = item_collection.find_one({'slug': item_slug})
+
+        new_comment = {
+            'item': {
+                'id': item['_id'],
+                'type': item_type
+            },
+            'user_id': current_user.get_id(),
+            'slug': comment_slug,
+            'comment': comment,
+            'created_date': datetime.datetime.now(),
+            'updated_date': datetime.datetime.now(),
+            'total_engagement': {
+                'likes': 0
+            },
+            'prompts': prompts,
+        }
+
+        user_db.profile.update_one(
+            {'_id': item['user_id']},
+            {'$inc': {'total_engagement.comments': 1}}
+        )
+
+        feature_db.comment.insert_one(new_comment)
+
+        return make_response(jsonify({"status": 1, "redirect_url": redirect_url + item_slug}), 200)
+
+
+    elif request.method == 'GET':
+        return render_template('ai_hub/create_comment.html', title=_('The deep pub'), item_type=item_type, item_slug=item_slug)
+
+    return make_response(jsonify({"status": 0, 'message': 'error in post comment.'}), 200)
