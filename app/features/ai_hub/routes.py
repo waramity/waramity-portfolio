@@ -87,6 +87,8 @@ def is_valid_base64_image(image_string):
     if len(image_string) * 3 / 4 > 2 * 1024 * 1024:
         raise Exception('ขนาดของไฟล์ควรต่ำกว่า 2 MBs')
 
+    print(image_string)
+
     if is_valid_image(image_string):
         image = base64.b64decode(image_string)
         img = Image.open(io.BytesIO(image))
@@ -98,12 +100,9 @@ def is_valid_base64_image(image_string):
     return False
 
 def is_valid_image(image_string):
-    try:
-        image = base64.b64decode(image_string)
-        Image.open(io.BytesIO(image))
-        return True
-    except Exception:
-        raise Exception('Format ของภาพไม่ถูกต้อง')
+    image = base64.b64decode(image_string)
+    Image.open(io.BytesIO(image))
+    return True
 
 def is_valid_topic(topic):
     if len(topic) > 0 and len(topic) <= 32:
@@ -452,13 +451,12 @@ def submit_edit_prompt(slug):
         prompts = []
 
         for prompt in new_prompts[:]:
-            prompt['image_url'] = urlparse(prompt['image_url']).path
-            prompt['image_url'] = prompt['image_url'].replace("/", "\\")
-            if prompt['image_url'] in original_prompt_urls:
+            prompt_image_path = urlparse(prompt['image_url']).path
+            prompt_image_path = prompt['image_url'].replace("/", "\\")
+            if prompt_image_path in original_prompt_urls:
                 prompts.append(prompt)
-                # original_prompts.remove(prompt)
                 original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] != prompt["image_url"]]
-            elif 'static/assets/images/ai_hub/' not in prompt['image_url'] and is_valid_base64_image(prompt['image_url']):
+            elif 'static\\assets\\images\\ai_hub\\' not in prompt_image_path and is_valid_base64_image(prompt['image_url']):
                 prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections\\' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
                 prompts.append(prompt)
 
@@ -466,7 +464,10 @@ def submit_edit_prompt(slug):
             return make_response(jsonify({'status': 0, 'error_message': 'กรุณาอัพโหลดรูปภาพ'}), 200)
 
         for prompt in original_prompts:
-            utils.delete_image_in_spaces(prompt['image_url'])
+            prompt_image_path = urlparse(prompt['image_url']).path
+            prompt_image_path = prompt['image_url'].replace("/", "\\")
+            os.remove(os.getcwd() + '\\app' + prompt_image_path)
+            # utils.delete_image_in_spaces(prompt['image_url'])
 
         prompt_collection_json = {
             '$set': {
