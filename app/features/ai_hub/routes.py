@@ -456,7 +456,8 @@ def submit_edit_prompt(slug):
             prompt['image_url'] = prompt['image_url'].replace("/", "\\")
             if prompt['image_url'] in original_prompt_urls:
                 prompts.append(prompt)
-                original_prompts.remove(prompt)
+                # original_prompts.remove(prompt)
+                original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] != prompt["image_url"]]
             elif 'static/assets/images/ai_hub/' not in prompt['image_url'] and is_valid_base64_image(prompt['image_url']):
                 prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections\\' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
                 prompts.append(prompt)
