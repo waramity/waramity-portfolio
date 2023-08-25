@@ -410,7 +410,7 @@ def edit_prompt(profile_name, slug):
             prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, slug)
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
-        return render_template('prompt_collection/edit.html', title=_('The deep pub'), slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
+        return render_template('ai_hub/edit_prompt.html', title=_('The deep pub'), slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in edit of prompt_collection'}), 200)
 
 @ai_hub.route('/destroy-prompt/<profile_name>/<slug>', methods=['GET', 'POST'])
