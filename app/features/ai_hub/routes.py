@@ -413,6 +413,22 @@ def edit_prompt(profile_name, slug):
         return render_template('ai_hub/edit_prompt.html', title=_('The deep pub'), slug=prompt_collection['slug'], profile_name=prompt_collection_creator['profile_name'])
     return make_response(jsonify({"status": 0, 'error_message': 'error_code in edit of prompt_collection'}), 200)
 
+@ai_hub.route('/get-prompt-collection/<profile_name>/<slug>/edit', methods=['GET'])
+@login_required
+def get_prompt_collection_edit(profile_name, slug):
+    if request.method == 'GET':
+        try:
+            prompt_collection, prompt_collection_creator = is_valid_permission(profile_name, slug)
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        keys_to_remove = ["_id", "user_id", "comments"]
+        for key in keys_to_remove:
+            prompt_collection.pop(key, None)
+
+        return make_response(jsonify({"status": 1, 'prompt_collection': prompt_collection}), 200)
+    return make_response(jsonify({"status": 0, "error_message": "error_code in get_prompt_collection_edit of prompt_collection"}), 200)
+
 @ai_hub.route('/destroy-prompt/<profile_name>/<slug>', methods=['GET', 'POST'])
 @login_required
 def destroy_prompt(profile_name, slug):
