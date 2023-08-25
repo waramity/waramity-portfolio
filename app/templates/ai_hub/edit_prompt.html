@@ -154,13 +154,28 @@
 
 <!-- END Dropzone -->
 
-<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
+<!-- Message Script -->
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+</script>
+<!-- END Message Script -->
+
 <script src="{{ url_for('static', filename='features/dropzone_upload/index.js') }}"></script>
 <script src="{{ url_for('static', filename='features/prompt_collection/edit.js') }}"></script>
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='features/dropzone_upload/index.css') }}"
-/>
 
 <!-- START: prompt upload -->
 <script type="text/javascript">
