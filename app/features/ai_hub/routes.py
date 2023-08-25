@@ -665,7 +665,7 @@ def create_comment(item_type, item_slug):
             is_valid_prompts_comment(request.json['prompts'])
 
             for prompt in prompts:
-                utils.is_valid_base64_image(prompt['image_url'])
+                is_valid_base64_image(prompt['image_url'])
 
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
@@ -680,7 +680,7 @@ def create_comment(item_type, item_slug):
             redirect_url = '/en/ai_hub/prompt-collection/'
 
         for prompt in prompts:
-            prompt['image_url'] = utils.upload_base64_to_spaces(current_user.get_profile_name(), spaces_path, prompt['image_url'])
+            prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), spaces_path, prompt['image_url'])
 
         item = item_collection.find_one({'slug': item_slug})
 
@@ -721,9 +721,6 @@ def like_comment(item_type, item_slug, comment_slug):
     if request.method == 'POST':
         if item_type == "prompt_collection":
             item_collection = feature_db.prompt_collection
-
-        elif item_type == "prompt_builder":
-            item_collection = feature_db.prompt_builder
 
         item = item_collection.find_one({'slug': item_slug})
 
