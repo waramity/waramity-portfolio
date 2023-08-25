@@ -126,6 +126,11 @@ def is_valid_prompts(prompts):
     else:
         return True
 
+def is_valid_comment(comment):
+    if comment == "":
+        raise Exception('กรุณาเขียนคอมเมนต์')
+    return True
+
 def upload_base64_to_file_system(profile_name, directory_path, base64_data):
     base64_data_without_prefix = base64_data.split(',', 1)[-1]
     binary_data = base64.b64decode(base64_data_without_prefix)
@@ -173,13 +178,6 @@ def initial_upload_image(profile_name, image_url, directory_path, old_image_url=
         raise Exception('คุณไม่มี Permission สำหรับรูปนี้')
 
     return cdn_url
-
-def delete_image_in_spaces(image_url):
-    object_key = image_url.replace("https://tdp-public.sgp1.cdn.digitaloceanspaces.com/", "")
-    spaces_client.delete_object(Bucket='tdp-public', Key=object_key)
-
-def delete_file_in_local_system(file_path):
-    os.remove(file_path)
 
 @ai_hub.route('/ai_hub')
 def index():
@@ -656,6 +654,7 @@ def create_comment(item_type, item_slug):
         comment = request.json['comment']
 
         try:
+            print(request.json['comment'])
             is_valid_comment(request.json['comment'])
             is_valid_prompts(request.json['prompts'])
 
