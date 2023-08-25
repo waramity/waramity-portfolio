@@ -452,12 +452,8 @@ def submit_edit_prompt(slug):
         prompts = []
 
         for prompt in new_prompts[:]:
-            print(prompt['image_url'])
-            print(urlparse(prompt['image_url']).path)
-            print(original_prompt_urls)
             prompt['image_url'] = urlparse(prompt['image_url']).path
             prompt['image_url'] = prompt['image_url'].replace("/", "\\")
-            print(prompt['image_url'])
             if prompt['image_url'] in original_prompt_urls:
                 prompts.append(prompt)
                 original_prompts.remove(prompt)
