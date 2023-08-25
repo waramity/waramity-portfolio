@@ -429,6 +429,57 @@ def get_prompt_collection_edit(profile_name, slug):
         return make_response(jsonify({"status": 1, 'prompt_collection': prompt_collection}), 200)
     return make_response(jsonify({"status": 0, "error_message": "error_code in get_prompt_collection_edit of prompt_collection"}), 200)
 
+@ai_hub.route('/submit-edit-prompt/<slug>', methods=['PATCH'])
+@login_required
+def submit_edit_prompt(slug):
+    if request.method == 'PATCH' and request.json is not None:
+
+        try:
+            is_valid_topic(request.json['topic'])
+            is_valid_description(request.json['description'])
+            is_valid_model_name(request.json['model_name'])
+            is_valid_prompts(request.json['prompts'])
+
+            prompt_collection, prompt_collection_creator = is_valid_permission(current_user.get_profile_name(), slug)
+
+        except Exception as e:
+            return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
+
+        new_prompts = request.json['prompts']
+        original_prompts = prompt_collection["prompts"]
+
+        original_prompt_urls = [prompt['image_url'] for prompt in prompt_collection["prompts"]]
+
+        prompts = []
+
+        for prompt in new_prompts[:]:
+            if prompt['image_url'] in original_prompt_urls:
+                prompts.append(prompt)
+                original_prompts.remove(prompt)
+            elif not prompt['image_url'].startswith('https://tdp-public.sgp1.cdn.digitaloceanspaces.com/') and utils.is_valid_base64_image(prompt['image_url']):
+                prompt['image_url'] = utils.upload_base64_to_spaces(current_user.get_profile_name(), 'prompt_collections/' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
+                prompts.append(prompt)
+
+        if len(prompts) == 0:
+            return make_response(jsonify({'status': 0, 'error_message': 'กรุณาอัพโหลดรูปภาพ'}), 200)
+
+        for prompt in original_prompts:
+            utils.delete_image_in_spaces(prompt['image_url'])
+
+        prompt_collection_json = {
+            '$set': {
+                'topic': request.json['topic'],
+                'description': request.json['description'],
+                'model_name': request.json['model_name'],
+                'updated_date': datetime.datetime.now(),
+                'prompts': prompts
+            }
+        }
+
+        feature_db.prompt_collection.update_one({'_id': prompt_collection['_id'], 'user_id': prompt_collection_creator['_id']},  prompt_collection_json)
+        return make_response(jsonify({"status": 1, "redirect_url": '/en/prompt-collection/' + slug}), 200)
+
+
 @ai_hub.route('/destroy-prompt/<profile_name>/<slug>', methods=['GET', 'POST'])
 @login_required
 def destroy_prompt(profile_name, slug):

@@ -503,7 +503,7 @@
     });
 
     try {
-      const response = await fetch(`/en/submit-edit-prompt/${slug}`, {
+      const response = await fetch(`/en/ai_hub/submit-edit-prompt/${slug}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(prompts),
