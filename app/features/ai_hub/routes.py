@@ -161,10 +161,11 @@ def initial_upload_image(profile_name, image_url, directory_path, old_image_url=
     # return kuy
     if not image_url.startswith('\\static\\assets\\images\\ai_hub\\'):
         print('kuy')
-        utils.is_valid_base64_image(image_url)
+        is_valid_base64_image(image_url)
         if old_image_url is not "":
-            utils.delete_image_in_spaces(old_image_url)
-        cdn_url = utils.upload_base64_to_spaces(profile_name, directory_path, image_url)
+            # utils.delete_image_in_spaces(old_image_url)
+            os.remove(os.getcwd() + '\\app' + old_image_url)
+        cdn_url = upload_base64_to_file_system(profile_name, directory_path, image_url)
     elif image_url == current_user.get_profile_image():
         print('sus')
         cdn_url = image_url
@@ -527,7 +528,7 @@ def submit_edit_profile():
         try:
             is_valid_description(request.json['profile']['description'])
             user = user_db.profile.find_one({'_id': current_user.get_id()})
-            cdn_url = initial_upload_image(current_user.get_profile_name(), request.json['profile']['base64_image'], 'profiles/' + current_user.get_profile_name() + '_' + current_user.get_slug(), user['image_url'])
+            cdn_url = initial_upload_image(current_user.get_profile_name(), request.json['profile']['base64_image'], 'profiles\\' + current_user.get_profile_name() + '_' + current_user.get_slug(), user['image_url'])
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
 
