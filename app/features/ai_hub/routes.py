@@ -753,7 +753,9 @@ def delete_comment(comment_slug):
             user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count}}, return_document=False)
 
             for prompt in comment["prompts"]:
-                utils.delete_image_in_spaces(prompt['image_url'])
+                # utils.delete_image_in_spaces(prompt['image_url'])
+                os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+
 
             feature_db.comment.delete_one({'_id': comment['_id']})
 
