@@ -494,7 +494,8 @@ def destroy_prompt(profile_name, slug):
 
             for comment in comments:
                 for prompt in comment['prompts']:
-                    utils.delete_image_in_spaces(prompt['image_url'])
+                    # utils.delete_image_in_spaces(prompt['image_url'])
+                    os.remove(os.getcwd() + '\\app' + prompt['image_url'])
 
             deleted_comment = feature_db.comment.delete_many({ 'item.id': prompt_collection['_id'], 'item.type': 'prompt_collection'})
 
