@@ -6,10 +6,14 @@
   </div>
 </div>
 
-<div class="row"></div>
+<div id="prompt-container" class="row"></div>
 
 <template id="prompt-template">
-  <div class="col-4"></div>
+  <div class="row col-3">
+    <div class="col-4" id="topic"></div>
+    <div class="col-4" id="likes"></div>
+    <div class="col-4" id="updated_date"></div>
+  </div>
 </template>
 
 <script type="text/javascript">
@@ -18,6 +22,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    let prompt_container = document.querySelector("#prompt-container");
+
     async function fetchGetPrompts() {
       const res = await fetch(`/en/ai_hub/get-prompts`, {
         method: "GET",
@@ -27,8 +33,27 @@
       const prompts = data["prompts"];
 
       for (let i = 0; i < prompts.length; i++) {
+        var prompt_template = document.querySelector("#prompt-template");
+
+        let prompt_template_clone = prompt_template.content.cloneNode(true);
+
+        prompt_template_clone.querySelector(
+          "#topic"
+        ).innerHTML = `${prompts[i]["topic"]}`;
+
         console.log(prompts[i]);
+
+        prompt_template_clone.querySelector(
+          "#likes"
+        ).innerHTML = `${prompts[i]["likes"]}`;
+
+        prompt_template_clone.querySelector(
+          "#updated_date"
+        ).innerHTML = `${prompts[i]["updated_date"]}`;
+
+        prompt_container.appendChild(prompt_template_clone.children[0]);
       }
+
       removeSpinner();
     }
 
