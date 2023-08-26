@@ -148,32 +148,25 @@ def upload_base64_to_file_system(profile_name, directory_path, base64_data):
 
     os.makedirs(directory_path, exist_ok=True)
 
-    # Define the path where you want to save the file on your local filesystem
     file_path = os.path.join(directory_path, f'{profile_name}-{unique_id}-{time.time()}.png')
 
-    # Write the binary data to the local file
     with open(file_path, 'wb') as file:
         file.write(binary_data)
 
     file_path = file_path.split(os.path.sep)
 
-    # Remove the 'app' part if it exists
     if file_path[0] == 'app':
         file_path.pop(0)
 
     file_path = "\\" + os.path.sep.join(file_path)
     file_path = file_path.replace("/", "\\")
-    print(file_path)
 
-    # Return the local file path (if needed)
     return file_path
 
 def initial_upload_image(profile_name, image_url, directory_path, old_image_url=""):
-    # return kuy
     if not image_url.startswith('\\static\\assets\\images\\ai_hub\\'):
         is_valid_base64_image(image_url)
         if old_image_url is not "":
-            # utils.delete_image_in_spaces(old_image_url)
             os.remove(os.getcwd() + '\\app' + old_image_url)
         cdn_url = upload_base64_to_file_system(profile_name, directory_path, image_url)
     elif image_url == current_user.get_profile_image():
