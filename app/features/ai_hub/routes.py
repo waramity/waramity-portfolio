@@ -449,7 +449,6 @@ def submit_edit_prompt(slug):
             if prompt_image_path in original_prompt_urls:
                 prompt["image_url"] = prompt_image_path
                 prompts.append(prompt)
-                print(prompt)
                 for tmp_prompt in original_prompts:
                     if tmp_prompt["image_url"] == prompt_image_path:
                         original_prompts.remove(tmp_prompt)
@@ -460,8 +459,6 @@ def submit_edit_prompt(slug):
 
         if len(prompts) == 0:
             return make_response(jsonify({'status': 0, 'error_message': 'กรุณาอัพโหลดรูปภาพ'}), 200)
-
-        print(original_prompts)
 
         for prompt in original_prompts:
             os.remove(os.getcwd() + '\\app' + prompt["image_url"])
