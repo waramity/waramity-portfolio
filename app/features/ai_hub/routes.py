@@ -449,13 +449,15 @@ def submit_edit_prompt(slug):
             if prompt_image_path in original_prompt_urls:
                 prompt["image_url"] = prompt_image_path
                 prompts.append(prompt)
-                original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] != prompt_image_path]
+                original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] == prompt_image_path]
             elif 'static\\assets\\images\\ai_hub\\' not in prompt_image_path and is_valid_base64_image(prompt['image_url']):
                 prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections\\' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
                 prompts.append(prompt)
 
         if len(prompts) == 0:
             return make_response(jsonify({'status': 0, 'error_message': 'กรุณาอัพโหลดรูปภาพ'}), 200)
+
+        print(original_prompts)
 
         for prompt in original_prompts:
             os.remove(os.getcwd() + '\\app' + prompt_image_path)
