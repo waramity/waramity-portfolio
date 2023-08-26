@@ -6,7 +6,17 @@
   </div>
 </div>
 
+<div class="row"></div>
+
+<template id="prompt-template">
+  <div class="col-4"></div>
+</template>
+
 <script type="text/javascript">
+  function removeSpinner() {
+    $(".spinner-border").toggleClass("invisible");
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     async function fetchGetPrompts() {
       const res = await fetch(`/en/ai_hub/get-prompts`, {
@@ -14,6 +24,12 @@
         headers: { Accept: "application/json" },
       });
       const data = await res.json();
+      const prompts = data["prompts"];
+
+      for (let i = 0; i < prompts.length; i++) {
+        console.log(prompts[i]);
+      }
+      removeSpinner();
     }
 
     fetchGetPrompts();

@@ -188,7 +188,8 @@ def index():
 
 @ai_hub.route('/get-prompts', methods=["GET"])
 def get_prompts():
-    return make_response(jsonify({"status": 0, 'error_message': str("kuy")}), 200)
+    prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}))
+    return make_response(jsonify({"status": 0, 'prompts': prompts}), 200)
 
 
 @ai_hub.route('/logout')
