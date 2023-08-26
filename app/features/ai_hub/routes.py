@@ -454,13 +454,10 @@ def submit_edit_prompt(slug):
         for prompt in new_prompts[:]:
             prompt_image_path = urlparse(prompt['image_url']).path
             prompt_image_path = prompt_image_path.replace("/", "\\")
-            print(prompt_image_path)
             if prompt_image_path in original_prompt_urls:
+                prompt["image_url"] = prompt_image_path
                 prompts.append(prompt)
-                print(prompt_image_path)
-                print(prompt["image_url"])
-                print(original_prompts)
-                original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] == prompt["image_url"]]
+                original_prompts = [tmp_prompt for tmp_prompt in original_prompts if tmp_prompt["image_url"] != prompt_image_path]
             elif 'static\\assets\\images\\ai_hub\\' not in prompt_image_path and is_valid_base64_image(prompt['image_url']):
                 prompt['image_url'] = upload_base64_to_file_system(current_user.get_profile_name(), 'prompt_collections\\' + current_user.get_profile_name() + '_' + slug, prompt['image_url'])
                 prompts.append(prompt)
@@ -469,10 +466,7 @@ def submit_edit_prompt(slug):
             return make_response(jsonify({'status': 0, 'error_message': 'กรุณาอัพโหลดรูปภาพ'}), 200)
 
         for prompt in original_prompts:
-            prompt_image_path = urlparse(prompt['image_url']).path
-            prompt_image_path = prompt['image_url'].replace("/", "\\")
             os.remove(os.getcwd() + '\\app' + prompt_image_path)
-            # utils.delete_image_in_spaces(prompt['image_url'])
 
         prompt_collection_json = {
             '$set': {
