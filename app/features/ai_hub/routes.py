@@ -196,12 +196,9 @@ def get_google_provider_cfg():
 
 @ai_hub.route("/google-auth")
 def google_auth():
-    # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    # Use library to construct the request for Google login and provide
-    # scopes that let you retrieve user's profile from Google
     request_uri = google_client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
@@ -299,7 +296,6 @@ def submit_create_profile():
             is_valid_profile_name(request.json['profile']['name'])
             is_valid_description(request.json['profile']['description'])
             is_duplicate_profile_name(request.json['profile']['name'])
-            print(request.json['profile']['base64_image'])
             is_valid_base64_image(request.json['profile']['base64_image'])
         except Exception as e:
             return make_response(jsonify({"status": 0, 'error_message': str(e)}), 200)
@@ -819,7 +815,6 @@ def delete_comment(comment_slug):
             user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count}}, return_document=False)
 
             for prompt in comment["prompts"]:
-                # utils.delete_image_in_spaces(prompt['image_url'])
                 os.remove(os.getcwd() + '\\app' + prompt['image_url'])
 
 
