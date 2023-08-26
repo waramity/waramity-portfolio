@@ -2,28 +2,7 @@
 
 <h1 class="mb-4">Prompt collection</h1>
 
-<!-- START: show information script -->
-<script type="text/javascript">
-  function formatTimeDifference(date_str, element_id) {
-    var date = new Date(date_str);
-    var timeDiff = Math.abs(Date.now() - date.getTime());
-    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
-    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
-
-    if (diffMinutes < 60) {
-      document.getElementById(element_id).innerHTML =
-        diffMinutes + " minutes ago";
-    } else if (diffHours < 24) {
-      document.getElementById(element_id).innerHTML = diffHours + " hours ago";
-    } else if (diffDays < 30) {
-      document.getElementById(element_id).innerHTML = diffDays + " days ago";
-    } else {
-      document.getElementById(element_id).innerHTML =
-        diffMonths + " months ago";
-    }
-  }
-</script>
-<!-- END:  show information script-->
+<div class="spinner-border" role="status">
+  <span class="sr-only"></span>
+</div>
 {% endblock %}
