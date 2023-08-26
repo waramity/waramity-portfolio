@@ -189,6 +189,11 @@ def index():
         print(prompt)
     return render_template('ai_hub/index.html', title=_('waramity portfolio'), prompts=prompts)
 
+@ai_hub.route('/get-prompts', methods=["GET"])
+def get_prompts():
+    return make_response(jsonify({"status": 0, 'error_message': str("kuy")}), 200)
+
+
 @ai_hub.route('/logout')
 @login_required
 def logout():

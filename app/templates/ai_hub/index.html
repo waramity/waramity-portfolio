@@ -5,4 +5,18 @@
     <span class="sr-only"></span>
   </div>
 </div>
+
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    async function fetchGetPrompts() {
+      const res = await fetch(`/en/ai_hub/get-prompts`, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+      });
+      const data = await res.json();
+    }
+
+    fetchGetPrompts();
+  });
+</script>
 {% endblock %}
