@@ -21,6 +21,8 @@ from .forms import DestoryPromptCollectionForm
 from werkzeug.datastructures import CombinedMultiDict
 
 from urllib.parse import urlparse
+import shutil
+
 
 
 
@@ -503,8 +505,11 @@ def destroy_prompt(profile_name, slug):
 
             user_db.profile.find_one_and_update({'_id': prompt_collection['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count, 'total_engagement.bookmarks': -bookmark_result.deleted_count, 'total_engagement.comments': -deleted_comment.deleted_count}}, return_document=False)
 
-            for prompt in prompt_collection["prompts"]:
-                os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+            # print(prompt_collection['prompts'][0]['image_url'])
+            prompt_folder_name = prompt_collection['prompts'][0]['image_url'].split("\\")[6]
+            shutil.rmtree(os.getcwd() + '\\app\\static\\assets\\images\\ai_hub\\prompt_collections\\' + prompt_folder_name)
+            # for prompt in prompt_collection["prompts"]:
+            #     os.remove(os.getcwd() + '\\app' + prompt['image_url'])
             feature_db.prompt_collection.delete_one({'_id': prompt_collection['_id']})
             return redirect(url_for('ai_hub.index'))
         else:
