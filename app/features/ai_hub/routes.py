@@ -499,9 +499,13 @@ def destroy_prompt(profile_name, slug):
 
             comments = list(feature_db.comment.find({ 'item.id': prompt_collection['_id'], 'item.type': 'prompt_collection'}))
 
-            for comment in comments:
-                for prompt in comment['prompts']:
-                    os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+            # for comment in comments:
+            #     for prompt in comment['prompts']:
+            #         os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+
+            if comments and len(comments) > 0:
+                comment_folder_name = comments[0]['prompts'][0]['image_url'].split("\\")[6]
+                shutil.rmtree(os.getcwd() + '\\app\\static\\assets\\images\\ai_hub\\comments\\' + comment_folder_name)
 
             deleted_comment = feature_db.comment.delete_many({ 'item.id': prompt_collection['_id'], 'item.type': 'prompt_collection'})
 
