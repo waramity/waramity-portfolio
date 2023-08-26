@@ -820,8 +820,12 @@ def delete_comment(comment_slug):
             like_result = feature_db.engagement.delete_many({ 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like'})
             user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count}}, return_document=False)
 
-            for prompt in comment["prompts"]:
-                os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+            # for prompt in comment["prompts"]:
+            #     os.remove(os.getcwd() + '\\app' + prompt['image_url'])
+            #
+
+            comment_folder_name = comment['prompts'][0]['image_url'].split("\\")[6]
+            shutil.rmtree(os.getcwd() + '\\app\\static\\assets\\images\\ai_hub\\comments\\' + comment_folder_name)
 
 
             feature_db.comment.delete_one({'_id': comment['_id']})
