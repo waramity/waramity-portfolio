@@ -447,7 +447,6 @@ def submit_edit_prompt(slug):
         original_prompts = prompt_collection["prompts"]
 
         original_prompt_urls = [prompt['image_url'] for prompt in prompt_collection["prompts"]]
-        print(original_prompt_urls)
 
         prompts = []
 
