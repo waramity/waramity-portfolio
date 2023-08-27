@@ -43,6 +43,9 @@ def before_request():
 
 @ai_hub.route('/ai_hub')
 def index():
+
+    if session['platform'] != 'ai_hub':
+        logout_user()
     if current_user.is_authenticated:
         if current_user.get_profile_name() is None:
             return redirect(url_for('ai_hub.create_profile'))
