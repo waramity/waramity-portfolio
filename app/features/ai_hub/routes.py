@@ -51,7 +51,7 @@ def index():
 
 @ai_hub.route('/get-prompts/<int:page_index>', methods=["GET"])
 def get_prompts(page_index):
-    prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}).skip(page_index).limit(9))
+    prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}).sort('upload_dated', -1).skip(page_index).limit(9))
     return make_response(jsonify({"status": 0, 'prompts': prompts}), 200)
 
 
