@@ -1,5 +1,5 @@
 from flask import (render_template, Blueprint, g, redirect,
-                   request, current_app, abort, url_for, jsonify, make_response, json)
+                   request, current_app, abort, url_for, jsonify, make_response, json, session)
 
 from flask_babel import _, refresh
 from flask_login import login_user, logout_user, login_required, current_user
@@ -59,6 +59,7 @@ def get_prompts(page_index):
 @login_required
 def logout():
     logout_user()
+    session.pop('platform', None)
     return redirect(url_for('ai_hub.index'))
 
 def get_google_provider_cfg():
@@ -147,6 +148,7 @@ def google_auth_callback():
 
     user = User(user)
     login_user(user)
+    session['platform'] = 'ai_hub'
     return redirect(url_for('ai_hub.index'))
 
 @ai_hub.route("/create-profile", methods=['GET'])

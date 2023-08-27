@@ -1,8 +1,8 @@
 from flask import (render_template, Blueprint, g, redirect,
-                   request, current_app, abort, url_for, jsonify, make_response, json)
+                   request, current_app, abort, url_for, jsonify, make_response, json, session)
 
 from flask_babel import _, refresh
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 
 import geocoder
 
@@ -55,6 +55,9 @@ def haversine(lat1, lon1, lat2, lon2):
 
 @dating.route('/dating')
 def index():
+
+    if session['platform'] != 'dating':
+        logout_user()
     if current_user.is_authenticated:
         if current_user.given_name is None:
             return redirect(url_for('auth.create_profile'))
