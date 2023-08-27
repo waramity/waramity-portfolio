@@ -41,15 +41,14 @@ def haversine(lat1, lon1, lat2, lon2):
     Calculate the great circle distance in kilometers between two points
     on the earth (specified in decimal degrees)
     """
-    # convert decimal degrees to radians
+
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
-    # haversine formula
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
     c = 2 * asin(sqrt(a))
-    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+    r = 6371
     return c * r
 
 
@@ -110,9 +109,8 @@ def get_user_preferences():
 @dating.route('/save-changes-preferences', methods=['POST'])
 @login_required
 def save_changes_preferences():
-    # print(request.json)
-    if request.method == 'POST' and request.json is not None:
 
+    if request.method == 'POST' and request.json is not None:
         preferences = Preferences.query.filter_by(user_id=current_user.id).first()
         if request.json['start_age'] < 20 or request.json['start_age'] > 65:
             request.json['start_age'] = 20
@@ -131,9 +129,6 @@ def save_changes_preferences():
         if showmes == []:
             showmes.append(Gender.query.filter_by(id=1).first())
 
-        # print(preferences.showmes)
-        # print(showmes)
-
         preferences.start_age = request.json['start_age']
         preferences.end_age = request.json['end_age']
         preferences.distance = request.json['distance']
@@ -142,12 +137,6 @@ def save_changes_preferences():
         db.session.commit()
 
         preferences = Preferences.query.filter_by(user_id=current_user.id).first().serialize
-        # users = [i.serialize for i in User.query.all()]
-        # current_user_last_location = Location.query.filter_by(user_id=current_user.id).first()
-        # for user in users:
-        #     distance = haversine(current_user_last_location.latitude, current_user_last_location.longitude, user['last_location']['latitude'], user['last_location']['longitude'])
-        #     del user['last_location']
-        #     user['distance'] = distance
         return make_response(jsonify(preferences), 200)
 
 def random_uuid(model):
@@ -189,13 +178,10 @@ def update_dislike():
         result = {}
         from_user_like = Likes.query.filter(Likes.from_user_id==str(current_user.id), Likes.to_user_id==str(request.json["res_user_id"])).first()
         if from_user_like is None:
-            # print(request.json["res_user_id"])
             from_user_like = Likes(id=random_uuid(Likes), from_user_id=current_user.id, to_user_id=str(request.json["res_user_id"]), like=bool(request.json["like"]))
             if from_user_like.like is False:
-                # print(like)
                 current_user.likes.append(from_user_like)
                 db.session.add(from_user_like)
                 db.session.commit()
-                print(len(current_user.likes))
                 result["result"] = "Dislike"
                 return make_response(jsonify(result), 200)
