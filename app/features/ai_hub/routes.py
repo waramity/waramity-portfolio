@@ -22,9 +22,6 @@ import shutil
 
 from .utils import is_valid_permission, is_valid_profile_name, is_valid_description, is_duplicate_profile_name, is_valid_base64_image, is_valid_topic, is_valid_model_name, is_valid_prompts, is_valid_prompts_comment, is_valid_comment, upload_base64_to_file_system, initial_upload_image
 
-
-
-
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
 # Multiligual Start
