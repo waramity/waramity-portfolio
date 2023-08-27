@@ -81,9 +81,12 @@
   <div class="col-3 bg-dark d-flex flex-column no-padding">
     {% include "dating/chat-list.html" %} {% include "dating/preferences.html"
     %}
-    <button type="button" class="btn btn-secondary btn-lg">
-      {{_('Log out')}}
-    </button>
+
+    <a href="{{ url_for('auth.logout') }}">
+      <button type="button" class="btn btn-secondary btn-lg w-100">
+        {{_('Log out')}}
+      </button>
+    </a>
   </div>
   <div id="main" class="main col-9 bg-light">
     {% include "dating/chat.html" %} {% include "dating/card.html" %}

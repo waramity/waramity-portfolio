@@ -46,7 +46,7 @@ def before_request():
 def logout():
     logout_user()
     session['platform'] = 'none'
-    return redirect(url_for('main.index'))
+    return redirect(url_for('dating.index'))
 
 def get_google_provider_cfg():
     return requests.get(app.config['GOOGLE_DISCOVERY_URL']).json()
