@@ -9,13 +9,19 @@
 <div id="prompt-container" class="row"></div>
 
 <template id="prompt-template">
-  <div class="row col-3">
-    <div class="col-12"><img id="image" src="" class="w-100 rounded" /></div>
-    <div class="col-8">
-      <h3 id="topic"></h3>
-      <p id="updated_date"></p>
-    </div>
-    <div class="col-4" id="likes"></div>
+  <div class="col-3">
+    <a id="link" href="#" class="text-decoration-none text-dark">
+      <div class="col-12 mb-2">
+        <img id="image" src="" class="w-100 rounded" />
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <h3 id="topic"></h3>
+          <p id="updated_date"></p>
+        </div>
+        <div class="col-4" id="likes"></div>
+      </div>
+    </a>
   </div>
 </template>
 
@@ -41,10 +47,12 @@
         let prompt_template_clone = prompt_template.content.cloneNode(true);
 
         prompt_template_clone.querySelector(
+          "#link"
+        ).href = `/th/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
+
+        prompt_template_clone.querySelector(
           "#topic"
         ).innerHTML = `${prompts[i]["topic"]}`;
-
-        console.log(prompts[i]["prompts"][0]["image_url"]);
 
         prompt_template_clone.querySelector(
           "#image"
