@@ -1,19 +1,4 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
-<style media="screen">
-  .image-hover button {
-    position: absolute;
-    bottom: 10px; /* Adjust the button's position from the bottom */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  /* Add a hover effect */
-  .image-hover:hover button {
-    opacity: 1;
-  }
-</style>
 
 <div class="text-center">
   <div class="spinner-border" role="status">
@@ -24,11 +9,10 @@
 <div id="prompt-container" class="row"></div>
 
 <template id="prompt-template">
-  <div class="col-3 image-container">
+  <div class="col-3">
     <a id="link" href="#" class="text-decoration-none text-dark">
-      <div class="col-12 mb-2 image-hover">
+      <div class="col-12 mb-2">
         <img id="image" src="" class="w-100 rounded" />
-        <button class="btn btn-primary">Button 2</button>
       </div>
       <div class="row">
         <div class="col-8">
@@ -42,6 +26,8 @@
 </template>
 
 <script type="text/javascript">
+  let pageIndex = 0;
+
   function removeSpinner() {
     $(".spinner-border").toggleClass("invisible");
   }
@@ -69,7 +55,7 @@
     let prompt_container = document.querySelector("#prompt-container");
 
     async function fetchGetPrompts() {
-      const res = await fetch(`/en/ai_hub/get-prompts`, {
+      const res = await fetch(`/en/ai_hub/get-prompts/${pageIndex}`, {
         method: "GET",
         headers: { Accept: "application/json" },
       });

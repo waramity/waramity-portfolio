@@ -186,8 +186,9 @@ def index():
     prompts = feature_db.prompt_collection.find()
     return render_template('ai_hub/index.html', title=_('waramity portfolio'), prompts=prompts)
 
-@ai_hub.route('/get-prompts', methods=["GET"])
-def get_prompts():
+@ai_hub.route('/get-prompts/<int:page_index>', methods=["GET"])
+def get_prompts(page_index):
+    print(page_index)
     prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}))
     return make_response(jsonify({"status": 0, 'prompts': prompts}), 200)
 
