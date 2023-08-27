@@ -121,7 +121,7 @@ def google_auth_callback():
 
     session['platform'] = 'dating'
 
-    return redirect(url_for('main.index'))
+    return redirect(url_for('dating.index'))
 
 def render_picture(data):
     render_pic = base64.b64encode(data).decode('ascii')
