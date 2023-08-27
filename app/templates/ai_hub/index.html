@@ -16,7 +16,7 @@
       </div>
       <div class="row">
         <div class="col-8">
-          <h3 id="topic"></h3>
+          <h4 id="topic"></h4>
           <p id="updated_date"></p>
         </div>
         <div class="col-4" id="likes"></div>
@@ -28,6 +28,25 @@
 <script type="text/javascript">
   function removeSpinner() {
     $(".spinner-border").toggleClass("invisible");
+  }
+
+  function formatTimeDifference(date_str, element) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      element.innerHTML = diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      element.innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      element.innerHTML = diffDays + " days ago";
+    } else {
+      element.innerHTML = diffMonths + " months ago";
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -65,6 +84,11 @@
         prompt_template_clone.querySelector(
           "#updated_date"
         ).innerHTML = `${prompts[i]["updated_date"]}`;
+
+        formatTimeDifference(
+          `${prompts[i]["updated_date"]}`,
+          prompt_template_clone.querySelector("#updated_date")
+        );
 
         prompt_container.appendChild(prompt_template_clone.children[0]);
       }
