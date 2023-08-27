@@ -695,3 +695,30 @@ def delete_comment(comment_slug):
             feature_db.comment.delete_one({'_id': comment['_id']})
 
             return make_response(jsonify({'status': 1}), 200)
+
+@ai_hub.route('/follow', methods=['POST'])
+@login_required
+def follow():
+    if request.method == 'POST' and request.json is not None:
+        follower_id = current_user.get_id()
+
+        user = user_db.profile.find_one({'profile_name': request.json['following_profile_name']})
+
+        following_id = user['_id']
+
+        if follower_id == following_id:
+            return make_response(jsonify({"status": 0, 'error_message': 'Cannot follow yourself.'}), 200)
+
+        follow = user_db.follow.find_one({'follower_id': follower_id, 'following_id': following_id})
+
+        if follow:
+            user_db.follow.delete_one({'_id': follow['_id']})
+            user_db.profile.find_one_and_update({'_id': user['_id']}, {'$inc': {'total_engagement.followers': -1}}, return_document=False)
+            user_db.profile.find_one_and_update({'_id': current_user.get_id()}, {'$inc': {'total_engagement.followings': -1}}, return_document=False)
+            return make_response(jsonify({"status": 1, 'message': 'Unfollowed user.'}), 200)
+
+        user_db.follow.insert_one({'follower_id': follower_id, 'following_id': following_id})
+
+        user_db.profile.find_one_and_update({'_id': user['_id']}, {'$inc': {'total_engagement.followers': 1}}, return_document=False)
+        user_db.profile.find_one_and_update({'_id': current_user.get_id()}, {'$inc': {'total_engagement.followings': 1}}, return_document=False)
+        return make_response(jsonify({"status": 1, 'message': 'Followed user.'}), 200)

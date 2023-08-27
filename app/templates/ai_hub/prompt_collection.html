@@ -659,8 +659,7 @@
     let follow_json = {
       following_profile_name: "{{creator['profile_name']}}",
     };
-    console.log(follow_json);
-    fetch(`/en/follow`, {
+    fetch(`/en/ai_hub/follow`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
