@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, g, current_app
+from flask import Blueprint, render_template, redirect, url_for, request, flash, g, current_app, session
 from flask_babel import _
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
@@ -135,6 +135,8 @@ def google_auth_callback():
 
     # Begin user session by logging the user in
     login_user(user)
+
+    session['platform'] = 'dating'
 
     # Send user back to homepage
     return redirect(url_for('main.index'))
