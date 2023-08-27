@@ -10,9 +10,12 @@
 
 <template id="prompt-template">
   <div class="row col-3">
-    <div class="col-4" id="topic"></div>
+    <div class="col-12"><img id="image" src="" class="w-100 rounded" /></div>
+    <div class="col-8">
+      <h3 id="topic"></h3>
+      <p id="updated_date"></p>
+    </div>
     <div class="col-4" id="likes"></div>
-    <div class="col-4" id="updated_date"></div>
   </div>
 </template>
 
@@ -41,7 +44,11 @@
           "#topic"
         ).innerHTML = `${prompts[i]["topic"]}`;
 
-        console.log(prompts[i]);
+        console.log(prompts[i]["prompts"][0]["image_url"]);
+
+        prompt_template_clone.querySelector(
+          "#image"
+        ).src = `${prompts[i]["prompts"][0]["image_url"]}`;
 
         prompt_template_clone.querySelector(
           "#likes"
