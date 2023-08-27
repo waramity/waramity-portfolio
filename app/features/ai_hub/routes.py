@@ -28,6 +28,7 @@ from .utils import is_valid_permission, is_valid_profile_name, is_valid_descript
 ai_hub = Blueprint('ai_hub', __name__, template_folder='templates', url_prefix='/<lang_code>/ai_hub' )
 
 # Multiligual Start
+
 @ai_hub.url_defaults
 def add_language_code(endpoint, values):
     values.setdefault('lang_code', g.lang_code)
@@ -143,7 +144,6 @@ def google_auth_callback():
             }
         }
 
-        # Insert the new user document into the collection
         result = user_db.profile.insert_one(user)
         user['_id'] = str(result.inserted_id)
     else:
@@ -686,10 +686,6 @@ def delete_comment(comment_slug):
 
             like_result = feature_db.engagement.delete_many({ 'item_id': comment['_id'], 'item_type': 'comment', 'engage_type': 'like'})
             user_db.profile.find_one_and_update({'_id': comment['user_id']}, {'$inc': {'total_engagement.likes': -like_result.deleted_count}}, return_document=False)
-
-            # for prompt in comment["prompts"]:
-            #     os.remove(os.getcwd() + '\\app' + prompt['image_url'])
-            #
 
             comment_folder_name = comment['prompts'][0]['image_url'].split("\\")[6]
             shutil.rmtree(os.getcwd() + '\\app\\static\\assets\\images\\ai_hub\\comments\\' + comment_folder_name)
