@@ -76,9 +76,12 @@
 </script>
 
 <div class="row">
-  <div class="col-3 bg-dark">
+  <div class="col-3 bg-dark d-flex flex-column">
     {% include "dating/preferences.html" %} {% include "dating/chat-list.html"
     %}
+    <button type="button" class="btn btn-secondary btn-lg mt-auto">
+      Log out
+    </button>
   </div>
   <div id="main" class="main col-9 bg-light">
     {% include "dating/chat.html" %} {% include "dating/card.html" %}
@@ -101,25 +104,15 @@
     return passionsStr;
   }
 
-  // let current_user = {
-  //   id: "{{current_user.id}}",
-  //   last_location_id: "{{current_user.last_location_id}}",
-  // };
-
   function getUserCardBasedOnPreferences() {
     fetch("{{url_for('dating.get_user_based_on_preferences')}}", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify(current_user),
     }).then((res) => {
       res.json().then((data) => {
-        // cards.empty();
         for (let i = 0; i < data.length; i++) {
           let age = getAge(data[i].birthday);
           let passions = convertPassionsToStr(data[i].passions);
-          // let distance = haversineFormula({{current_user}}, lon1, lat2, lon2)
-          console.log(data);
-          // console.log({{current_user.serialize_last_location}});
           cardParent.append(`
             <div id="${data[i].id}" class="tinder--card">
               <img src="data:image/png;base64,${data[i].profile_images[0].rendered_data}" alt="${data[i].profile_images[0].name}" />
