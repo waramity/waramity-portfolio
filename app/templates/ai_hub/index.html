@@ -92,16 +92,16 @@
 
         prompt_container.appendChild(prompt_template_clone.children[0]);
       }
+
+      pageIndex += 1;
     }
 
     var intersectionObserver = new IntersectionObserver((entries) => {
       if (entries[0].intersectionRatio <= 0) {
-        fetchGetPrompts();
         return;
       }
 
-      // loadItems();
-      console.log("kuy");
+      fetchGetPrompts();
     });
 
     intersectionObserver.observe(intersection);
