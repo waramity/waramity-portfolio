@@ -62,7 +62,7 @@ def get_prompts(page_index):
 @login_required
 def logout():
     logout_user()
-    session.pop('platform', None)
+    session['platform'] = 'none'
     return redirect(url_for('ai_hub.index'))
 
 def get_google_provider_cfg():

@@ -45,7 +45,7 @@ def before_request():
 @login_required
 def logout():
     logout_user()
-    session.pop('platform', None)
+    session['platform'] = 'none'
     return redirect(url_for('main.index'))
 
 def get_google_provider_cfg():
