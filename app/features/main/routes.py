@@ -1,6 +1,6 @@
 
 from flask import (render_template, Blueprint, g, redirect,
-                   request, current_app, abort, url_for, jsonify, make_response, json)
+                   request, current_app, abort, url_for, jsonify, make_response, json, session)
 from flask_babel import _, refresh
 import os
 # from flask_login import login_required, current_user
@@ -37,6 +37,7 @@ def load_json(filename):
 
 @main.route('/')
 def index():
+    session['platform'] = 'none'
     skill_data = load_json('data/main/skill.json')
     system_architecture_icons = ['python.png', 'javascript.png', 'html.png', 'css.png', 'jquery.png', 'scss.png', 'type-script.png', 'babel.png', 'flask.png', 'sqlalchemy.png', 'react.png', 'socket-io.png']
     return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data, system_architecture_icons=system_architecture_icons)

@@ -36,9 +36,6 @@ mongo_client = MongoClient('localhost', 27017)
 user_db = mongo_client["user"]
 feature_db = mongo_client["feature"]
 
-
-# socketio.init_app(app, manage_session=False)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 
 from app.features.main import main as main_blueprint
