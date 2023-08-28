@@ -128,8 +128,6 @@
 
     newCards.forEach(function (card, index) {
       card.style.zIndex = allCards.length - index;
-      // card.style.transform =
-      //   "scale(" + (20 - index) / 20 + ") translateY(-" + 30 * index + "px)";
       card.style.opacity = (10 - index) / 10;
     });
 
@@ -155,7 +153,6 @@
     let card = cards[0];
     let res_user_id = card.id;
     let req = { res_user_id: res_user_id, like: like };
-    console.log(card);
 
     fetch("{{url_for('dating.update_like')}}", {
       method: "POST",
@@ -208,7 +205,6 @@
     }
     card.classList.add("removed");
     setInterval(() => card.remove(), 100);
-    // console.log(cards.length);
     if (cards.length == 0) {
       getUserCardBasedOnPreferences();
     }

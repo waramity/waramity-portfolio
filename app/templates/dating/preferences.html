@@ -169,7 +169,6 @@
     fetch("{{url_for('dating.get_user_preferences')}}", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify(current_user),
     }).then((res) => {
       res.json().then((data) => {
         initialAgeSlider(data["start_age"], data["end_age"]);
@@ -204,7 +203,6 @@
         let distanceSliderValue = distanceSlider.noUiSlider.get();
         let showmeIDs = [];
         $("*[id*=showme-]:checked").each(function () {
-          //Get elements that have an id=
           showmeIDs.push(
             parseInt(
               $(this)
@@ -279,9 +277,6 @@
     .addEventListener("click", saveChangePreferences());
   $("#save-changes-button").click(saveChangePreferences());
 
-  // document
-  //   .getElementById("")
-  //   .addEventListener("click", closePreferences());
   $("#close-button").click(closePreferences());
 
   $("*[id*=showme-]").click(function () {
