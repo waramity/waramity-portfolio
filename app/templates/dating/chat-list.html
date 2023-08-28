@@ -112,6 +112,8 @@
           $("#messaging").css({ "z-index": 2 });
           $("#messaging__close").toggleClass("active");
           $("#messaging__close").click(toggleClose(user_id));
+          $(".tinder--buttons").addClass("invisible");
+          $(".tinder--cards").addClass("invisible");
 
           socket.emit("changeChat", user_id, match_id);
 
