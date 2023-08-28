@@ -3,6 +3,10 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css"
 />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
 
 <style media="screen">
   #age-slider-value::before {
@@ -24,11 +28,13 @@
 <!-- Button trigger modal -->
 <button
   type="button"
-  class="btn btn-primary mt-auto"
+  class="btn btn-dark mt-auto border border-secondary text-secondary me-5 ms-5 pb-3 pt-3"
   id="#preferencesModalToggle"
   data-bs-toggle="modal"
   data-bs-target="#preferencesModal"
 >
+  <i class="bi bi-gear me-2"></i>
+
   {{_('Settings')}}
 </button>
 
