@@ -107,15 +107,17 @@
           $("#messaging").css({ "z-index": -1 });
           $("#messaging__close").toggleClass("active");
           $("#msg_history").removeClass("msg_history");
+          $(".tinder--buttons").removeClass("invisible");
+          $(".tinder--cards").removeClass("invisible");
         } else {
           $(this).toggleClass("active");
           $("#messaging").removeClass("invisible");
           $("#messaging").css({ "z-index": 2 });
           $("#messaging__close").toggleClass("active");
           $("#messaging__close").click(toggleClose(user_id));
+          $("#msg_history").addClass("msg_history");
           $(".tinder--buttons").addClass("invisible");
           $(".tinder--cards").addClass("invisible");
-          $("#msg_history").addClass("msg_history");
 
           socket.emit("changeChat", user_id, match_id);
 

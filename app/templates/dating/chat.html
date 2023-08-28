@@ -75,7 +75,6 @@
 
   .sent_msg {
     float: right;
-    width: 46%;
   }
 
   .input_msg_write input {
@@ -101,9 +100,9 @@
   }
 
   .messaging {
-    padding: 0 0 50px 0;
     z-index: -1;
     background-color: white;
+    position: absolute;
   }
 
   .msg_history {
@@ -112,7 +111,7 @@
   }
 </style>
 
-<div id="messaging" class="messaging invisible">
+<div id="messaging" class="messaging w-100 invisible">
   <button
     id="messaging__close"
     type="button"
