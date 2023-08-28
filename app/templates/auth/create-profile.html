@@ -375,7 +375,6 @@
       <div class="row">
         <div class="field col-xs-1 col-md-4">
           <div class="label">{{_('Day')}}</div>
-          <!-- <select class="day_picker" name="birth_day"> </select> -->
           {{ form.birth_day(class="day_picker") }}
           <span class="error">
             {% if form.birth_day.errors %} {% for error in form.birth_day.errors
@@ -384,7 +383,6 @@
         </div>
         <div class="field col-xs-1 col-md-4">
           <div class="label">{{_('Month')}}</div>
-          <!-- <select class="month_picker" name="birth_month"> </select> -->
           {{ form.birth_month(class="month_picker") }}
           <span class="error">
             {% if form.birth_month.errors %} {% for error in
@@ -393,7 +391,6 @@
         </div>
         <div class="field col-xs-1 col-md-4">
           <div class="label">{{_('Year')}}</div>
-          <!-- <select class="year_picker" name="birth_year"> </select> -->
           {{ form.birth_year(class="year_picker") }}
           <span class="error">
             {% if form.birth_year.errors %} {% for error in
@@ -438,19 +435,6 @@
         error }} {% endfor %} {% endif %}
       </span>
       <div class="row">
-        <!-- <div class="col-xs-1 col-md-2 mb-4">
-          <input
-            type="checkbox"
-            class="btn-check"
-            id="showme-00"
-            autocomplete="off"
-            onclick="everybodyToggle(checked)"
-          />
-          <label class="btn btn-outline-secondary w-100" for="showme-00"
-            >{{_('ทุกคน')}}</label
-          >
-        </div> -->
-
         {% for showme in form.showme %}
         <div class="col-xs-1 col-md-2 mb-4">
           {{ showme(class="showme btn-check") }} {{ showme.label(class="btn
@@ -458,16 +442,6 @@
         </div>
         {% endfor %}
       </div>
-      <!-- <script>
-        function everybodyToggle(checked) {
-          var elms = $('input[id^="showme"]');
-          $.each(elms, function (index, elm) {
-            if (checked != elm.checked) {
-              elm.click();
-            }
-          });
-        }
-      </script> -->
       <div class="field btns">
         <button class="prev-3 prev">{{_('Previous')}}</button>
         <button class="next-3 next">{{_('Next')}}</button>

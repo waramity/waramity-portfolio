@@ -65,7 +65,7 @@ def index():
         else:
             return redirect(url_for('dating.app'))
 
-    return render_template('dating/index.html', title=_('Dootua - คู่ชีวิตที่คุณตามหา'))
+    return render_template('dating/index.html', title=_('Life partner you are looking for'))
 
 def get_geolocation():
     ip = geocoder.ip('me')
@@ -79,7 +79,7 @@ def get_geolocation():
 @login_required
 def app():
     get_geolocation()
-    return render_template('dating/match.html', title=_('Dootua - คู่ชีวิตที่คุณตามหา'))
+    return render_template('dating/match.html', title=_('Life partner you are looking for'))
 
 @dating.route('/get-user-based-on-preferences', methods=['POST'])
 @login_required

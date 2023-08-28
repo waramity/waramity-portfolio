@@ -162,12 +162,12 @@ def create_profile():
             if file.filename != "":
                 file_count += 1
                 if file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')) == False:
-                    flash(_('*กรุณาอัพโหลดรูปถ่าย'))
+                    flash(_('*Please upload a photo.'))
                     return redirect(url_for('auth.create_profile'))
                 continue
 
         if file_count == 0:
-            flash(_('*กรุณาอัพโหลดรูปถ่าย'))
+            flash(_('*Please upload a photo.'))
             return redirect(url_for('auth.create_profile'))
 
         for file in profile_image_files:
@@ -204,7 +204,7 @@ def create_profile():
 
     genders = Gender.query.all()
     passions = Passion.query.all()
-    return render_template('auth/create-profile.html', title=_('สร้างโปรไฟล์ - Dootua'), genders=genders, passions=passions, form=form)
+    return render_template('auth/create-profile.html', title=_('Create profile'), genders=genders, passions=passions, form=form)
 
 @auth.route('/profile')
 @login_required
