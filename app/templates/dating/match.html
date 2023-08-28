@@ -113,32 +113,44 @@
     return passionsStr;
   }
 
-  function getUserCardBasedOnPreferences() {
-    fetch("{{url_for('dating.get_user_based_on_preferences')}}", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => {
-      res.json().then((data) => {
-        for (let i = 0; i < data.length; i++) {
-          let age = getAge(data[i].birthday);
-          let passions = convertPassionsToStr(data[i].passions);
-          cardParent.append(`
-            <div id="${data[i].id}" class="tinder--card">
-              <img src="data:image/png;base64,${data[i].profile_images[0].rendered_data}" alt="${data[i].profile_images[0].name}" />
-              <h3>${data[i].given_name}, ${age}</h3>
-              <p>${passions}${data[i].distance}</p>
-            </div>
-          `);
+  async function getUserCardBasedOnPreferences() {
+    try {
+      const response = await fetch(
+        "{{url_for('dating.get_user_based_on_preferences')}}",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
         }
+      );
 
-        initCards();
-      });
-    });
+      if (!response.ok) {
+        // Handle error here if needed
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      for (let i = 0; i < data.length; i++) {
+        let age = getAge(data[i].birthday);
+        let passions = convertPassionsToStr(data[i].passions);
+        cardParent.append(
+          "beforeend",
+          `
+        <div id="${data[i].id}" class="tinder--card">
+          <img src="data:image/png;base64,${data[i].profile_images[0].rendered_data}" alt="${data[i].profile_images[0].name}" />
+          <h3>${data[i].given_name}, ${age}</h3>
+          <p>${passions}${data[i].distance}</p>
+        </div>
+      `
+        );
+      }
+
+      initCards();
+    } catch (error) {
+      // Handle any exceptions here
+      console.error(error);
+    }
   }
 
-  function startApp() {
-    getUserCardBasedOnPreferences();
-  }
-
-  startApp();
+  getUserCardBasedOnPreferences();
 </script>
