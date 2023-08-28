@@ -106,6 +106,7 @@
           $("#messaging").addClass("invisible");
           $("#messaging").css({ "z-index": -1 });
           $("#messaging__close").toggleClass("active");
+          $("#msg_history").removeClass("msg_history");
         } else {
           $(this).toggleClass("active");
           $("#messaging").removeClass("invisible");
@@ -114,6 +115,7 @@
           $("#messaging__close").click(toggleClose(user_id));
           $(".tinder--buttons").addClass("invisible");
           $(".tinder--cards").addClass("invisible");
+          $("#msg_history").addClass("msg_history");
 
           socket.emit("changeChat", user_id, match_id);
 

@@ -5,12 +5,11 @@
 ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment-with-locales.min.js"></script>
 <style media="screen">
-  img {
+  img#profile_image {
     max-width: 100%;
   }
 
   .inbox_msg {
-    height: 100vw
     border: 1px solid #c4c4c4;
     clear: both;
     overflow: hidden;
@@ -21,16 +20,19 @@
     margin: 0;
     padding: 18px 16px 10px;
   }
+
   .incoming_msg_img {
     display: inline-block;
     width: 6%;
   }
+
   .received_msg {
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
     width: 92%;
   }
+
   .received_withd_msg p {
     background: #ebebeb none repeat scroll 0 0;
     border-radius: 3px;
@@ -40,18 +42,20 @@
     padding: 5px 10px 5px 12px;
     width: 100%;
   }
+
   .time_date {
     color: #747474;
     display: block;
     font-size: 12px;
     margin: 8px 0 0;
   }
+
   .received_withd_msg {
     width: 57%;
   }
+
   .mesgs {
     float: left;
-    padding: 30px 15px 0 25px;
     width: 100%;
   }
 
@@ -64,48 +68,46 @@
     padding: 5px 10px 5px 12px;
     width: 100%;
   }
+
   .outgoing_msg {
     overflow: hidden;
-    margin: 26px 0 26px;
   }
+
   .sent_msg {
     float: right;
     width: 46%;
   }
+
   .input_msg_write input {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: medium none;
     color: #4c4c4c;
     font-size: 15px;
     min-height: 48px;
-    width: 100%;
     outline: none;
   }
 
   .type_msg {
     border-top: 1px solid #c4c4c4;
-    position: relative;
   }
+
   .msg_send_btn {
-    background: #05728f none repeat scroll 0 0;
     border: medium none;
     border-radius: 50%;
-    color: #fff;
     cursor: pointer;
     font-size: 17px;
     height: 33px;
-    position: absolute;
-    right: 0;
-    top: 11px;
     width: 33px;
   }
+
   .messaging {
     padding: 0 0 50px 0;
     z-index: -1;
     background-color: white;
   }
+
   .msg_history {
-    height: 85%;
+    height: 85vh;
     overflow-y: auto;
   }
 </style>
@@ -122,16 +124,20 @@
 
   <div class="inbox_msg">
     <div class="mesgs">
-      <div class="msg_history"></div>
+      <div id="msg_history"></div>
       <div class="type_msg">
         <div class="input_msg_write">
           <input
             type="text"
-            class="write_msg"
+            class="write_msg w-75 p-3"
             placeholder="Type a message"
+            style="font-size: 1.22rem;"
             required
           />
-          <button class="msg_send_btn" type="button">
+          <button
+            class="msg_send_btn bg-light float-end m-3 me-4"
+            type="button"
+          >
             <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
           </button>
         </div>
