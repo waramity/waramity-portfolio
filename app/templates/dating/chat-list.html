@@ -97,16 +97,19 @@
         }
       };
     }
+
     function changeChat(user_id, match_id) {
       return function (event) {
         event.preventDefault();
         if ($(this).hasClass("active")) {
-          $("#messaging").css({ "z-index": -1 });
           $(this).toggleClass("active");
+          $("#messaging").addClass("invisible");
+          $("#messaging").css({ "z-index": -1 });
           $("#messaging__close").toggleClass("active");
         } else {
-          $("#messaging").css({ "z-index": 2 });
           $(this).toggleClass("active");
+          $("#messaging").removeClass("invisible");
+          $("#messaging").css({ "z-index": 2 });
           $("#messaging__close").toggleClass("active");
           $("#messaging__close").click(toggleClose(user_id));
 

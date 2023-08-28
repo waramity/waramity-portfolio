@@ -109,14 +109,16 @@
   }
 </style>
 
-<div id="messaging" class="messaging">
+<div id="messaging" class="messaging invisible">
   <button
     id="messaging__close"
     type="button"
     class="btn-close"
     aria-label="Close"
   ></button>
+
   <h3 class="text-center">{{_('Messaging')}}</h3>
+
   <div class="inbox_msg">
     <div class="mesgs">
       <div class="msg_history">
@@ -136,95 +138,91 @@
       </div>
     </div>
   </div>
+</div>
 
-  <template id="incoming-msg__template">
-    <div class="incoming_msg">
-      <div class="incoming_msg_img">
-        <img id="profile_image" src="" alt="sunil" />
-      </div>
-      <div class="received_msg">
-        <div class="received_withd_msg">
-          <p class="message"></p>
-          <span class="time_date"></span>
-        </div>
-      </div>
+<template id="incoming-msg__template">
+  <div class="incoming_msg">
+    <div class="incoming_msg_img">
+      <img id="profile_image" src="" alt="sunil" />
     </div>
-  </template>
-
-  <template id="outgoing-msg__template">
-    <div class="outgoing_msg">
-      <div class="sent_msg">
+    <div class="received_msg">
+      <div class="received_withd_msg">
         <p class="message"></p>
         <span class="time_date"></span>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script type="text/javascript">
-    socket.on("displayAllMessages", (payload) => {
-      $(".msg_history").html("");
-      let all_messages = payload["all_messages"];
-      let recipient_profile_image_uri = payload["profile_image_uri"];
+<template id="outgoing-msg__template">
+  <div class="outgoing_msg">
+    <div class="sent_msg">
+      <p class="message"></p>
+      <span class="time_date"></span>
+    </div>
+  </div>
+</template>
 
-      for (const message_info of all_messages) {
-        const { match_id, message_type, created_date, message } = message_info;
-        if (message_type == "receivedMessage") {
-          displayReceivedMessage(
-            created_date,
-            message,
-            recipient_profile_image_uri
-          );
-        } else if (message_type == "sentMessage") {
-          displaySentMessage(created_date, message);
-        }
+<script type="text/javascript">
+  socket.on("displayAllMessages", (payload) => {
+    $(".msg_history").html("");
+    let all_messages = payload["all_messages"];
+    let recipient_profile_image_uri = payload["profile_image_uri"];
+
+    for (const message_info of all_messages) {
+      const { match_id, message_type, created_date, message } = message_info;
+      if (message_type == "receivedMessage") {
+        displayReceivedMessage(
+          created_date,
+          message,
+          recipient_profile_image_uri
+        );
+      } else if (message_type == "sentMessage") {
+        displaySentMessage(created_date, message);
       }
-    });
+    }
+  });
 
-    const convertDate = (datetime) => {
-      let date = moment.utc(datetime, "YYYY-MM-DD HH:mm:ss.SSS");
-      date = new Date(date);
-      date = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })}`;
-      return date;
-    };
+  const convertDate = (datetime) => {
+    let date = moment.utc(datetime, "YYYY-MM-DD HH:mm:ss.SSS");
+    date = new Date(date);
+    date = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+    return date;
+  };
 
-    const displayReceivedMessage = (
-      created_date,
-      message,
-      profile_image_uri
-    ) => {
-      const date = convertDate(created_date);
-      var message_box = document.querySelector(".msg_history");
+  const displayReceivedMessage = (created_date, message, profile_image_uri) => {
+    const date = convertDate(created_date);
+    var message_box = document.querySelector(".msg_history");
 
-      var incoming_message_template = document.querySelector(
-        "#incoming-msg__template"
-      );
+    var incoming_message_template = document.querySelector(
+      "#incoming-msg__template"
+    );
 
-      let template_clone = incoming_message_template.content.cloneNode(true);
-      template_clone.querySelector(
-        "#profile_image"
-      ).src = `data:image/png;base64,${profile_image_uri}`;
-      template_clone.querySelector(".message").innerHTML = `${message}`;
-      template_clone.querySelector(".time_date").innerHTML = `${date}`;
+    let template_clone = incoming_message_template.content.cloneNode(true);
+    template_clone.querySelector(
+      "#profile_image"
+    ).src = `data:image/png;base64,${profile_image_uri}`;
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${date}`;
 
-      message_box.append(template_clone.children[0]);
-    };
+    message_box.append(template_clone.children[0]);
+  };
 
-    const displaySentMessage = (created_date, message) => {
-      const date = convertDate(created_date);
-      var message_box = document.querySelector(".msg_history");
+  const displaySentMessage = (created_date, message) => {
+    const date = convertDate(created_date);
+    var message_box = document.querySelector(".msg_history");
 
-      var outgoing_message_template = document.querySelector(
-        "#outgoing-msg__template"
-      );
+    var outgoing_message_template = document.querySelector(
+      "#outgoing-msg__template"
+    );
 
-      let template_clone = outgoing_message_template.content.cloneNode(true);
-      template_clone.querySelector(".message").innerHTML = `${message}`;
-      template_clone.querySelector(".time_date").innerHTML = `${date}`;
+    let template_clone = outgoing_message_template.content.cloneNode(true);
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${date}`;
 
-      message_box.append(template_clone.children[0]);
-    };
-  </script>
-</div>
+    message_box.append(template_clone.children[0]);
+  };
+</script>
