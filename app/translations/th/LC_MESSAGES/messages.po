@@ -227,45 +227,45 @@ msgstr ""
 
 #: app/templates/ai_hub/nav.html:96
 msgid "+ Upload Prompt"
-msgstr ""
+msgstr "+ อัพโหลด Prompt"
 
 #: app/templates/ai_hub/nav.html:123
 msgid "Profile"
-msgstr ""
+msgstr "โปรไฟล์"
 
 #: app/templates/ai_hub/nav.html:129
 msgid "Bookmark"
-msgstr ""
+msgstr "บุ๊คมาร์ค"
 
 #: app/templates/ai_hub/nav.html:144
 msgid "Sign out"
-msgstr ""
+msgstr "ออกจากระบบ"
 
 #: app/templates/auth/create-profile.html:305
 msgid "Create your profile"
-msgstr ""
+msgstr "สร้างโปรไฟล์ของคุณ"
 
 #: app/templates/auth/create-profile.html:315
 msgid "Birthday"
-msgstr ""
+msgstr "วันเกิด"
 
 #: app/templates/auth/create-profile.html:329
 #: app/templates/auth/create-profile.html:432
 #: app/templates/dating/preferences.html:55
 msgid "Show me"
-msgstr ""
+msgstr "แสดงฉัน"
 
 #: app/templates/auth/create-profile.html:343
 msgid "Profile image"
-msgstr ""
+msgstr "รูปโปรไฟล์"
 
 #: app/templates/auth/create-profile.html:359
 msgid "Your given name"
-msgstr ""
+msgstr "ชื่อของคุณ"
 
 #: app/templates/auth/create-profile.html:361
 msgid "This name will be displayed in public."
-msgstr ""
+msgstr "ชื่อนี้จะถูกแสดงเป็นสาธารณะ"
 
 #: app/templates/auth/create-profile.html:369
 #: app/templates/auth/create-profile.html:403
@@ -273,11 +273,11 @@ msgstr ""
 #: app/templates/auth/create-profile.html:447
 #: app/templates/auth/create-profile.html:466
 msgid "Next"
-msgstr ""
+msgstr "ถัดไป"
 
 #: app/templates/auth/create-profile.html:374
 msgid "Your birthday"
-msgstr ""
+msgstr "วันเกิดของคุณ"
 
 #: app/templates/auth/create-profile.html:402
 #: app/templates/auth/create-profile.html:427
@@ -285,49 +285,49 @@ msgstr ""
 #: app/templates/auth/create-profile.html:465
 #: app/templates/auth/create-profile.html:516
 msgid "Previous"
-msgstr ""
+msgstr "ก่อนหน้า"
 
 #: app/templates/auth/create-profile.html:407
 msgid "My gender"
-msgstr ""
+msgstr "เพศของฉัน"
 
 #: app/templates/auth/create-profile.html:470
 msgid "Upload profile image"
-msgstr ""
+msgstr "อัพโหลดรูปโปรไฟล์"
 
 #: app/templates/auth/create-profile.html:517
 msgid "Submit"
-msgstr ""
+msgstr "ยืนยัน"
 
 #: app/templates/auth/create-profile.html:611
 msgid "Do not use special characters or spaces."
-msgstr ""
+msgstr "ห้ามใช้อักขระพิเศษหรือเว้นว่าง"
 
 #: app/templates/auth/create-profile.html:645
 msgid "*Please enter the given name."
-msgstr ""
+msgstr "*กรุณาใส่ชื่อ"
 
 #: app/templates/auth/create-profile.html:648
 msgid "*Please select a gender."
-msgstr ""
+msgstr "*กรุณาเลือกเพศ"
 
 #: app/templates/auth/create-profile.html:651
 #: app/templates/auth/create-profile.html:652
 msgid "*Please select the gender to be displayed."
-msgstr ""
+msgstr "*กรุณาใส่เพศที่จะแสดง"
 
 #: app/templates/auth/create-profile.html:655
 #: app/templates/auth/create-profile.html:656
 msgid "*Please select interests."
-msgstr ""
+msgstr "*กรุณาใส่ความสนใจ"
 
 #: app/templates/auth/create-profile.html:661
 msgid "*Please upload a PNG, JPEG, or WEBP file."
-msgstr ""
+msgstr "*กรุณาอัพโหลดเป็นไฟล์ PNG, JPEG, หรือ WEBP"
 
 #: app/templates/auth/geolocation.html:2
 msgid "Confirm to allow us to access your location"
-msgstr ""
+msgstr "ยอมรับให้เราเข้าถึงสถานที่ของคุณ"
 
 #: app/templates/auth/geolocation.html:4
 msgid ""
@@ -335,11 +335,7 @@ msgid ""
 "  personalized recommendations and location-based services within our "
 "mobile\n"
 "  app."
-msgstr ""
-"เราต้องขอการเข้าถึงข้อมูลสถานที่ของคุณ\n"
-"เพื่อแนะนำคู่สนทนาตามความชอบของคุณ"
-"ภายในแอพ\n"
-"ของเรา."
+msgstr "เราต้องขอการเข้าถึงข้อมูลสถานที่ของคุณ\n เพื่อแนะนำคู่สนทนาตามความชอบของคุณภายในแอพ\n ของเรา."
 
 #: app/templates/auth/geolocation.html:14
 msgid "I'm confirmed."

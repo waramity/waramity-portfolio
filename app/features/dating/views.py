@@ -24,13 +24,8 @@ def random_uuid(model):
 @socketio.on("userConnected", namespace='/dating')
 @login_required
 def userConnected():
-    print('user connect')
     session.pop("current_chat", None)
-    # join_room(session.get("user").get("id"))
     join_room(current_user.id)
-    # chatRooms = db.session.query(ChatRoom).filter((ChatRoom.senderID == session.get("user").get("id")) | (ChatRoom.recipientID == session.get("user").get("id"))).all()
-    # matches = [match.serialize for match in Matches.query.filter((Matches.sender_id==current_user.id) | (Matches.recipient_id==current_user.id)).order_by(Matches.updated_date.desc()).all()]
-    # matches = Matches.query.filter((Matches.sender_id==current_user.id) | (Matches.recipient_id==current_user.id)).order_by(Matches.updated_date.desc()).all()
     matches = Matches.query.filter((Matches.sender_id==current_user.id) | (Matches.recipient_id==current_user.id)).all()
 
     all_chats = []
@@ -50,9 +45,6 @@ def userConnected():
         if recipient_user:
             all_chats.append({'match_id': match.id, 'user_id': user_id, 'given_name': recipient_user.given_name, 'last_message': message, 'profile_image_uri': recipient_user.profile_images[0].rendered_data})
 
-    print(all_chats)
-    print(current_user.id)
-    print("Emitting chatRooms event")
     socketio.emit("chatRooms", all_chats, room=current_user.id, namespace='/dating')
 
 def stringifyDateTime(dateTimeObject):
@@ -67,20 +59,13 @@ def changeChat(user_id, match_id):
     payload = {"recipient_id": user_id, "profile_image_uri": recipient_user.profile_images[0].rendered_data, "all_messages": []}
     for message in messages:
         message_type = "receivedMessage"
-        print(current_user.id)
-        print(message.sender_id)
-        print(current_user.id == message.sender_id)
-
-        print(message_type)
         if current_user.id == message.sender_id:
             message_type = "sentMessage"
-        print(message_type)
         payload['all_messages'].append({"match_id": match_id, "message_type": message_type, "created_date": json.dumps(message.created_date, default=stringifyDateTime), "message": message.message})
     socketio.emit("displayAllMessages", payload, room=current_user.id, namespace='/dating')
 
 @socketio.on("message", namespace='/dating')
 def message(form):
-    print(form)
     match_id = form['match_id']
     recipient_id = form['recipient_id']
     message = form['message']
@@ -95,7 +80,3 @@ def message(form):
 
     socketio.emit("sentMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime)}, room=current_user.id, namespace='/dating')
     socketio.emit("receivedMessage", {"match_id": match_id, "recipient_id": recipient_id, "sender_id": current_user.id, "message": message, "created_date": json.dumps(new_message.created_date, default=stringifyDateTime), "firstName": current_user.given_name}, room=recipient_id, namespace='/dating')
-
-
-
-# Schedule the trigger_tick_update function to run every 5 seconds
