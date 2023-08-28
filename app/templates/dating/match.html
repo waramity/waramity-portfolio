@@ -83,8 +83,11 @@
     %}
     <hr class="ms-5 me-5 border border-secondary" />
 
-    <a href="{{ url_for('auth.logout') }}" class="mb-3 container p-3 ms-1">
-      <button type="button" class="btn btn-dark btn-lg w-100">
+    <a
+      href="{{ url_for('auth.logout') }}"
+      class="mb-3 container pe-5 ps-5 ms-1"
+    >
+      <button type="button" class="btn btn-dark btn-lg w-100 text-secondary">
         {{_('Log out')}}
       </button>
     </a>
