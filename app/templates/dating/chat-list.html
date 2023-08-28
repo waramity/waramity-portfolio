@@ -1,14 +1,18 @@
-<div id="chat-list" class="list-group"></div>
+<div class="container">
+  <h1 class="text-white m-3">Chat</h1>
+
+  <div id="chat-list" class="list-group"></div>
+</div>
 
 <template id="chat-item-template">
   <a
     id="chat-item__link"
     href="#"
-    class="list-group-item list-group-item-action"
+    class="list-group-item list-group-item-action bg-dark text-white border border-secondary"
     aria-current="true"
   >
     <div class="row">
-      <div class="col-3">
+      <div class="col-2">
         <img
           id="profile-image"
           src=""
@@ -17,7 +21,7 @@
         />
       </div>
 
-      <div class="col-9">
+      <div class="col-10">
         <div class="d-flex w-100 justify-content-between">
           <p id="given-name" class="mb-1"></p>
           <small id="updated-date">3 days ago</small>
