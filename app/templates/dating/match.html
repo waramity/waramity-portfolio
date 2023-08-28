@@ -81,9 +81,10 @@
   <div class="col-3 bg-dark d-flex flex-column no-padding">
     {% include "dating/chat-list.html" %} {% include "dating/preferences.html"
     %}
+    <hr class="ms-5 me-5" style="border-top: 1px solid #ccc;" />
 
-    <a href="{{ url_for('auth.logout') }}">
-      <button type="button" class="btn btn-secondary btn-lg w-100">
+    <a href="{{ url_for('auth.logout') }}" class="mb-3 container p-3 ms-1">
+      <button type="button" class="btn btn-dark btn-lg w-100">
         {{_('Log out')}}
       </button>
     </a>
