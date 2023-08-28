@@ -124,7 +124,6 @@
       );
 
       if (!response.ok) {
-        // Handle error here if needed
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -147,7 +146,6 @@
 
       initCards();
     } catch (error) {
-      // Handle any exceptions here
       console.error(error);
     }
   }
