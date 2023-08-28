@@ -158,7 +158,7 @@ def google_auth_callback():
 @login_required
 def create_profile():
     if request.method == 'GET' and current_user.get_profile_name() is None:
-        return render_template('ai_hub/create-profile.html', title=_('สร้างโปรไฟล์ - The deep pub'))
+        return render_template('ai_hub/create-profile.html', title=_('Create profile'))
     return redirect(url_for('ai_hub.index'))
 
 
@@ -380,7 +380,7 @@ def destroy_prompt(profile_name, slug):
             feature_db.prompt_collection.delete_one({'_id': prompt_collection['_id']})
             return redirect(url_for('ai_hub.index'))
         else:
-            flash(_('กรุณาใส่ slug ให้ถูกต้อง'))
+            flash(_('Please enter a correct slug.'))
             return redirect(url_for('prompt_collection.destroy', slug=slug, profile_name=profile_name))
 
     if request.method == 'GET':
@@ -443,7 +443,7 @@ def profile(profile_name):
                 follow = user_db.follow.find_one({'follower_id': current_user.get_id(), 'following_id': user['_id']})
                 followed = follow is not None
             user.pop('_id', None)
-            return render_template('ai_hub/profile.html', title=_('โปรไฟล์ของฉัน - The deep pub'), user=user, profile_name=profile_name, followed=followed)
+            return render_template('ai_hub/profile.html', title=_('My profile'), user=user, profile_name=profile_name, followed=followed)
         else:
             return redirect(url_for('ai_hub.index'))
 
@@ -451,7 +451,7 @@ def profile(profile_name):
 @login_required
 def bookmark():
     if request.method == 'GET':
-        return render_template('ai_hub/bookmark.html', title=_('บุ๊คมาร์คของฉัน - The deep pub'))
+        return render_template('ai_hub/bookmark.html', title=_('My bookmark'))
 
 @ai_hub.route("/edit-profile/<profile_name>", methods=['GET'])
 @login_required
@@ -459,7 +459,7 @@ def edit_profile(profile_name):
     if request.method == 'GET':
         if current_user.get_profile_name() == profile_name:
             user = user_db.profile.find_one({'profile_name': current_user.get_profile_name()}, {'profile_name': 1, 'description': 1, 'image_url': 1})
-            return render_template('ai_hub/edit-profile.html', title=_('แก้ไขโปรไฟล์ - The deep pub'), user=user)
+            return render_template('ai_hub/edit-profile.html', title=_('Edit profile'), user=user)
 
 @ai_hub.route("/submit-edit-profile", methods=['PATCH'])
 @login_required

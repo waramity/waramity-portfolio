@@ -7,5 +7,5 @@ from flask_babel import _
 import datetime
 
 class DestoryPromptCollectionForm(FlaskForm):
-    slug = StringField(_('พิมพ์ชื่อ Slug เพื่อลบ Prompt Collection'), validators=[InputRequired(message=_('*กรุณากรอกชื่อ Prompt Collection')), Length(min=2, max=35, message=_('*ชื่อ Prompt Collection ต้องมี 2-35 ตัวอักษร'))])
-    submit = SubmitField(_('ลบ Prompt Collection'))
+    slug = StringField(_('Type the name \'Slug\' to delete the Prompt.'), validators=[InputRequired(message=_('*Please enter the Prompt')), Length(min=2, max=35, message=_('*Prompt must be between 2-35 characters'))])
+    submit = SubmitField(_('Delete prompt'))
