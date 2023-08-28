@@ -119,6 +119,12 @@
           $("#msg_history").addClass("msg_history");
           $(".tinder--buttons").addClass("invisible");
           $(".tinder--cards").addClass("invisible");
+          $("#messaging_header img").attr(
+            "src",
+            `data:image/png;base64,${profile_image_uri}`
+          );
+
+          $("#messaging_header h4").html(`${given_name}`);
 
           socket.emit("changeChat", user_id, match_id);
 

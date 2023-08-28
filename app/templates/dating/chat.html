@@ -108,17 +108,28 @@
     height: 85vh;
     overflow-y: auto;
   }
+
+  #messaging_header img {
+    width: 3rem;
+  }
 </style>
 
 <div id="messaging" class="messaging w-100 invisible">
   <button
     id="messaging__close"
     type="button"
-    class="btn-close"
+    class="btn-close float-end p-4"
     aria-label="Close"
   ></button>
 
-  <h3 class="text-center">{{_('Messaging')}}</h3>
+  <div id="messaging_header" class="row">
+    <div class="col-auto mt-2">
+      <img src="" class="rounded-circle" />
+    </div>
+    <div class="col pt-3">
+      <h4></h4>
+    </div>
+  </div>
 
   <div class="inbox_msg">
     <div class="mesgs">
