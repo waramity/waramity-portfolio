@@ -33,12 +33,8 @@ def userConnected():
         else:
             user_id = match.sender_id
 
-        recipient_user = User.query.filter((User.id == user_id)).first()
-        last_message = Message.query.filter((Message.id == match.id)).order_by(Message.created_date.desc()).first()
-        print(last_message)
-        print(Message.query.filter((Message.id == match.id)).order_by(Message.created_date.desc()).first())
-        print(Message.query.filter(Message.id == match.id).first())
-        print(Message.query.order_by(Message.created_date.desc()).first())
+        recipient_user = User.query.filter(User.id == user_id).first()
+        last_message = Message.query.filter(Message.match_id == match.id).order_by(Message.created_date.desc()).first()
         message = None
         if last_message:
             message = {"message": last_message.message, "datetime": json.dumps(last_message.created_date, default=stringifyDateTime)}
@@ -56,8 +52,8 @@ def stringifyDateTime(dateTimeObject):
 @socketio.on("changeChat", namespace='/dating')
 def changeChat(user_id, match_id):
     session["current_chat"] = user_id
-    messages = Message.query.filter((Message.match_id == match_id)).all()
-    recipient_user = User.query.filter((User.id == user_id)).first()
+    messages = Message.query.filter(Message.match_id == match_id).all()
+    recipient_user = User.query.filter(User.id == user_id).first()
     payload = {"recipient_id": user_id, "profile_image_uri": recipient_user.profile_images[0].rendered_data, "all_messages": []}
     for message in messages:
         message_type = "receivedMessage"
