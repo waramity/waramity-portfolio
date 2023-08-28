@@ -98,6 +98,8 @@
           $("#messaging").css({ "z-index": -1 });
           $(this).toggleClass("active");
           $(`#chat-item__link-${user_id}`).toggleClass("active");
+          $(".tinder--buttons").removeClass("invisible");
+          $(".tinder--cards").removeClass("invisible");
         }
       };
     }
