@@ -39,7 +39,7 @@ def load_json(filename):
 def index():
     session['platform'] = 'none'
     skill_data = load_json('data/main/skill.json')
-    system_architecture_icons = ['python.png', 'javascript.png', 'html.png', 'css.png', 'jquery.png', 'scss.png', 'type-script.png', 'babel.png', 'flask.png', 'sqlalchemy.png', 'react.png', 'socket-io.png']
+    system_architecture_icons = ['python.png', 'javascript.png', 'html.png', 'css.png', 'jquery.png', 'scss.png', 'type-script.png', 'babel.png', 'flask.png', 'sqlalchemy.png', 'react.png', 'socket-io.png', 'digital-ocean.png', 'mongo.jpg', 'tailwind.png', 'oauth.png', 'postgres.png']
     return render_template('main/index.html', title=_('waramity portfolio'), skill_data=skill_data, system_architecture_icons=system_architecture_icons)
 
 @main.route('/get_skill_data/<int:index>')
