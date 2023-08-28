@@ -302,52 +302,45 @@
 </style>
 <!-- end photo upload style -->
 
-<header>{{_('สร้างโปรไฟล์ของคุณ')}}</header>
+<header>{{_('Create your profile')}}</header>
 <div class="progress-bar">
   <div class="step">
-    <p>{{_('ชื่อ')}}</p>
+    <p>{{_('Given name')}}</p>
     <div class="bullet">
       <span>1</span>
     </div>
     <div class="check fas fa-check"></div>
   </div>
   <div class="step">
-    <p>{{_('วันเกิด')}}</p>
+    <p>{{_('Birthday')}}</p>
     <div class="bullet">
       <span>2</span>
     </div>
     <div class="check fas fa-check"></div>
   </div>
   <div class="step">
-    <p>{{_('เพศ')}}</p>
+    <p>{{_('Gender')}}</p>
     <div class="bullet">
       <span>3</span>
     </div>
     <div class="check fas fa-check"></div>
   </div>
-  <!-- <div class="step">
-    <p>{{_('เพศวิถี')}}</p>
-    <div class="bullet">
-      <span>4</span>
-    </div>
-    <div class="check fas fa-check"></div>
-  </div> -->
   <div class="step">
-    <p>{{_('แสดงฉัน')}}</p>
+    <p>{{_('Show me')}}</p>
     <div class="bullet">
       <span>4</span>
     </div>
     <div class="check fas fa-check"></div>
   </div>
   <div class="step">
-    <p>{{_('ความสนใจ')}}</p>
+    <p>{{_('Interests')}}</p>
     <div class="bullet">
       <span>5</span>
     </div>
     <div class="check fas fa-check"></div>
   </div>
   <div class="step">
-    <p>{{_('รูปถ่าย')}}</p>
+    <p>{{_('Profile image')}}</p>
     <div class="bullet">
       <span>6</span>
     </div>
@@ -363,9 +356,9 @@
   >
     {{ form.csrf_token }}
     <div class="page slide-page">
-      <div class="title">{{_('ชื่อต้นของคุณ')}}</div>
+      <div class="title">{{_('Your given name')}}</div>
       <div class="field">
-        <div class="label">{{_('ชื่อนี้จะถูกแสดงบนพื้นที่สาธารณะ')}}</div>
+        <div class="label">{{_('This name will be displayed in public.')}}</div>
         {{ form.given_name(class="given-name") }}
         <span class="error">
           {% if form.given_name.errors %} {% for error in form.given_name.errors
@@ -373,15 +366,15 @@
         </span>
       </div>
       <div class="field">
-        <button class="first-next next">{{_('ถัดไป')}}</button>
+        <button class="first-next next">{{_('Next')}}</button>
       </div>
     </div>
 
     <div class="page">
-      <div class="title">{{_('วันเกิดของคุณ')}}</div>
+      <div class="title">{{_('Your birthday')}}</div>
       <div class="row">
         <div class="field col-xs-1 col-md-4">
-          <div class="label">{{_('วัน')}}</div>
+          <div class="label">{{_('Day')}}</div>
           <!-- <select class="day_picker" name="birth_day"> </select> -->
           {{ form.birth_day(class="day_picker") }}
           <span class="error">
@@ -390,7 +383,7 @@
           </span>
         </div>
         <div class="field col-xs-1 col-md-4">
-          <div class="label">{{_('เดือน')}}</div>
+          <div class="label">{{_('Month')}}</div>
           <!-- <select class="month_picker" name="birth_month"> </select> -->
           {{ form.birth_month(class="month_picker") }}
           <span class="error">
@@ -399,7 +392,7 @@
           </span>
         </div>
         <div class="field col-xs-1 col-md-4">
-          <div class="label">{{_('ปีเกิด')}}</div>
+          <div class="label">{{_('Year')}}</div>
           <!-- <select class="year_picker" name="birth_year"> </select> -->
           {{ form.birth_year(class="year_picker") }}
           <span class="error">
@@ -409,12 +402,12 @@
         </div>
       </div>
       <div class="field btns">
-        <button class="prev-1 prev">{{_('ก่อนหน้า')}}</button>
-        <button class="next-1 next">{{_('ถัดไป')}}</button>
+        <button class="prev-1 prev">{{_('Previous')}}</button>
+        <button class="next-1 next">{{_('Next')}}</button>
       </div>
     </div>
     <div class="page">
-      <div class="title mb-4">{{_('เพศของฉัน')}}</div>
+      <div class="title mb-4">{{_('My gender')}}</div>
 
       <span class="error">
         {% if form.gender.errors %} {% for error in form.gender.errors %} {{
@@ -434,12 +427,12 @@
         </div>
       </div>
       <div class="field btns">
-        <button class="prev-2 prev">{{_('ก่อนหน้า')}}</button>
-        <button class="next-2 next">{{_('ถัดไป')}}</button>
+        <button class="prev-2 prev">{{_('Previous')}}</button>
+        <button class="next-2 next">{{_('Next')}}</button>
       </div>
     </div>
     <div class="page">
-      <div class="title mb-4">{{_('แสดงฉัน')}}</div>
+      <div class="title mb-4">{{_('Show me')}}</div>
       <span class="error">
         {% if form.showme.errors %} {% for error in form.showme.errors %} {{
         error }} {% endfor %} {% endif %}
@@ -476,12 +469,12 @@
         }
       </script> -->
       <div class="field btns">
-        <button class="prev-3 prev">{{_('ก่อนหน้า')}}</button>
-        <button class="next-3 next">{{_('ถัดไป')}}</button>
+        <button class="prev-3 prev">{{_('Previous')}}</button>
+        <button class="next-3 next">{{_('Next')}}</button>
       </div>
     </div>
     <div class="page">
-      <div class="title mb-4">{{_('ความสนใจ')}}</div>
+      <div class="title mb-4">{{_('Interests')}}</div>
       <div class="row">
         <span class="error">
           {% if form.passion.errors %} {% for error in form.passion.errors %} {{
@@ -495,12 +488,12 @@
         {% endfor %}
       </div>
       <div class="field btns">
-        <button class="prev-4 prev">{{_('ก่อนหน้า')}}</button>
-        <button class="next-4 next">{{_('ถัดไป')}}</button>
+        <button class="prev-4 prev">{{_('Previous')}}</button>
+        <button class="next-4 next">{{_('Next')}}</button>
       </div>
     </div>
     <div class="page">
-      <div class="title mb-4">{{_('อัพโหลดรูปถ่าย')}}</div>
+      <div class="title mb-4">{{_('Upload profile image')}}</div>
       {% with messages = get_flashed_messages() %} {% if messages %}
       <ul class="flashes">
         {% for message in messages %}
@@ -546,8 +539,8 @@
       </script>
 
       <div class="field btns">
-        <button class="prev-5 prev">{{_('ก่อนหน้า')}}</button>
-        <button class="submit">{{_('ยืนยัน')}}</button>
+        <button class="prev-5 prev">{{_('Previous')}}</button>
+        <button class="submit">{{_('Submit')}}</button>
       </div>
     </div>
   </form>
@@ -576,18 +569,18 @@
 <!-- date picker script -->
 <script type="text/javascript">
   const month_names = [
-    "{{_('มกราคม')}}",
-    "{{_('กุมภาพันธ์')}}",
-    "{{_('มีนาคม')}}",
-    "{{_('เมษายน')}}",
-    "{{_('พฤษภาคม')}}",
-    "{{_('มิถุนายน')}}",
-    "{{_('กรกฎาคม')}}",
-    "{{_('สิงหาคม')}}",
-    "{{_('กันยายน')}}",
-    "{{_('ตุลาคม')}}",
-    "{{_('พฤศจิกายน')}}",
-    "{{_('ธันวาคม')}}",
+    "{{_('January')}}",
+    "{{_('February')}}",
+    "{{_('March')}}",
+    "{{_('April')}}",
+    "{{_('May')}}",
+    "{{_('June')}}",
+    "{{_('July')}}",
+    "{{_('August')}}",
+    "{{_('September')}}",
+    "{{_('October')}}",
+    "{{_('November')}}",
+    "{{_('December')}}",
   ];
 
   var dateFieldDay = document.querySelector(".day_picker");
@@ -595,19 +588,6 @@
   var dateFieldYear = document.querySelector(".year_picker");
 
   const dateFields = [dateFieldYear, dateFieldMonth, dateFieldDay];
-
-  // const emptyDayOption = document.createElement("option");
-  // emptyDayOption.value = "";
-  // emptyDayOption.textContent = "-";
-  // dateFieldDay.add(emptyDayOption);
-  // const emptyMonthOption = document.createElement("option");
-  // emptyMonthOption.value = "";
-  // emptyMonthOption.textContent = "-";
-  // dateFieldMonth.add(emptyMonthOption);
-  // const emptyYearOption = document.createElement("option");
-  // emptyYearOption.value = "";
-  // emptyYearOption.textContent = "-";
-  // dateFieldYear.add(emptyYearOption);
 
   const dayOptions = [];
   for (var i = 1; i <= 31; i++) {
@@ -618,28 +598,7 @@
     dateFieldDay.add(newOption);
   }
 
-  // const monthOptions = [];
-  // for (var i = 0; i < month_names.length; i++) {
-  //   var newOption = document.createElement("option");
-  //   newOption.value = (i < 9 ? "0" : "") + (i + 1);
-  //   newOption.textContent = month_names[i];
-  //   monthOptions.push(newOption);
-  //   dateFieldMonth.add(newOption);
-  // }
-  //
-  // const yearEnd = new Date().getFullYear() - 18;
-  // const yearStart = yearEnd - 100;
-  // const yearOptions = [];
-  // for (var i = yearEnd; i >= yearStart; i--) {
-  //   var newOption = document.createElement("option");
-  //   newOption.value = i;
-  //   newOption.textContent = i;
-  //   yearOptions.push(newOption);
-  //   dateFieldYear.add(newOption);
-  // }
-
   const dateChangeHandler = function () {
-    // var day = parseInt( dateFieldDay.value, 10 );
     const month = parseInt(dateFieldMonth.value, 10);
     const year = parseInt(dateFieldYear.value, 10);
     let maxDays = 31;
@@ -657,25 +616,6 @@
         emptyDayOption.selected = true;
       }
     });
-
-    // let allSet = true;
-    // dateFields.forEach((field) => {
-    //   const isEmpty = !field.value;
-    //   if (isEmpty) {
-    //     allSet = false;
-    //   }
-    //   field.classList[isEmpty ? "add" : "remove"]("show-placeholder");
-    // });
-
-    // if (allSet) {
-    //   fieldDateOfBirth.value = dateFields
-    //     .map(function (field) {
-    //       return field.value;
-    //     })
-    //     .join("-");
-    // } else {
-    //   fieldDateOfBirth.value = "";
-    // }
   };
 
   dateFieldDay.addEventListener("change", dateChangeHandler);
@@ -694,7 +634,7 @@
     function (value, element) {
       return this.optional(element) || /^\w+$/i.test(value);
     },
-    "{{_('ห้ามใส่อักขระพิเศษหรือเว้นวรรค')}}"
+    "{{_('Do not use special characters or spaces.')}}"
   );
   jQuery(".create-profile-form").validate({
     debug: false,
@@ -710,10 +650,6 @@
       gender: {
         required: true,
       },
-      // sexual_orientation: {
-      //   required: true,
-      //   minlength: 1,
-      // },
       showme: {
         required: true,
         minlength: 1,
@@ -730,29 +666,25 @@
     },
     messages: {
       given_name: {
-        minlength: "{{_('*ชื่อต้นต้องมี 2-35 ตัวอักษร')}}",
-        maxlength: "{{_('*ชื่อต้นต้องมี 2-35 ตัวอักษร')}}",
-        required: "{{_('*กรุณากรอกชื่อต้น')}}",
+        minlength: "{{_('*Given name must be between 2-35 characters.')}}",
+        maxlength: "{{_('*Given name must be between 2-35 characters.')}}",
+        required: "{{_('*Please enter the given name.')}}",
       },
       gender: {
-        required: "{{_('*กรุณาเลือกเพศ')}}",
+        required: "{{_('*Please select a gender.')}}",
       },
-      // sexual_orientation: {
-      //   required: "{{_('*กรุณาเลือกเพศวิถี')}}",
-      //   minlength: "{{_('*กรุณาเลือกเพศวิถี')}}",
-      // },
       showme: {
-        required: "{{_('*กรุณาเลือกเพศที่จะแสดง')}}",
-        minlength: "{{_('*กรุณาเลือกเพศที่จะแสดง')}}",
+        required: "{{_('*Please select the gender to be displayed.')}}",
+        minlength: "{{_('*Please select the gender to be displayed.')}}",
       },
       passion: {
-        required: "{{_('*กรุณาเลือกความสนใจ')}}",
-        minlength: "{{_('*กรุณาเลือกความสนใจ')}}",
+        required: "{{_('*Please select interests.')}}",
+        minlength: "{{_('*Please select interests.')}}",
       },
       profile_image: {
-        required: "{{_('*กรุณาอัพโหลดรูปถ่าย')}}",
-        minlength: "{{_('*กรุณาอัพโหลดรูปถ่าย')}}",
-        extension: "{{_('*กรุณาอัพโหลดไฟล์ PNG, JPEG, WEBP')}}",
+        required: "{{_('*Please upload a photo.')}}",
+        minlength: "{{_('*Please upload a photo.')}}",
+        extension: "{{_('*Please upload a PNG, JPEG, or WEBP file.')}}",
       },
     },
     highlight: function (element, errorClass) {
@@ -762,18 +694,6 @@
       $(element).removeClass(errorClass);
     },
   });
-
-  // $(".first-next").click(function () {
-  //   $(".given-name").valid();
-  // });
-  //
-  // $(".next-2").click(function () {
-  //   $(".gender").valid();
-  // });
-  //
-  // $(".submit").click(function () {
-  //   $(".profile-image").valid();
-  // });
 </script>
 
 <!-- script to slide page sync with next and previous button -->
@@ -807,7 +727,6 @@
         event.preventDefault();
 
         inputsValid = validateInputs(this);
-        // inputsValid = true;
 
         if (inputsValid) {
           slidePage.style.marginLeft = `-${(100 / stepsNumber) * current}%`;
@@ -862,7 +781,6 @@
 
       const inputs = ths.parentElement.parentElement.querySelectorAll("input");
       for (let i = 0; i < inputs.length; i++) {
-        // const valid = inputs[i].checkValidity();
         const valid = $("." + inputs[i].classList[0]).valid();
         if (!valid) {
           inputsValid = false;

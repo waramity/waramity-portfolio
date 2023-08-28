@@ -53,7 +53,7 @@
           data-bs-target="#loginModal"
           role="button"
         >
-          {{_('เข้าสู่ระบบ')}}
+          {{_('Sign in')}}
         </a>
 
         <!-- Modal -->
@@ -68,7 +68,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">
-                  {{_('เข้าสู่ระบบ')}}
+                  {{_('Sign in')}}
                 </h5>
                 <button
                   type="button"
@@ -85,7 +85,7 @@
                   <img
                     src="https://img.icons8.com/color/16/000000/google-logo.png"
                   />
-                  {{_('เข้าสู่ระบบด้วย Google')}}
+                  {{_('Sign in with Google Account')}}
                 </a>
               </div>
             </div>
@@ -93,7 +93,7 @@
         </div>
         {% else %} {%if current_user.get_profile_name() %}
         <a href="{{ url_for('ai_hub.upload_prompt') }}" class="nav-link">
-          {{_('+ อัพโหลด Prompt')}}
+          {{_('+ Upload Prompt')}}
         </a>
 
         <div class="dropdown">
@@ -120,13 +120,13 @@
                 href="{{ url_for('ai_hub.profile', profile_name=current_user.get_profile_name()) }}"
               >
                 <i class="bi bi-person-circle"></i>
-                {{_('โปรไฟล์')}}
+                {{_('Profile')}}
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="{{ url_for('ai_hub.bookmark') }}">
                 <i class="bi bi-bookmark"></i>
-                {{_('บุ๊คมาร์ค')}}
+                {{_('Bookmark')}}
               </a>
             </li>
             <li>
@@ -135,13 +135,13 @@
                 href="{{ url_for('ai_hub.edit_profile', profile_name=current_user.get_profile_name()) }}"
               >
                 <i class="bi bi-pencil-square"></i>
-                {{_('แก้ไขโปรไฟล์')}}
+                {{_('Edit profile')}}
               </a>
             </li>
             <li>
               <a href="{{ url_for('ai_hub.logout') }}" class="dropdown-item">
                 <i class="bi bi-box-arrow-right"></i>
-                {{_('ออกจากระบบ')}}
+                {{_('Sign out')}}
               </a>
             </li>
           </ul>
