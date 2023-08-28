@@ -74,6 +74,8 @@
     let template_clone = chat_item_template.content.cloneNode(true);
     template_clone.querySelector("#given-name").innerHTML = `${given_name}`;
 
+    console.log(last_message);
+
     template_clone.querySelector(
       "#profile-image"
     ).src = `data:image/png;base64,${profile_image_uri}`;

@@ -35,6 +35,10 @@ def userConnected():
 
         recipient_user = User.query.filter((User.id == user_id)).first()
         last_message = Message.query.filter((Message.id == match.id)).order_by(Message.created_date.desc()).first()
+        print(last_message)
+        print(Message.query.filter((Message.id == match.id)).order_by(Message.created_date.desc()).first())
+        print(Message.query.filter(Message.id == match.id).first())
+        print(Message.query.order_by(Message.created_date.desc()).first())
         message = None
         if last_message:
             message = {"message": last_message.message, "datetime": json.dumps(last_message.created_date, default=stringifyDateTime)}
