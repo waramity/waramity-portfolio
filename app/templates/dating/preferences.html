@@ -6,19 +6,19 @@
 
 <style media="screen">
   #age-slider-value::before {
-    content: "{{_('ช่วงอายุ')}}: ";
+    content: "{{_('Age range.')}}: ";
   }
 
   #age-slider-value::after {
-    content: "{{_('ปี')}}";
+    content: "{{_('Year')}}";
   }
 
   #distance-slider-value::before {
-    content: "{{_('ระยะทาง')}}: ";
+    content: "{{_('Distance')}}: ";
   }
 
   #distance-slider-value::after {
-    content: "{{_('กม.')}}";
+    content: "{{_('km.')}}";
   }
 </style>
 <!-- Button trigger modal -->
@@ -52,7 +52,7 @@
         <div id="age-slider"></div>
         <span id="distance-slider-value"></span>
         <div id="distance-slider"></div>
-        {{_('แสดงฉัน')}}:
+        {{_('Show me')}}:
         <div class="row">
           <div class="col-xs-1 col-md-2 mb-4">
             <input
@@ -63,7 +63,7 @@
               value="Man"
             />
             <label class="btn btn-outline-secondary w-100" for="showme-0">
-              {{_('ผู้ชาย')}}
+              {{_('Men')}}
             </label>
           </div>
 
@@ -76,7 +76,7 @@
               value="Woman"
             />
             <label class="btn btn-outline-secondary w-100" for="showme-1">
-              {{_('ผู้หญิง')}}
+              {{_('Women')}}
             </label>
           </div>
         </div>
@@ -89,10 +89,10 @@
           class="btn btn-danger"
           data-bs-dismiss="modal"
         >
-          {{_('ปิด')}}
+          {{_('Close')}}
         </button>
         <button type="button" id="save-changes-button" class="btn btn-primary">
-          {{_('บันทึก')}}
+          {{_('Save')}}
         </button>
       </div>
     </div>
@@ -190,13 +190,13 @@
       const uncheckedButtons = $("*[id*=showme-]:not(:checked)");
       if (uncheckedButtons.length == 2) {
         $("#alert-message").html(
-          "<span class='text-danger'>*กรุณาเลือกเพศ</span>"
+          "<span class='text-danger'>*Please select the gender.</span>"
         );
       } else {
         $("#save-changes-button").removeClass("btn-primary");
         $("#save-changes-button").addClass("btn-secondary");
         $("#alert-message").html(
-          "<span class='text-success'>บันทึกเรียบร้อย</span>"
+          "<span class='text-success'>Save complete</span>"
         );
         $("#save-changes-button").prop("disabled", true);
         let ageSliderValue = ageSlider.noUiSlider.get();
