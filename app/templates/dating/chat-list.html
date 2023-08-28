@@ -24,7 +24,7 @@
       <div class="col-10">
         <div class="d-flex w-100 justify-content-between">
           <p id="given-name" class="mb-1"></p>
-          <small id="updated-date">3 days ago</small>
+          <small id="updated-date"></small>
         </div>
         <small id="last-message"></small>
       </div>
@@ -37,31 +37,25 @@
   var chat_item_template = document.querySelector("#chat-item-template");
   var chat_list = document.querySelector("#chat-list");
 
-  function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
+  function formatTimeDifference(date_str, element) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
 
-    var interval = seconds / 31536000;
-
-    if (interval > 1) {
-      return Math.floor(interval) + " years";
+    if (diffMinutes < 60) {
+      element.innerHTML = diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      console.log("sus");
+      element.innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      console.log("ku y");
+      element.innerHTML = diffDays + " days ago";
+    } else {
+      element.innerHTML = diffMonths + " months ago";
     }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-      return Math.floor(interval) + " months";
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-      return Math.floor(interval) + " days";
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-      return Math.floor(interval) + " hours";
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-      return Math.floor(interval) + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
   }
 
   function createChatItem(
@@ -74,8 +68,6 @@
     let template_clone = chat_item_template.content.cloneNode(true);
     template_clone.querySelector("#given-name").innerHTML = `${given_name}`;
 
-    console.log(last_message);
-
     template_clone.querySelector(
       "#profile-image"
     ).src = `data:image/png;base64,${profile_image_uri}`;
@@ -84,8 +76,9 @@
       template_clone.querySelector(
         "#last-message"
       ).innerHTML = `${last_message["message"]}`;
-      template_clone.querySelector("#updated-date").innerHTML = timeSince(
-        `${last_message["message"]["datetime"]}`
+      formatTimeDifference(
+        `${last_message["datetime"]}`,
+        template_clone.querySelector("#updated-date")
       );
     } else {
       template_clone.querySelector(
