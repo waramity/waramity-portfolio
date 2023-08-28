@@ -13,8 +13,6 @@ from app import db
 
 socketio = SocketIO()
 
-print("nahee")
-
 def random_uuid(model):
     unique_id = uuid.uuid4().hex
     while model.query.filter_by(id=unique_id).first():
