@@ -1,7 +1,7 @@
-<div class="container p-0">
+<div class="container p-3">
   <h1 class="text-white m-3">Chat</h1>
 
-  <div id="chat-list" class="list-group"></div>
+  <div id="chat-list" class="list-group ms-3"></div>
 </div>
 
 <template id="chat-item-template">
@@ -11,7 +11,7 @@
     class="list-group-item list-group-item-action bg-dark text-white border border-secondary"
     aria-current="true"
   >
-    <div class="row">
+    <div class="row mt-2 mb-2">
       <div class="col-2">
         <img
           id="profile-image"
@@ -23,7 +23,7 @@
 
       <div class="col-10">
         <div class="d-flex w-100 justify-content-between">
-          <p id="given-name" class="mb-1"></p>
+          <h5 id="given-name" class="mb-2"></h5>
           <small id="updated-date"></small>
         </div>
         <small id="last-message"></small>
