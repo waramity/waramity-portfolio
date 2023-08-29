@@ -83,9 +83,7 @@
     <button
       type="button"
       class="btn btn-dark mt-auto border border-secondary text-secondary me-5 ms-5 pb-3 pt-3"
-      id="#preferencesModalToggle"
-      data-bs-toggle="modal"
-      data-bs-target="#preferencesModal"
+      id="preferencesToggle"
     >
       <i class="bi bi-gear me-2"></i>
 
@@ -171,5 +169,15 @@
     }
   }
 
+  function preferencesToggle() {
+    return function (event) {
+      event.preventDefault();
+      $("#preferences").toggleClass("invisible");
+    };
+  }
+</script>
+
+<script type="text/javascript">
+  $("#preferencesToggle").click(preferencesToggle());
   getUserCardBasedOnPreferences();
 </script>

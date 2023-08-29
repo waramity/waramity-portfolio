@@ -93,8 +93,6 @@
           $("#messaging").css({ "z-index": -1 });
           $(this).toggleClass("active");
           $(`#chat-item__link-${user_id}`).toggleClass("active");
-          $(".tinder--buttons").removeClass("invisible");
-          $(".tinder--cards").removeClass("invisible");
         }
       };
     }
@@ -108,8 +106,6 @@
           $("#messaging").css({ "z-index": -1 });
           $("#messaging__close").toggleClass("active");
           $("#msg_history").removeClass("msg_history");
-          $(".tinder--buttons").removeClass("invisible");
-          $(".tinder--cards").removeClass("invisible");
         } else {
           $(this).toggleClass("active");
           $("#messaging").removeClass("invisible");
@@ -117,8 +113,6 @@
           $("#messaging__close").toggleClass("active");
           $("#messaging__close").click(toggleClose(user_id));
           $("#msg_history").addClass("msg_history");
-          $(".tinder--buttons").addClass("invisible");
-          $(".tinder--cards").addClass("invisible");
           $("#messaging_header img").attr(
             "src",
             `data:image/png;base64,${profile_image_uri}`
