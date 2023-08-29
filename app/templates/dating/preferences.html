@@ -115,14 +115,15 @@
     </div>
     <div class="col-4">
       <select
+        id="language-picker"
         class="form-select form-select-lg"
         aria-label=".form-select-lg example"
       >
-        <option value="en">
-          🇺🇸 English
+        <option value="en" id="eng-lang">
+          English
         </option>
         <option value="th">
-          🇹🇭 ภาษาไทย
+          ภาษาไทย
         </option>
       </select>
     </div>
@@ -299,6 +300,16 @@
       getUserCardBasedOnPreferences();
     };
   }
+</script>
+<script type="text/javascript">
+  $("#language-picker").on("change", function () {
+    var selected_lang = $(this).val();
+    let url = window.location.href;
+    url = url.split("/");
+    url[3] = selected_lang;
+    let switch_url = url.join("/");
+    window.location.replace(switch_url);
+  });
 </script>
 <script type="text/javascript">
   getUserPreferences();
