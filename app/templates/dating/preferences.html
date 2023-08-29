@@ -24,51 +24,50 @@
   #distance-slider-value::after {
     content: "{{_('km.')}}";
   }
+
+  #preferences {
+    z-index: 3;
+    height: 100vw;
+  }
 </style>
 <!-- Button trigger modal -->
-<div
-  id="preferences"
-  class="position-absolute w-100 invisible bg-white"
-  style="z-index: 3;"
->
-  <div class="">
-    <h5 class="" id="preferencesModalLabel">Modal title</h5>
-  </div>
-  <div class="">
-    <span id="age-slider-value"></span>
-    <div id="age-slider"></div>
-    <span id="distance-slider-value"></span>
-    <div id="distance-slider"></div>
-    {{_('Show me')}}:
-    <div class="row">
-      <div class="col-xs-1 col-md-2 mb-4">
-        <input
-          class="showme btn-check"
-          id="showme-0"
-          name="showme"
-          type="checkbox"
-          value="Man"
-        />
-        <label class="btn btn-outline-secondary w-100" for="showme-0">
-          {{_('Men')}}
-        </label>
-      </div>
-
-      <div class="col-xs-1 col-md-2 mb-4">
-        <input
-          class="showme btn-check"
-          id="showme-1"
-          name="showme"
-          type="checkbox"
-          value="Woman"
-        />
-        <label class="btn btn-outline-secondary w-100" for="showme-1">
-          {{_('Women')}}
-        </label>
-      </div>
+<div id="preferences" class="position-absolute w-100 invisible bg-white p-5">
+  <h5 class="" id="preferencesModalLabel">
+    {{_('Preferences')}}:
+  </h5>
+  <span id="age-slider-value"></span>
+  <div id="age-slider"></div>
+  <span id="distance-slider-value"></span>
+  <div id="distance-slider"></div>
+  {{_('Show me')}}:
+  <div class="row">
+    <div class="col-xs-1 col-md-2 mb-4">
+      <input
+        class="showme btn-check"
+        id="showme-0"
+        name="showme"
+        type="checkbox"
+        value="Man"
+      />
+      <label class="btn btn-outline-secondary w-100" for="showme-0">
+        {{_('Men')}}
+      </label>
     </div>
-    <div id="alert-message"></div>
+
+    <div class="col-xs-1 col-md-2 mb-4">
+      <input
+        class="showme btn-check"
+        id="showme-1"
+        name="showme"
+        type="checkbox"
+        value="Woman"
+      />
+      <label class="btn btn-outline-secondary w-100" for="showme-1">
+        {{_('Women')}}
+      </label>
+    </div>
   </div>
+  <div id="alert-message"></div>
   <button type="button" id="close-button" class="btn btn-danger">
     {{_('Reset')}}
   </button>
