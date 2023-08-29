@@ -110,8 +110,8 @@
 <div class="tinder--cards"></div>
 
 <div class="tinder--buttons">
-  <button id="nope"><i class="fa fa-remove"></i></button>
-  <button id="love"><i class="fa fa-heart"></i></button>
+  <button id="nope" class="shadow"><i class="fa fa-remove"></i></button>
+  <button id="love" class="shadow"><i class="fa fa-heart"></i></button>
 </div>
 
 <script type="text/javascript">
@@ -128,7 +128,7 @@
     newCards.forEach(function (card, index) {
       card.style.zIndex = allCards.length - index;
       card.style.opacity = (10 - index) / 10;
-      card.classList.add("shadow");
+      card.classList.add("shadow-sm");
     });
 
     tinderContainer.classList.add("loaded");
