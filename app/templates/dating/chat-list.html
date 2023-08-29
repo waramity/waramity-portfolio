@@ -1,3 +1,15 @@
+<style media="screen">
+  #chat-list a {
+    color: #f8f9fa;
+    background-color: #212529;
+  }
+
+  #chat-list a.active {
+    color: #212529;
+    background-color: #f8f9fa;
+  }
+</style>
+
 <div class="container p-3">
   <h1 class="text-white m-3">Chat</h1>
 
@@ -8,7 +20,7 @@
   <a
     id="chat-item__link"
     href="#"
-    class="list-group-item list-group-item-action bg-dark text-white border border-secondary"
+    class="list-group-item list-group-item-action border border-secondary list-group-item-dark"
     aria-current="true"
   >
     <div class="row mt-2 mb-2">
@@ -88,7 +100,7 @@
       return function (event) {
         event.preventDefault();
         if ($(this).hasClass("active")) {
-          $("#messaging").css({ "z-index": -1 });
+          $("#messaging").addClass("invisible");
           $(this).toggleClass("active");
           $(`#chat-item__link-${user_id}`).toggleClass("active");
         }
