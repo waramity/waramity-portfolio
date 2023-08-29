@@ -26,83 +26,51 @@
   }
 </style>
 <!-- Button trigger modal -->
-<button
-  type="button"
-  class="btn btn-dark mt-auto border border-secondary text-secondary me-5 ms-5 pb-3 pt-3"
-  id="#preferencesModalToggle"
-  data-bs-toggle="modal"
-  data-bs-target="#preferencesModal"
->
-  <i class="bi bi-gear me-2"></i>
-
-  {{_('Settings')}}
-</button>
-
-<!-- Modal -->
-<div
-  class="modal fade"
-  id="preferencesModal"
-  tabindex="-1"
-  aria-labelledby="preferencesModalLabel"
-  aria-hidden="true"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="preferencesModalLabel">Modal title</h5>
+<div id="preferences" class="position-absolute w-100 invisible">
+  <div class="">
+    <h5 class="" id="preferencesModalLabel">Modal title</h5>
+  </div>
+  <div class="">
+    <span id="age-slider-value"></span>
+    <div id="age-slider"></div>
+    <span id="distance-slider-value"></span>
+    <div id="distance-slider"></div>
+    {{_('Show me')}}:
+    <div class="row">
+      <div class="col-xs-1 col-md-2 mb-4">
+        <input
+          class="showme btn-check"
+          id="showme-0"
+          name="showme"
+          type="checkbox"
+          value="Man"
+        />
+        <label class="btn btn-outline-secondary w-100" for="showme-0">
+          {{_('Men')}}
+        </label>
       </div>
-      <div class="modal-body">
-        <span id="age-slider-value"></span>
-        <div id="age-slider"></div>
-        <span id="distance-slider-value"></span>
-        <div id="distance-slider"></div>
-        {{_('Show me')}}:
-        <div class="row">
-          <div class="col-xs-1 col-md-2 mb-4">
-            <input
-              class="showme btn-check"
-              id="showme-0"
-              name="showme"
-              type="checkbox"
-              value="Man"
-            />
-            <label class="btn btn-outline-secondary w-100" for="showme-0">
-              {{_('Men')}}
-            </label>
-          </div>
 
-          <div class="col-xs-1 col-md-2 mb-4">
-            <input
-              class="showme btn-check"
-              id="showme-1"
-              name="showme"
-              type="checkbox"
-              value="Woman"
-            />
-            <label class="btn btn-outline-secondary w-100" for="showme-1">
-              {{_('Women')}}
-            </label>
-          </div>
-        </div>
-        <div id="alert-message"></div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          id="close-button"
-          class="btn btn-danger"
-          data-bs-dismiss="modal"
-        >
-          {{_('Close')}}
-        </button>
-        <button type="button" id="save-changes-button" class="btn btn-primary">
-          {{_('Save')}}
-        </button>
+      <div class="col-xs-1 col-md-2 mb-4">
+        <input
+          class="showme btn-check"
+          id="showme-1"
+          name="showme"
+          type="checkbox"
+          value="Woman"
+        />
+        <label class="btn btn-outline-secondary w-100" for="showme-1">
+          {{_('Women')}}
+        </label>
       </div>
     </div>
+    <div id="alert-message"></div>
   </div>
+  <button type="button" id="close-button" class="btn btn-danger">
+    {{_('Close')}}
+  </button>
+  <button type="button" id="save-changes-button" class="btn btn-primary">
+    {{_('Save')}}
+  </button>
 </div>
 
 <script type="text/javascript">
