@@ -43,8 +43,12 @@
   id="preferences"
   class="position-absolute w-100 invisible bg-white p-5 overflow-scroll"
 >
-  <h2 id="preferencesModalLabel" class="display-7">
-    <i class="bi bi-arrow-left me-3"></i>
+  <h2 class="display-7">
+    <i
+      class="bi bi-arrow-left me-3"
+      id="back-preferences"
+      style="cursor: pointer;"
+    ></i>
 
     {{_('Preferences')}}
   </h2>
@@ -320,10 +324,18 @@
       "selected"
     );
   }
+
+  function preferencesToggle() {
+    return function (event) {
+      event.preventDefault();
+      $("#preferences").toggleClass("invisible");
+    };
+  }
 </script>
 <script type="text/javascript">
   setLangPreferences();
   getUserPreferences();
+  $("#back-preferences").click(preferencesToggle());
 
   document
     .getElementById("save-changes-button")
