@@ -30,16 +30,13 @@
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
-    width: 92%;
   }
 
-  .received_withd_msg p {
+  .received_withd_msg {
     background: #ebebeb none repeat scroll 0 0;
     border-radius: 3px;
     color: #646464;
-    font-size: 14px;
     margin: 0;
-    width: 100%;
   }
 
   .time_date {
@@ -47,10 +44,6 @@
     display: block;
     font-size: 12px;
     margin: 8px 0 0;
-  }
-
-  .received_withd_msg {
-    width: 57%;
   }
 
   .mesgs {
@@ -61,10 +54,8 @@
   .sent_msg p {
     background: #05728f none repeat scroll 0 0;
     border-radius: 3px;
-    font-size: 14px;
     margin: 0;
     color: #fff;
-    padding: 5px 10px 5px 12px;
     width: 100%;
   }
 
@@ -161,10 +152,8 @@
       <img id="profile_image" class="rounded-circle" src="" alt="sunil" />
     </div>
     <div class="received_msg">
-      <div class="received_withd_msg">
-        <p class="message p-3"></p>
-        <span class="time_date"></span>
-      </div>
+      <p class="message p-2 received_withd_msg"></p>
+      <span class="time_date"></span>
     </div>
   </div>
 </template>
@@ -172,7 +161,7 @@
 <template id="outgoing-msg__template">
   <div class="outgoing_msg">
     <div class="sent_msg">
-      <p class="message"></p>
+      <p class="message p-2"></p>
       <span class="time_date"></span>
     </div>
   </div>
