@@ -128,6 +128,7 @@
     newCards.forEach(function (card, index) {
       card.style.zIndex = allCards.length - index;
       card.style.opacity = (10 - index) / 10;
+      card.classList.add("shadow");
     });
 
     tinderContainer.classList.add("loaded");
