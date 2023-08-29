@@ -34,7 +34,7 @@
   }
 
   .tinder--cards {
-    flex-grow: 1;
+    flex-grow: 0.9;
     padding-top: 40px;
     display: flex;
     justify-content: center;
@@ -46,7 +46,6 @@
     display: inline-block;
     width: 90vw;
     max-width: 400px;
-    height: 70vh;
     background: #ffffff;
     padding-bottom: 40px;
     border-radius: 8px;
@@ -75,9 +74,6 @@
   }
 
   .tinder--buttons button {
-    border-radius: 50%;
-    line-height: 60px;
-    width: 60px;
     border: 0;
     background: #ffffff;
     display: inline-block;
@@ -109,9 +105,13 @@
 
 <div class="tinder--cards"></div>
 
-<div class="tinder--buttons">
-  <button id="nope" class="shadow"><i class="fa fa-remove"></i></button>
-  <button id="love" class="shadow"><i class="fa fa-heart"></i></button>
+<div class="tinder--buttons fs-5">
+  <button id="nope" class="shadow-sm p-4">
+    <i class="fa fa-remove me-2"></i> <span class="fw-semibold">NOPE</span>
+  </button>
+  <button id="love" class="shadow-sm p-4">
+    <i class="fa fa-heart me-2"></i> <span class="fw-semibold">LOVE </span>
+  </button>
 </div>
 
 <script type="text/javascript">
