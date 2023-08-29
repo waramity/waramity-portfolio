@@ -34,7 +34,6 @@
 
   .received_withd_msg {
     background: #ebebeb none repeat scroll 0 0;
-    border-radius: 3px;
     color: #646464;
     margin: 0;
   }
@@ -43,7 +42,6 @@
     color: #747474;
     display: block;
     font-size: 12px;
-    margin: 8px 0 0;
   }
 
   .mesgs {
@@ -52,8 +50,6 @@
   }
 
   .sent_msg p {
-    background: #05728f none repeat scroll 0 0;
-    border-radius: 3px;
     margin: 0;
     color: #fff;
     width: 100%;
@@ -152,16 +148,16 @@
       <img id="profile_image" class="rounded-circle" src="" alt="sunil" />
     </div>
     <div class="received_msg">
-      <p class="message p-2 received_withd_msg"></p>
+      <p class="message p-2 received_withd_msg rounded-pill"></p>
       <span class="time_date"></span>
     </div>
   </div>
 </template>
 
 <template id="outgoing-msg__template">
-  <div class="outgoing_msg">
+  <div class="outgoing_msg me-2 mb-3">
     <div class="sent_msg">
-      <p class="message p-2"></p>
+      <p class="message p-2 bg-dark rounded-pill"></p>
       <span class="time_date"></span>
     </div>
   </div>
