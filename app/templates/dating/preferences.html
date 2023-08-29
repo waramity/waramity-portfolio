@@ -14,7 +14,7 @@
   }
 
   #age-slider-value::after {
-    content: "{{_('Year')}}";
+    content: "{{_(' Year')}}";
   }
 
   #distance-slider-value::before {
@@ -22,7 +22,7 @@
   }
 
   #distance-slider-value::after {
-    content: "{{_('km.')}}";
+    content: "{{_(' km.')}}";
   }
 
   #preferences {
@@ -40,129 +40,55 @@
 </style>
 <!-- Button trigger modal -->
 <div id="preferences" class="position-absolute w-100 invisible bg-white p-5">
-  <h4 class="fw-bold" id="preferencesModalLabel">
+  <h3 id="preferencesModalLabel">
     {{_('Preferences')}}
-  </h4>
+  </h3>
   <hr />
-  <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link active"
-        id="pills-basic-tab"
-        data-bs-toggle="pill"
-        data-bs-target="#pills-basic"
-        type="button"
-        role="tab"
-        aria-controls="pills-basic"
-        aria-selected="true"
-      >
-        {{_('Basic')}}
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="pills-profile-tab"
-        data-bs-toggle="pill"
-        data-bs-target="#pills-profile"
-        type="button"
-        role="tab"
-        aria-controls="pills-profile"
-        aria-selected="false"
-      >
-        {{_('Profile')}}
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="pills-contact-tab"
-        data-bs-toggle="pill"
-        data-bs-target="#pills-contact"
-        type="button"
-        role="tab"
-        aria-controls="pills-contact"
-        aria-selected="false"
-      >
-        {{_('Language')}}
-      </button>
-    </li>
-  </ul>
-  <div class="tab-content" id="pills-tabContent">
-    <div
-      class="tab-pane fade show active"
-      id="pills-basic"
-      role="tabpanel"
-      aria-labelledby="pills-basic-tab"
-      tabindex="0"
-    >
-      <span id="age-slider-value"></span>
-      <div id="age-slider" class="mb-3"></div>
-      <span id="distance-slider-value"></span>
-      <div id="distance-slider" class="mb-3"></div>
-      {{_('Show me')}}:
-      <div class="row">
-        <div class="col-xs-1 col-md-2 mb-4">
-          <input
-            class="showme btn-check"
-            id="showme-0"
-            name="showme"
-            type="checkbox"
-            value="Man"
-          />
-          <label class="btn btn-outline-secondary w-100" for="showme-0">
-            {{_('Men')}}
-          </label>
-        </div>
 
-        <div class="col-xs-1 col-md-2 mb-4">
-          <input
-            class="showme btn-check"
-            id="showme-1"
-            name="showme"
-            type="checkbox"
-            value="Woman"
-          />
-          <label class="btn btn-outline-secondary w-100" for="showme-1">
-            {{_('Women')}}
-          </label>
-        </div>
+  <div class="border p-5">
+    <h5 class="fw-bold mb-5" id="preferencesModalLabel">
+      {{_('Basic')}}
+    </h5>
+    <div class="mb-4">
+      <span id="age-slider-value"></span>
+      <div id="age-slider" class="mt-3"></div>
+    </div>
+    <div class="mb-5">
+      <span id="distance-slider-value"></span>
+      <div id="distance-slider" class="mt-3"></div>
+    </div>
+    {{_('Show me')}}:
+    <div class="row">
+      <div class="col-xs-1 col-md-2 mb-4">
+        <input
+          class="showme btn-check"
+          id="showme-0"
+          name="showme"
+          type="checkbox"
+          value="Man"
+        />
+        <label class="btn btn-outline-secondary w-100" for="showme-0">
+          {{_('Men')}}
+        </label>
       </div>
-      <div id="alert-message"></div>
-      <button type="button" id="close-button" class="btn btn-danger">
-        {{_('Reset')}}
-      </button>
-      <button type="button" id="save-changes-button" class="btn btn-primary">
-        {{_('Save')}}
-      </button>
+
+      <div class="col-xs-1 col-md-2 mb-4">
+        <input
+          class="showme btn-check"
+          id="showme-1"
+          name="showme"
+          type="checkbox"
+          value="Woman"
+        />
+        <label class="btn btn-outline-secondary w-100" for="showme-1">
+          {{_('Women')}}
+        </label>
+      </div>
     </div>
-    <div
-      class="tab-pane fade"
-      id="pills-profile"
-      role="tabpanel"
-      aria-labelledby="pills-profile-tab"
-      tabindex="0"
-    >
-      ...
-    </div>
-    <div
-      class="tab-pane fade"
-      id="pills-contact"
-      role="tabpanel"
-      aria-labelledby="pills-contact-tab"
-      tabindex="0"
-    >
-      ...
-    </div>
-    <div
-      class="tab-pane fade"
-      id="pills-disabled"
-      role="tabpanel"
-      aria-labelledby="pills-disabled-tab"
-      tabindex="0"
-    >
-      ...
-    </div>
+    <div id="alert-message" class="mb-3"></div>
+    <button type="button" id="save-changes-button" class="btn btn-primary">
+      {{_('Save')}}
+    </button>
   </div>
   <div class=""></div>
 </div>
