@@ -45,7 +45,7 @@
   </h3>
   <hr />
 
-  <div class="border p-5">
+  <div class="border rounded-3 p-5 mb-5">
     <h5 class="fw-bold mb-5" id="preferencesModalLabel">
       {{_('Basic')}}
     </h5>
@@ -86,11 +86,34 @@
       </div>
     </div>
     <div id="alert-message" class="mb-3"></div>
-    <button type="button" id="save-changes-button" class="btn btn-primary">
+    <button
+      type="button"
+      id="save-changes-button"
+      class="btn btn-dark p-3 w-25"
+    >
+      <i class="bi bi-arrow-through-heart me-2"></i>
+
       {{_('Save')}}
     </button>
   </div>
-  <div class=""></div>
+
+  <div class="border rounded-3 p-5">
+    <h5 class="fw-bold mb-5" id="preferencesModalLabel">
+      {{_('Languages')}}
+    </h5>
+
+    <select
+      class="form-select form-select-lg mb-3"
+      aria-label=".form-select-lg example"
+    >
+      <option value="en">
+        English
+      </option>
+      <option value="th">
+        ภาษาไทย
+      </option>
+    </select>
+  </div>
 </div>
 
 <script type="text/javascript">
