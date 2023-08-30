@@ -685,7 +685,6 @@
           .then((response) => response.text())
           .then((data) => {
             let depth = JSON.parse(data);
-            console.log(depth);
             this.asks = depth.asks;
             this.bids = depth.bids;
 
@@ -708,7 +707,6 @@
             return x[2];
           })
         );
-        console.log(this.maxAsk);
         setTimeout(async () => {
           await this.prepareOrderBook();
         }, 500);
@@ -751,7 +749,6 @@
       },
       toggleFullScreenChart() {
         this.fullScreenChart = !this.fullScreenChart;
-        console.log(this.fullScreenChart);
       },
     },
     mounted() {
