@@ -21,6 +21,10 @@ def random_uuid(model):
         unique_id = uuid.uuid4().hex
     return unique_id
 
+def stringifyDateTime(dateTimeObject):
+    if isinstance(dateTimeObject, datetime.datetime):
+        return dateTimeObject.__str__()
+
 @socketio.on("userConnected", namespace='/dating')
 @login_required
 def userConnected():
@@ -47,10 +51,6 @@ def userConnected():
 
     socketio.emit("chatRooms", all_chats, room=current_user.id, namespace='/dating')
 
-def stringifyDateTime(dateTimeObject):
-    if isinstance(dateTimeObject, datetime.datetime):
-        return dateTimeObject.__str__()
-
 @socketio.on("changeChat", namespace='/dating')
 def changeChat(user_id, match_id):
     session["current_chat"] = user_id
@@ -73,7 +73,7 @@ def message(form):
     user = User.query.filter(User.id == recipient_id).first()
     if not user:
         flash("No such account exists.")
-        return redirect(url_for("main.app"))
+        return redirect(url_for("dating.index"))
 
     new_message = Message(id=random_uuid(Message), match_id=match_id, sender_id=current_user.id, message=message)
     db.session.add(new_message)

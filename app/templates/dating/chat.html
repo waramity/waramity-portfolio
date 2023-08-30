@@ -181,6 +181,8 @@
         displaySentMessage(created_date, message);
       }
     }
+
+    $("#msg_history").scrollTop($("#msg_history")[0].scrollHeight);
   });
 
   socket.on("sentMessage", (payload) => {
