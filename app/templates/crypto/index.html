@@ -175,25 +175,23 @@
         <span>Full Screen</span>
       </button>
 
-      <div v-if="tickers[ticker]" class="grid grid-cols-7 gap-2">
-        <div>{*digitalClock*}</div>
-        <span :class="[status === 0 ? 'text-red-500	' : 'text-green-500']">
-          Status
-        </span>
+      <div v-if="tickers[ticker]" class="grid grid-cols-3 gap-2 m-5">
         <div>
           <small>{*tickers[ticker]['pair']*}</small>
-          <span :class="tickers[ticker]['style']">
-            <span>{*tickers[ticker]['arrow']*}</span>
-            <span>{*tickers[ticker]['percent']*}%</span>
-          </span>
-
+          <br />
           <span :class="tickers[ticker]['style']"
             >{*parseNumber(tickers[ticker]['close'],
             tickers[ticker]['asset'])*}</span
           >
+          <br />
+          <span :class="tickers[ticker]['style']">
+            <span>{*tickers[ticker]['arrow']*}</span>
+            <span>{*tickers[ticker]['percent']*}%</span>
+          </span>
         </div>
         <div>
           <small>24H Highest</small>
+          <br />
           <span
             >{*parseNumber(tickers[ticker]['high'],
             tickers[ticker]['asset'])*}</span
@@ -201,6 +199,7 @@
         </div>
         <div>
           <small>24H Lowest</small>
+          <br />
           <span
             >{*parseNumber(tickers[ticker]['low'],
             tickers[ticker]['asset'])*}</span
@@ -208,6 +207,7 @@
         </div>
         <div>
           <small>24H Volume</small>
+          <br />
           <span
             >{*parseNumber(tickers[ticker]['tokenVolume'],
             tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
@@ -215,6 +215,8 @@
         </div>
         <div>
           <small>24H Value</small>
+
+          <br />
           <span
             >{*parseNumber(tickers[ticker]['assetVolume'],
             tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
