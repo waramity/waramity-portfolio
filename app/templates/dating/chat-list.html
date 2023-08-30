@@ -100,11 +100,9 @@
     function toggleClose(user_id) {
       return function (event) {
         event.preventDefault();
-        if ($(this).hasClass("active")) {
-          $("#messaging").addClass("invisible");
-          $(this).toggleClass("active");
-          $(`#chat-item__link-${user_id}`).toggleClass("active");
-        }
+        $("#messaging").addClass("invisible");
+        $(this).removeClass("active");
+        $(`#chat-item__link-${user_id}`).removeClass("active");
       };
     }
 
@@ -115,14 +113,14 @@
           $(this).removeClass("active");
           $("#messaging").addClass("invisible");
           $("#messaging").css({ "z-index": -1 });
-          $("#messaging__close").toggleClass("active");
+          $("#messaging__close").removeClass("active");
           $("#msg_history").removeClass("msg_history");
         } else {
           $("#chat-list a").removeClass("active");
           $(this).addClass("active");
           $("#messaging").removeClass("invisible");
           $("#messaging").css({ "z-index": 2 });
-          $("#messaging__close").toggleClass("active");
+          $("#messaging__close").addClass("active");
           $("#messaging__close").click(toggleClose(user_id));
           $("#msg_history").addClass("msg_history");
           $("#messaging_header img").attr(
