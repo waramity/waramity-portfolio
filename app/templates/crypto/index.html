@@ -175,49 +175,49 @@
         <span>Full Screen</span>
       </button>
 
-      <div v-if="tickers[ticker]" class="grid grid-cols-3 gap-2 m-5">
+      <div v-if="tickers[ticker]" class="grid grid-cols-3 gap-1 m-5">
         <div>
-          <small>{*tickers[ticker]['pair']*}</small>
+          <small class="text-lg">{*tickers[ticker]['pair']*}</small>
           <br />
-          <span :class="tickers[ticker]['style']"
+          <span :class="tickers[ticker]['style']" class="text-3xl"
             >{*parseNumber(tickers[ticker]['close'],
             tickers[ticker]['asset'])*}</span
           >
           <br />
-          <span :class="tickers[ticker]['style']">
+          <span :class="tickers[ticker]['style']" class="text-lg">
             <span>{*tickers[ticker]['arrow']*}</span>
             <span>{*tickers[ticker]['percent']*}%</span>
           </span>
         </div>
         <div>
-          <small>24H Highest</small>
+          <small class="text-lg">24H Highest</small>
           <br />
-          <span
+          <span class="text-3xl"
             >{*parseNumber(tickers[ticker]['high'],
             tickers[ticker]['asset'])*}</span
           >
         </div>
         <div>
-          <small>24H Lowest</small>
+          <small class="text-lg">24H Lowest</small>
           <br />
-          <span
+          <span class="text-3xl"
             >{*parseNumber(tickers[ticker]['low'],
             tickers[ticker]['asset'])*}</span
           >
         </div>
         <div>
-          <small>24H Volume</small>
+          <small class="text-lg">24H Volume</small>
           <br />
-          <span
+          <span class="text-3xl"
             >{*parseNumber(tickers[ticker]['tokenVolume'],
             tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
           >
         </div>
         <div>
-          <small>24H Value</small>
+          <small class="text-lg">24H Value</small>
 
           <br />
-          <span
+          <span class="text-3xl"
             >{*parseNumber(tickers[ticker]['assetVolume'],
             tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
           >
