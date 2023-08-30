@@ -112,13 +112,14 @@
       return function (event) {
         event.preventDefault();
         if ($(this).hasClass("active")) {
-          $(this).toggleClass("active");
+          $(this).removeClass("active");
           $("#messaging").addClass("invisible");
           $("#messaging").css({ "z-index": -1 });
           $("#messaging__close").toggleClass("active");
           $("#msg_history").removeClass("msg_history");
         } else {
-          $(this).toggleClass("active");
+          $("#chat-list a").removeClass("active");
+          $(this).addClass("active");
           $("#messaging").removeClass("invisible");
           $("#messaging").css({ "z-index": 2 });
           $("#messaging__close").toggleClass("active");
@@ -168,6 +169,11 @@
     template_clone.querySelector(
       "#chat-item__link"
     ).id = `chat-item__link-${user_id}`;
+
+    $("#chat-list a").click(function () {
+      // $("#chat-list a").removeClass("active");
+      // $(this).addClass("active");
+    });
 
     chat_list.insertBefore(template_clone.children[0], chat_list.children[0]);
   }
