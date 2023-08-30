@@ -1,0 +1,70 @@
+{% extends "_base.html" %} {% block content %}
+
+<div class="row mb-3">
+  <div class="my-3 text-danger">
+    <span id="error-message" class=""></span>
+  </div>
+  <div class="col-10">
+    <h2>อัพโหลด Prompt ของคุณ</h2>
+  </div>
+
+  <div class="col-2">
+    <button
+      id="submit-upload-button"
+      type="button"
+      class="btn btn-outline-primary w-100"
+    >
+      อัพโหลด
+    </button>
+  </div>
+</div>
+<div class="mb-5">
+  <label for="topic-input" class="form-label">
+    Topic <span class="text-danger">*</span>
+  </label>
+  <input
+    id="topic-input"
+    class="form-control mb-3"
+    type="text"
+    maxlength="32"
+  />
+  <label for="description-textarea" class="form-label">รายละเอียด</label>
+  <textarea
+    class="form-control mb-3"
+    id="description-textarea"
+    rows="3"
+    maxlength="188"
+  ></textarea>
+
+  <label for="model-input" class="form-label">
+    Model ที่ใช้
+  </label>
+  <input
+    id="model-input"
+    class="form-control"
+    type="text"
+    aria-label=".form-controlg example"
+    maxlength="100"
+  />
+</div>
+
+{% include 'dropzone_upload/dropzone.html' %} {% include
+'dropzone_upload/prompt-item-template.html' %}
+
+<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
+<script src="{{ url_for('static', filename='features/prompt_collection/upload.js') }}"></script>
+<script src="{{ url_for('static', filename='features/dropzone_upload/index.js') }}"></script>
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='features/dropzone_upload/index.css') }}"
+/>
+
+<script type="text/javascript">
+  document
+    .getElementById("submit-upload-button")
+    .addEventListener("click", submitPrompt);
+  initializeDropzone();
+</script>
+
+{% endblock %}

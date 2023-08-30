@@ -1,0 +1,86 @@
+<template id="prompt-item-dropzone-template">
+  <div class="row mb-3">
+    <div class="col-2">
+      <img id="prompt-image" class="w-100 mb-3" src="" alt="" />
+
+      <div class="d-flex justify-content-center align-items-center">
+        <button
+          id="delete-button"
+          type="button"
+          class="btn btn-danger delete-button"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <div class="col-4">
+      <label for="promptFormControlInput" class="form-label">Prompt:</label>
+      <textarea
+        id="prompt-input"
+        class="form-control remove-scroll mb-2"
+        aria-label="prompt input"
+      ></textarea>
+
+      <label for="negativePromptFormControlInput" class="form-label"
+        >Negative prompt:</label
+      >
+      <textarea
+        id="negative-prompt-input"
+        class="form-control remove-scroll mb-3"
+        aria-label="negative prompt input"
+      ></textarea>
+    </div>
+    <div class="col-3">
+      <label for="samplerFormControlInput" class="form-label">Sampler:</label>
+      <input
+        id="sampler-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="sampler input"
+      />
+      <label for="seedFormControlInput" class="form-label">Seed:</label>
+      <input
+        id="seed-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="seed input"
+      />
+      <label for="CFGScaleFormControlInput" class="form-label"
+        >CFG Scale:</label
+      >
+      <input
+        id="cfg-scale-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="cfg scale input"
+      />
+    </div>
+
+    <div class="col-3">
+      <label for="stepsFormControlInput" class="form-label">Steps:</label>
+      <input
+        id="steps-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="steps input"
+      />
+      <label for="sizeFormControlInput" class="form-label">Size:</label>
+      <input
+        id="size-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="size input"
+      />
+
+      <label for="modelHashFormControlInput" class="form-label"
+        >Model hash:</label
+      >
+      <input
+        id="model-hash-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="model hash input"
+      />
+    </div>
+  </div>
+</template>

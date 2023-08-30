@@ -1,0 +1,10 @@
+.dropzone {
+  border: 2px dashed gray;
+  padding: 20px;
+  text-align: center;
+  margin: 20px;
+}
+.prompt-container {
+  flex-wrap: wrap;
+  margin-top: 20px;
+}

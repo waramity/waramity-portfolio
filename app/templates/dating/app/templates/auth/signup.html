@@ -1,0 +1,155 @@
+{% extends "_base.html" %} {% block content %}
+<div class="row mt-5">
+  <h3 class="mt-5 mb-4 display-5">{{_('สมัครสมาชิก')}}</h3>
+  {% with messages = get_flashed_messages() %} {% if messages %}
+  <div class="notification is-danger">
+    {{ messages[0] }} Go to
+    <a href="{{ url_for('auth.login') }}">login page</a>.
+  </div>
+  {% endif %} {% endwith %}
+  <form
+    class="signup-form col-12 col-md-6 col-lg-4"
+    action="{{ url_for('auth.signup_post') }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="mb-4">
+      <input
+        class="form-control"
+        type="text"
+        name="username"
+        id="username"
+        placeholder="{{_('ชื่อผู้ใช้')}}"
+      />
+    </div>
+
+    <div class="mb-4">
+      <input
+        class="form-control"
+        type="email"
+        name="email"
+        id="email"
+        placeholder="{{_('อีเมล์')}}"
+      />
+    </div>
+
+    <div class="mb-4">
+      <input
+        class="form-control"
+        type="email"
+        name="email_confirm"
+        id="email_confirm"
+        placeholder="{{_('ยืนยันอีเมล์')}}"
+      />
+    </div>
+
+    <div class="mb-4">
+      <input
+        class="form-control"
+        type="password"
+        name="password"
+        id="password"
+        placeholder="{{_('รหัสผ่าน')}}"
+      />
+    </div>
+
+    <div class="mb-4">
+      <input
+        class="form-control"
+        type="password"
+        name="password_confirm"
+        id="password_confirm"
+        placeholder="{{_('ยืนยันรหัสผ่าน')}}"
+      />
+    </div>
+
+    <div class="">
+      <button type="submit" class="btn btn-primary mb-3 w-100 signup-button">
+        {{_('สมัครสมาชิก')}}
+      </button>
+    </div>
+  </form>
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+  type="text/javascript"
+></script>
+<script>
+  jQuery.validator.addMethod(
+    "alphanumeric",
+    function (value, element) {
+      return this.optional(element) || /^\w+$/i.test(value);
+    },
+    "{{_('ห้ามใส่อักขระพิเศษหรือเว้นวรรค')}}"
+  );
+
+  jQuery(".signup-form").validate({
+    rules: {
+      display_name: {
+        maxlength: 20,
+        required: true,
+      },
+      username: {
+        minlength: 6,
+        maxlength: 20,
+        required: true,
+        alphanumeric: true,
+      },
+      email: {
+        required: true,
+      },
+      email_confirm: {
+        required: true,
+        equalTo: "#email",
+      },
+      password: {
+        minlength: 8,
+        maxlength: 20,
+        required: true,
+      },
+      password_confirm: {
+        minlength: 8,
+        maxlength: 20,
+        required: true,
+        equalTo: "#password",
+      },
+    },
+    messages: {
+      display_name: {
+        required: "{{_('กรุณากรอกชื่อโปรไฟล์')}}",
+        maxlength: "{{_('ชื่อที่แสดงผลต้องต่ำกว่า 20 ตัวอักษร')}}",
+      },
+      username: {
+        minlength: "{{_('กรุณากรอกชื่อผู้ใช้ 6-20 ตัวอักษร')}}",
+        maxlength: "{{_('ชื่อผู้ใช้ต้องต่ำกว่า 20 ตัวอักษร')}}",
+        required: "{{_('กรุณากรอกชื่อผู้ใช้')}}",
+      },
+      email: {
+        email: "{{_('กรุณาพิมพ์รูปแบบอีเมล์ให้ถูกต้อง')}}",
+        required: "{{_('กรุณากรอกอีเมล์')}}",
+      },
+      email_confirm: {
+        email: "{{_('กรุณาพิมพ์รูปแบบอีเมล์ให้ถูกต้อง')}}",
+        required: "{{_('กรุณากรอกอีเมล์')}}",
+        equalTo: "{{_('กรุณากรอกอีเมล์ให้ตรงกัน')}}",
+      },
+      password: {
+        minlength: "{{_('รหัสผ่านต้องมี 8-20 ตัวอักษร')}}",
+        maxlength: "{{_('รหัสผ่านต้องต่ำกว่า 20 ตัวอักษร')}}",
+        required: "{{_('กรุณากรอกรหัสผ่าน')}}",
+      },
+      password_confirm: {
+        minlength: "{{_('รหัสผ่านต้องมี 8-20 ตัวอักษร')}}",
+        maxlength: "{{_('รหัสผ่านต้องต่ำกว่า 20 ตัวอักษร')}}",
+        required: "{{_('กรุณากรอกรหัสผ่าน')}}",
+        equalTo: "{{_('กรุณากรอกรหัสผ่านให้ตรงกัน')}}",
+      },
+    },
+  });
+
+  $(".signup-button").click(function () {
+    console.log($(".signup-form").valid());
+  });
+</script>
+{% endblock %}

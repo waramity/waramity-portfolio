@@ -1,0 +1,304 @@
+v-shaped eyebrows,คิ้วรูปตัววี,eye,eyebrow,character
+thick eyebrows,คิ้้วหนา,eye,eyebrow,character
+raised eyebrows,เลิกคิ้ว,eye,eyebrow,character
+short eyebrows,คิ้วสั้น,eye,eyebrow,character
+furrowed brow,คิ้วขมวด,eye,eyebrow,character
+forked eyebrows,คิ้วโก่ง,eye,eyebrow,character
+no eyebrows,ไม่มีคิ้ว,eye,eyebrow,character
+glowing eyes,ตาเรืองแสง,eye,detail,character
+heart eyes,ตารูปหัวใจ,eye,detail,character
+closed eyes,หลับตา,eye,detail,character
+one eye closed,หลับตาข้างเดียว,eye,detail,character
+half-closed eyes,หรี่ตา,eye,detail,character
+bags under eyes,ถุงใต้ตา,eye,detail,character
+mole under eye,ไฝใต้ตา,eye,detail,character
+eyelashes,ขนตา,eye,detail,character
+colored eyelashes,ขนตาสี,eye,detail,character
+long eyelashes,ขนตายาว,eye,detail,character
+blue eyes,ตาสีฟ้า,eye,color,character
+red eyes,ตาสีแดง,eye,color,character
+brown eyes,ตาสีน้ำตาล,eye,color,character
+green eyes,ตาสีเขียว,eye,color,character
+purple eyes,ตาสีม่วง,eye,color,character
+yellow eyes,ตาสีเหลือง,eye,color,character
+pink eyes,ตาสีชมพู,eye,color,character
+black eyes,ตาสีดำ,eye,color,character
+aqua eyes,ตาสีน้ำทะเล,eye,color,character
+orange eyes,ตาสีส้ม,eye,color,character
+grey eyes,ตาสีเทา,eye,color,character
+multicolored eyes,ตาหลากสี,eye,color,character
+heterochromia,ตาสองสี,eye,color,character
+black hair,ผมสีดำ,hair,color,character
+brown hair,ผมสีน้ำตาล,hair,color,character
+blonde hair,ผมสีบลอนด์,hair,color,character
+blue hair,ผมสีฟ้า,hair,color,character
+purple hair,ผมสีม่วง,hair,color,character
+pink hair,ผมสีชมพู,hair,color,character
+white hair,ผมสีขาว,hair,color,character
+grey hair,ผมสีเทา,hair,color,character
+red hair,ผมสีแดง,hair,color,character
+green hair,ผมสีเขียว,hair,color,character
+orange hair,ผมสีส้ม,hair,color,character
+silver hair,ผมสีเงิน,hair,color,character
+aqua hair,ผมสีน้ำทะเล,hair,color,character
+multicolored hair,ผมหลากสี,hair,color,character
+two tone hair,ผมสองสี,hair,color,character
+streaked hair,ผมสีเป็นเส้น,hair,color,character
+gradient hair,ผมไล่ระดับสี,hair,color,character
+split color hair,ผมทูโทนครึ่งหัว,hair,color,character
+long hair,ผมยาว,hair,style,character
+short hair,ผมสั้น,hair,style,character
+ponytail,หางม้า,hair,style,character
+twintail,มัดสองแกะ,hair,style,character
+medium hair,ผมยาวปานกลาง,hair,style,character
+straight hair,ผมตรง,hair,style,character
+curly hair,ผมม้วน,hair,style,character
+wavy hair,ผมหยัก,hair,style,character
+asymmetrical hair,ผมไม่เท่ากัน,hair,style,character
+undercut,อันเดอร์คัต,hair,style,character
+bob cut,ผมบ๊อบสั้น,hair,style,character
+hime cut,ทรงผมเจ้าหญิง,hair,style,character
+high ponytail,ผูกหางม้าสูง,hair,style,character
+low ponytail,ผูกหางม้าต่ำ,hair,style,character
+short ponytail,หางม้าสั้น,hair,style,character
+half bun,มัดจุกครึ่งหัว,hair,style,character
+spiked hair,ผมหนาม,hair,style,character
+bangs,หน้าม้า,hair,style,character
+hair tubes,ผมหลอด,hair,style,character
+hair bun,มวยผม,hair,style,character
+double bun,มวยผมคู่,hair,style,character
+braid,ถักเปีย,hair,style,character
+twin braid,ถักเปียคู่,hair,style,character
+side braid,ถักเปียข้าง,hair,style,character
+french braid,เปียเก็บ,hair,style,character
+crown braid,เปียมงกุฏ,hair,style,character
+hair over one eye,ผมปิดตา,hair,detail,character
+shiny hair,ผมเงา,hair,detail,character
+floating hair,ผมเลอย,hair,detail,character
+wet hair,ผมเปียก,hair,detail,character
+messy hair,ผมยุ่งเหยิง,hair,detail,character
+hair between eyes,ผมระหว่างตา,hair,detail,character
+hair rings,ห่วงแต่งผม,hair,accessory,character
+hair bobbles,ที่มัดผมทรงกลม,hair,accessory,character
+hair ornament,เครื่องประดับผม,hair,accessory,character
+hair ribbon,ริบบิ้นผม,hair,accessory,character
+hair bow,โบว์ผม,hair,accessory,character
+hair scrunchie,ยางรัดผมโดนัท,hair,accessory,character
+hairband,ที่คาดผม,hair,accessory,character
+hairclip,ที่หนีบผม,hair,accessory,character
+hair flower,ดอกไม้ตกแต่ง,hair,accessory,character
+animal ears,หูสัตว์,ear,animal ear,character
+cat ears,หููแมว,ear,animal ear,character
+cow ears,หูวัว,ear,animal ear,character
+dog ears,หูหมา,ear,animal ear,character
+fox ears,หูจิ้งจอก,ear,animal ear,character
+head fins,ครีพปลา,ear,animal ear,character
+horse ears,หูม้า,ear,animal ear,character
+mouse ears,หูหนู,ear,animal ear,character
+rabbit ears,หูกระต่าย,ear,animal ear,character
+raccoon ears,หูแรคคูน,ear,animal ear,character
+tiger ears,หูเสือ,ear,animal ear,character
+wolf ears,หูหมาป่า,ear,animal ear,character
+ear piercing,เจาะหู,ear,accessory,character
+white skin,ผิวขาว,body,skin,character
+pale skin,ผิวซีด,body,skin,character
+tan,ผิวแทน,body,skin,character
+black skin,ผิวดำ,body,skin,character
+colored skin,ผิวสี,body,skin,character
+green skin,ผิวสีเขียว,body,skin,character
+red skin,ผิวสีแดง,body,skin,character
+pink skin,ผิวสีชพู,body,skin,character
+multicolored skin,ผิวหลายสี,body,skin,character
+two-tone skin,ผิวทูโทน,body,skin,character
+shiny skin,ผิวกระจ่าง,body,skin,character
+short legs,ขาสั้น,body,leg,character
+long legs,ขายาว,body,leg,character
+thighs,ต้นขา,body,leg,character
+thick thighs,ต้นขาหนา,body,leg,character
+thigh gap,ช่องว่างต้นขา,body,leg,character
+small breasts,หน้าอกเล็ก,body,breast,character
+medium breasts,หน้าอกปานกลาง,body,breast,character
+large breasts,หน้าอกใหญ่,body,breast,character
+pectorals,ครีบอก,body,breast,character
+large pectorals,ครีบอกใหญ่,body,breast,character
+long arms,แขนยาว,body,arm,character
+short arms,แขนสั้น,body,arm,character
+thick arm,แขนเล็ก,body,arm,character
+abs,หน้าท้อง,body,weight,character
+big belly,พุงใหญ่,body,weight,character
+fat,อ้วน,body,weight,character
+muscular,กล้าม,body,weight,character
+narrow waist,เอวเล็ก,body,weight,character
+navel,สะดือ,body,weight,character
+skinny,ผอม,body,weight,character
+wide hips,สะโพกกว้าง,body,weight,character
+coat,เสื้อโค้ท,clothing,top,character
+collared shirt,เสื้อคอปก,clothing,top,character
+cropped shirt,เสื้อครอป,clothing,top,character
+dress shirt,เสื้อเชิ้ต,clothing,top,character
+frilled shirt,เสื้อครุย,clothing,top,character
+hooded coat,เสื้อโค้ทมีฮู้ด,clothing,top,character
+hoodie,เสื้อฮู้ด,clothing,top,character
+labcoat,เสื้อแลป,clothing,top,character
+long coat,เสื้อโค้ทยาว,clothing,top,character
+long sleeves,แขนยาว,clothing,top,character
+off-shoulder shirt,เสื้อปาดไหล่,clothing,top,character
+open cardigan,เสื้อสเวตเตอร์ถักเปิด,clothing,top,character
+open coat,เสื้อโค้ทเปิด,clothing,top,character
+raincoat,เสื้อกันฝน,clothing,top,character
+ribbed sweater,เสื้อกันหนาวยาง,clothing,top,character
+shirt,เสื้อ,clothing,top,character
+sleeveless shirt,เสื้อแขนกุด,clothing,top,character
+striped shirt,เสื้อเชิ้ตลายทาง,clothing,top,character
+sweater,เสื้อสเวตเตอร์,clothing,top,character
+sweater vest,เสื้อสเวตเตอร์กั๊ก,clothing,top,character
+tank top,เสื้อกล้าม,clothing,top,character
+tied shirt,เสื้อผูก,clothing,top,character
+t-shirt,เสื้อยืด,clothing,top,character
+turtleneck sweater,เสื้อคอเต่า,clothing,top,character
+vests,เสื้อกั๊ก,clothing,top,character
+winter coat,เสื้อกันหนาว,clothing,top,character
+capri pants,กางเกงคาปรี,clothing,bottom,character
+denim skirt,กระโปรงยีนส์,clothing,bottom,character
+frilled skirt,กระโปรงบาน,clothing,bottom,character
+high-waist skirt,กระโปรงเอวสูง,clothing,bottom,character
+jeans,ยีนส์,clothing,bottom,character
+long skirt,กระโปรงยาว,clothing,bottom,character
+miniskirt,กระโปรงสั้น,clothing,bottom,character
+pants,กางเกง,clothing,bottom,character
+pencil skirt,กระโปรงทรงดินสอ,clothing,bottom,character
+plaid skirt,กระโปรงลายสก๊อต,clothing,bottom,character
+pleated skirt,กระโปรงจีบ,clothing,bottom,character
+shorts,กางเกงขาสั้น,clothing,bottom,character
+short shorts,กางเกงขาสั้นจุ๊ดจู๋,clothing,bottom,character
+skirt,กระโปรง,clothing,bottom,character
+sweatpants,กางเกงวอร์ม,clothing,bottom,character
+track pants,กางเกงขาจั๊มพ์,clothing,bottom,character
+yoga pants,กางเกงโยคะ,clothing,bottom,character
+armor,ชุดเกราะ,clothing,outfit,character
+bikini,บิกินี่,clothing,outfit,character
+dress,ชุดเดรส,clothing,outfit,character
+frilled dress,ชุดเดรสครุย,clothing,outfit,character
+japanese clothes,เสื้อผ้าญี่ปุ่น,clothing,outfit,character
+jumpsuit,จั้มสูท,clothing,outfit,character
+maid,ชุดเมด,clothing,outfit,character
+military uniform,ชุดทหาร,clothing,outfit,character
+overall,ชุดหมี,clothing,outfit,character
+sailor dress,ชุดกะลาสี,clothing,outfit,character
+santa costume,ชุดซานต้า,clothing,outfit,character
+school uniform,ชุดนักเรียน,clothing,outfit,character
+short dress,เดรสสั้น,clothing,outfit,character
+sleeveless dress,เดรสแขนกุด,clothing,outfit,character
+strapless dress,ชุดเกาะอก,clothing,outfit,character
+suit,สูท,clothing,outfit,character
+sun dress,เดรสฤดูร้อน,clothing,outfit,character
+swimsuit,ชุดว่ายน้ำ,clothing,outfit,character
+track suit,แจ็คเก็ตกีฬา,clothing,outfit,character
+wedding dress,ชุดแต่งงาน,clothing,outfit,character
+witch,แม่มด,clothing,outfit,character
+wrestling outfit,ชุดมวยปล้ำ,clothing,outfit,character
+zero suit,ชุดจากเกม Metro,clothing,outfit,character
+eyewear onhead,แว่นตาบนหัว,clothing,eyewear,character
+glasses,แว่น,clothing,eyewear,character
+monocle,แว่นตาข้างเดียว,clothing,eyewear,character
+over-rim eyewear,แว่นกรอบหนา,clothing,eyewear,character
+rimless eyewear,แว่นไม่มีกรอบ,clothing,eyewear,character
+round eyewear,แว่นกลม,clothing,eyewear,character
+semi-rimless eyewear,แว่นกรอบบน,clothing,eyewear,character
+sunglasses,แว่นกันแดด,clothing,eyewear,character
+tinted eyewear,แว่นเลนส์สี,clothing,eyewear,character
+under-rim eyewear,แว่นกรอบล่าง,clothing,eyewear,character
+angry,โกรธ,setting,emotion,character
+blush,หน้าแดง,setting,emotion,character
+crying,ร้องไห้,setting,emotion,character
+disgust,ขยะแขยง,setting,emotion,character
+ears blush,หูแดง,setting,emotion,character
+embarrassed,เขินอาย,setting,emotion,character
+evil smile,ยิ้มชั่วร้าย,setting,emotion,character
+expressionless,ไม่แสดงออก,setting,emotion,character
+frown,ขมวดคิ้ว,setting,emotion,character
+full-face blush,บลัชออนเต็มหน้า,setting,emotion,character
+happy tears,น้ำตาแห่งความสุข,setting,emotion,character
+happy,มีความสุข,setting,emotion,character
+laughing,หัวเราะ,setting,emotion,character
+light blush,เขินเบาๆ,setting,emotion,character
+light smile,ยิ้มอ่อน,setting,emotion,character
+naughty smile,ยิ้มซุกซน,setting,emotion,character
+nervous smile,ยิ้มแหยๆ,setting,emotion,character
+nose blush,เขินถึงจมูก,setting,emotion,character
+pout,หน้ามุ่ย,setting,emotion,character
+sad,เศร้า,setting,emotion,character
+scared,กลัว,setting,emotion,character
+seductive smile,ยิ้มเย้ายวน,setting,emotion,character
+shouting,ตะโกน,setting,emotion,character
+smile,ยิ้ม,setting,emotion,character
+streaming tears,น้ำตาไหล,setting,emotion,character
+surprised,เซอร์ไพร์ส,setting,emotion,character
+sweat,เหงื่อออก,setting,emotion,character
+tears,ร้องไห้,setting,emotion,character
+thinking,กำลังคิด,setting,emotion,character
+tongue out,แลบลิ้น,setting,emotion,character
+bare arms,เปิดแขน,clothing,bare,character
+bare back,เปิดหลัง,clothing,bare,character
+bare legs,เปิดขา,clothing,bare,character
+bare shoulders,เปิดไหล่,clothing,bare,character
+arms behind back,มือไขว้หลัง,setting,pose,character
+arms up,ยกแขน,setting,pose,character
+crossed arms,ไขว้แขน,setting,pose,character
+crossed-legs,ไขว้ขา,setting,pose,character
+hand up,ยกมือ,setting,pose,character
+head tilt,เอียงคอ,setting,pose,character
+kneeling,คุกเข่า,setting,pose,character
+leaning forward,โน้มตัว,setting,pose,character
+outstretched arms,เหยียดแขน,setting,pose,character
+sitting,นั่ง,setting,pose,character
+standing,ยืน,setting,pose,character
+looking back,เหลียงหลัง,setting,looking,character
+looking over eyewear,มองผ่านแว่น,setting,looking,character
+looking to the side,มองจากด้านข้าง,setting,looking,character
+looking-away,มองไปทางอื่น,setting,looking,character
+dutch angle,มุมเอียง,setting,view,character
+from above,มุมด้านบน,setting,view,character
+from behind,มุมด้านหลัง,setting,view,character
+from below,มุมด้านล่าง,setting,view,character
+from side,มุมด้านข้าง,setting,view,character
+full body,เต็มตัว,setting,view,character
+multiple views,หลายมุม,setting,view,character
+on back,จากด้านหลัง,setting,view,character
+upper body,ครึ่งตัว,setting,view,character
+kitchen,ห้องครัว,background,indoor,environment
+library,ห้องสมุด,background,indoor,environment
+restaurant,ร้านอาหาร,background,indoor,environment
+shop,ร้านค้า,background,indoor,environment
+starry sky,ดาวเต็มฟ้า,background,sky,environment
+sunrise,พระอาทิตย์ขึ้น,background,sky,environment
+sunset,พระอาทิตย์ตก,background,sky,environment
+cloudy sky,ฟ้าครึ้ม,background,sky,environment
+rainbow,สายรุ้ง,background,sky,environment
+beach,ชายหาด,background,outdoor,environment
+city,เมือง,background,outdoor,environment
+forest,ป่า,background,outdoor,environment
+park,สวน,background,outdoor,environment
+autumn,ฤดูใบไม้ผลิ,period,season,environment
+night,กลางคืน,period,time,environment
+lightning,ฟ้าผ่า,period,weather,environment
+rain,ฝนตก,period,weather,environment
+snowing,หิมะตก,period,weather,environment
+wind,ลมพัด,period,weather,environment
+extra fingers,นิ้วเกิน,character,anatomy,negative prompt
+mutated hands,มือกลายพันธุ์,character,anatomy,negative prompt
+mutation,กลายพันธุ์,character,anatomy,negative prompt
+deformed,กลายร่าง,character,anatomy,negative prompt
+bad anatomy,ร่างกายเพี้ยน,character,anatomy,negative prompt
+bad proportions,สัดส่วนแย่,character,anatomy,negative prompt
+extra limbs,แขนขาเกิน,character,anatomy,negative prompt
+cloned face,ก๊อปใบหน้า,character,anatomy,negative prompt
+gross proportions,สัดส่วนน่าเกลียด,character,anatomy,negative prompt
+malformed limbs,แขนขาผิดรูป,character,anatomy,negative prompt
+missing arms,แขนขาด,character,anatomy,negative prompt
+missing legs,ขาขาด,character,anatomy,negative prompt
+extra arms,แขนงอก,character,anatomy,negative prompt
+extra legs,ขางอก,character,anatomy,negative prompt
+fused finger,นิ้้วรวมร่าง,character,anatomy,negative prompt
+cyberpunk,ไซเบอร์พังก์,background,theme,environment
+steampunk,สตีมพังก์,background,theme,environment

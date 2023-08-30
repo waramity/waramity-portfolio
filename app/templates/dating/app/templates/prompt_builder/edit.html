@@ -1,0 +1,394 @@
+{% extends "_base.html" %} {% block content %}
+<style media="screen">
+  .horizontal-ui-state-highlight {
+    width: 3em;
+    line-height: 1.2em;
+    background-color: grey;
+  }
+
+  .vertical-ui-state-highlight {
+    height: 1.5em;
+    line-height: 1.2em;
+    background-color: grey;
+  }
+</style>
+
+<div class="row">
+  <div class="col-9">
+    <h1 class="mb-5">แก้ไข Prompt builder</h1>
+  </div>
+
+  <div class="col-3">
+    <div class="row">
+      <div class="col-8">
+        <button
+          id="submit-edit-button"
+          type="button"
+          class="btn btn-primary w-100"
+        >
+          บันทึก
+        </button>
+      </div>
+      <div class="col-4">
+        <div
+          id="submit-edit-spinner"
+          class="spinner-border spinner-border-sm invisible text-primary"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="my-3 text-danger">
+  <span id="error-message" class=""></span>
+</div>
+<div class="row mb-5">
+  <div class="col-2">
+    <div id="prompt-builder-image-preview-container" class="mb-3">
+      <img
+        id="prompt-builder-cover-image"
+        src="{{ url_for('static', filename='blank-image.png') }}"
+        alt="Prompt builder's image"
+        class="w-100"
+      />
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+      <label class="btn btn-primary" for="prompt-builder-image-input">
+        อัพโหลดรูป
+        <input
+          accept="image/*"
+          type="file"
+          id="prompt-builder-image-input"
+          class="d-none"
+        />
+      </label>
+    </div>
+  </div>
+  <div class="col-10">
+    <div class="mb-3">
+      <label for="builder-name-input" class="form-label"
+        >ชื่อ Prompt builder</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="builder-name-input"
+        placeholder="ระหว่าง 2 - 35 ตัวอักษร"
+        maxlength="35"
+      />
+    </div>
+    <div class="mb-5">
+      <label for="description-textarea" class="form-label">รายละเอียด</label>
+      <textarea
+        class="form-control"
+        id="description-textarea"
+        rows="3"
+        placeholder="ต่ำกว่า 150 ตัวอักษร (Optional)"
+        maxlength="150"
+      ></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="main-container" class="row">
+  <div class="col-12 col-lg-2 mb-4">
+    <h5 class="my-4">หมวดหมู่</h5>
+    <div
+      class="nav flex-column nav-pills"
+      id="category-nav"
+      role="navlist"
+      aria-orientation="vertical"
+    >
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-outline-primary w-100"
+      data-bs-toggle="modal"
+      data-bs-target="#category-modal"
+    >
+      เพิ่มหมวดหมู่
+    </button>
+    <div
+      class="modal fade"
+      id="category-modal"
+      tabindex="-1"
+      aria-labelledby="category-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="input-group my-4">
+              <input
+                id="category-input"
+                type="text"
+                class="form-control"
+                placeholder="เพิ่มหมวดหมู่ (2-15 ตัวอักษร)"
+                aria-label="เพิ่มหมวดหมู่"
+                aria-describedby="category-addon"
+                maxlength="15"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+            <button
+              id="category-button"
+              type="button"
+              class="btn btn-primary"
+              onclick="addCategory('{{profile_name}}', '{{slug}}')"
+            >
+              เพิ่มหมวดหมู่
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-10">
+    <div class="row">
+      <div id="category-name" class="col-8 col-lg-7"></div>
+
+      <div class="col-4 col-lg-5">
+        <div class="row">
+          <div id="edit-category-name" class="col-12 col-lg-6 mb-2"></div>
+          <div id="delete-category" class="col-12 col-lg-6 mb-2"></div>
+        </div>
+      </div>
+    </div>
+    <div id="prompt-keywords" class="prompt-container"></div>
+  </div>
+</div>
+
+<template id="category-nav-item-template">
+  <a
+    class="nav-link mb-1 category-nav-item"
+    id="category-nav-item"
+    data-toggle="pill"
+    href="#category-nav-item"
+    role="tab"
+    aria-controls="category-nav-item"
+    aria-selected="false"
+  ></a>
+</template>
+
+<template id="prompt-item-template">
+  <div
+    id="prompt-item"
+    role="button"
+    class="card col-2 me-3 mb-3 p-0 cursor-pointer"
+  >
+    <img id="prompt-image" src="" alt="Prompt image" class="w-100" />
+    <div class="card-body row">
+      <div class="col-8">
+        <p id="prompt-name" class="card-text"></p>
+      </div>
+      <div class="col-4 text-center"></div>
+    </div>
+
+    <div class="buttons">
+      <button
+        id="edit-prompt-button"
+        class="btn btn-outline-primary w-100 mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#edit-modal"
+      >
+        Edit
+      </button>
+      <button
+        id="delete-prompt-button"
+        type="button"
+        class="btn btn-danger w-100"
+        data-bs-toggle="modal"
+        data-bs-target="#delete-modal"
+      >
+        Delete
+      </button>
+    </div>
+
+    <div
+      class="modal fade"
+      id="edit-modal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="edit-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="input-group my-4">
+              <input
+                id="edit-input"
+                type="text"
+                class="form-control"
+                placeholder="เพิ่มหมวดหมู่ (2-15 ตัวอักษร)"
+                aria-label="prompt-input"
+                aria-describedby="category-addon"
+                maxlength="15"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+            <button
+              id="submit-edit-button"
+              type="button"
+              class="btn btn-primary"
+            >
+              แก้ไข
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="delete-modal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="delete-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p id="delete-dialog"></p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+            <button
+              id="submit-delete-button"
+              type="button"
+              class="btn btn-primary"
+            >
+              ยืนยัน
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='/libs/jquery-ui/jquery.ui.touch-punch.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
+<script src="{{ url_for('static', filename='features/prompt_builder/edit.js') }}"></script>
+<script src="{{ url_for('static', filename='features/prompt_builder/dropzone/index.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='features/dropzone_upload/index.js') }}"></script> -->
+
+<!-- <link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='features/dropzone_upload/index.css') }}"
+/> -->
+
+<script type="text/javascript">
+  const profile_name = "{{profile_name}}";
+  const slug = "{{slug}}";
+
+  $("#category-nav").sortable({
+    delay: 180,
+    items: "a",
+    placeholder: "vertical-ui-state-highlight",
+    start: function (e, ui) {
+      ui.helper.addClass("text-bg-secondary");
+    },
+    beforeStop: function (e, ui) {
+      ui.helper.removeClass("text-bg-secondary");
+    },
+    update: function (event, ui) {
+      let category_order = $(this).sortable("toArray");
+      updateCategoryOrder(category_order);
+    },
+  });
+
+  $("#category-nav").disableSelection();
+
+  $("textarea").keydown(function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+    }
+  });
+
+  document
+    .getElementById("category-input")
+    .addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        var submitButton = document.querySelector("#category-button");
+        if (!submitButton.disabled) {
+          submitButton.click();
+          submitButton.disabled = true;
+        }
+      }
+    });
+</script>
+
+<script type="text/javascript">
+  getCategories(`${profile_name}`, `${slug}`);
+
+  document
+    .getElementById("submit-edit-button")
+    .addEventListener("click", function () {
+      submitEdit(`${profile_name}`, `${slug}`);
+    });
+
+  processBase64Image(
+    "prompt-builder-image-input",
+    "prompt-builder-image-preview-container",
+    "prompt-builder-cover-image",
+    512,
+    512
+  );
+
+  getPromptBuilderInfo("{{profile_name}}", "{{slug}}");
+</script>
+
+<style>
+  .buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+  }
+
+  .buttons button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+</style>
+{%endblock%}

@@ -183,21 +183,13 @@
     }
   });
 
-  function formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+  socket.on("sentMessage", (payload) => {
+    displaySentMessage(payload["created_date"], payload["message"]);
+    $("#chat-list a.active #last-message").html(`${payload["message"]}`);
+  });
+</script>
 
-    const formattedDate = `${month}·${day}`;
-    const formattedTime = `${hours
-      .toString()
-      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-    return `${formattedDate} ${formattedTime}`;
-  }
-
+<script type="text/javascript">
   const displayReceivedMessage = (created_date, message, profile_image_uri) => {
     var message_box = document.querySelector(".msg_history");
 
@@ -233,4 +225,21 @@
 
     message_box.append(template_clone.children[0]);
   };
+</script>
+
+<script type="text/javascript">
+  function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const formattedDate = `${month}·${day}`;
+    const formattedTime = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+    return `${formattedDate} ${formattedTime}`;
+  }
 </script>

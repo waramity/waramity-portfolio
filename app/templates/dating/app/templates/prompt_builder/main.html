@@ -1,0 +1,332 @@
+{% extends "_base.html" %} {% block content %}
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='features/profile/index.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='features/prompt_builder/main/index.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<div class="my-3 text-danger">
+  <span id="error-message" class=""></span>
+</div>
+
+<div class="row">
+  <div class="border-bottom my-3 col-6 col-lg-2">
+    {% if prompt_builder['cover_image_url'] != ""%}
+    <img class="w-100" src="{{prompt_builder['cover_image_url']}}" alt="" />
+    {%else%}
+    <img
+      class="w-100"
+      src="{{url_for('static', filename='/blank-image.png')}}"
+      alt=""
+    />
+    {%endif%}
+  </div>
+  <div class="border-bottom my-3 col-6 col-lg-6">
+    <h4 class="text-muted">Prompt builder</h4>
+    <h1 class="mb-4">
+      {{prompt_builder['name']}}
+    </h1>
+    <p class="text-muted">
+      {{prompt_builder['description']}}
+    </p>
+    <p class="text-muted">
+      Last updated:
+      <span id="last-updated"></span>
+    </p>
+
+    <div class="row">
+      {% if current_user.is_authenticated %}
+      <div class="col-3">
+        <button id="heart-button" type="button" class="btn btn-secondary w-100">
+          {%if liked%}
+          <i class="bi bi-heart-fill text-danger"></i>
+          {%else%}
+          <i class="bi bi-heart-fill"></i>
+          {%endif%}
+          <span id="heart-amount">{{prompt_builder["likes"]}}</span>
+          Likes
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          id="bookmark-button"
+          type="button"
+          class="btn btn-secondary w-100"
+        >
+          {%if bookmarked%}
+          <i class="bi bi-bookmark-fill text-warning"></i>
+          {%else%}
+          <i class="bi bi-bookmark-fill"></i>
+          {%endif%} Bookmark
+        </button>
+      </div>
+      {% if prompt_builder_creator["profile_name"] ==
+      current_user.get_profile_name() %}
+      <div class="col-3">
+        <a
+          class="btn btn-primary w-100"
+          href="{{ url_for( 'prompt_builder.edit', profile_name=prompt_builder_creator['profile_name'], slug=prompt_builder['slug']) }}"
+        >
+          <i class="bi bi-pencil-square"></i>
+          Edit
+        </a>
+      </div>
+
+      <div class="col-3">
+        <a
+          class="btn btn-outline-danger w-100"
+          href="{{ url_for( 'prompt_builder.destroy', profile_name=prompt_builder_creator['profile_name'], slug=prompt_builder['slug']) }}"
+        >
+          <i class="bi bi-trash3"></i>
+
+          Destroy
+        </a>
+      </div>
+      {%endif%} {%endif%}
+    </div>
+  </div>
+  <div class="my-2 col-12 col-lg-4">
+    <div class="row">
+      <div class="col-3">
+        <a
+          href="{{ url_for( 'profile.main', profile_name=prompt_builder_creator['profile_name']) }}"
+        >
+          <div class="image-container">
+            <img
+              src="{{prompt_builder_creator['image_url']}}"
+              class="img-fluid"
+            />
+          </div>
+        </a>
+      </div>
+      <div class="col-5">
+        <a
+          href="{{ url_for( 'profile.main', profile_name=prompt_builder_creator['profile_name']) }}"
+          class="text-decoration-none text-black"
+        >
+          <p>{{prompt_builder_creator["profile_name"]}}</p>
+          <p id="creator-registered-on"></p>
+        </a>
+      </div>
+      <div class="col-4">
+        {% if current_user.is_authenticated %} {% if
+        prompt_builder_creator["profile_name"] !=
+        current_user.get_profile_name() %} {%if followed%}
+        <button
+          id="follow-button"
+          type="button"
+          class="btn btn-outline-primary w-100"
+        >
+          Unfollow
+        </button>
+        {%else%}
+        <button id="follow-button" type="button" class="btn btn-primary w-100">
+          Follow
+        </button>
+        {%endif%} {%endif%} {%endif%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row my-3">
+  <div class="col-12 col-lg-8">
+    <div id="prompt-container" class="d-flex flex-wrap"></div>
+    <input
+      type="text"
+      id="prompt-input"
+      placeholder="Prompt"
+      value=""
+      class="form-control"
+    />
+  </div>
+  <div class="col-6 col-lg-2">
+    <button
+      class="btn btn-danger prompt-input-button"
+      type="button"
+      onclick="clearPromptInput('prompt-container')"
+    >
+      CLEAR
+    </button>
+  </div>
+  <div class="col-6 col-lg-2">
+    <button
+      id="copy-prompt-button"
+      class="btn btn-outline-primary prompt-input-button"
+      type="button"
+      onclick="copyPromptInput('prompt-container')"
+    >
+      COPY
+    </button>
+  </div>
+</div>
+
+<div id="main" class="row mb-5">
+  <div class="col-12 col-lg-2 mb-4">
+    <h5 class="my-4">หมวดหมู่</h5>
+    <div
+      class="nav flex-column nav-pills"
+      id="category-nav"
+      role="navlist"
+      aria-orientation="vertical"
+    >
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-10 mb-5">
+    <div class="row">
+      <div id="category-name" class="col-8 col-lg-7"></div>
+    </div>
+    <div id="prompt-keywords"></div>
+  </div>
+</div>
+
+<div class="my-5 text-center">
+  <span id="message" class=""></span>
+</div>
+
+<!-- START: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+<div class="swiper-button-next invisible"></div>
+<div class="swiper-button-prev invisible"></div>
+
+<div class="swiper-pagination invisible"></div>
+<!-- END: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+
+<!-- START: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+<div class="swiper-button-next invisible"></div>
+<div class="swiper-button-prev invisible"></div>
+
+<div class="swiper-pagination invisible"></div>
+<!-- END: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+
+<div class="my-5 mt-5 d-flex">
+  <h2 class="me-3">Comment</h2>
+
+  {% if current_user.is_authenticated %}
+  <button type="button" class="btn btn-outline-primary">
+    <a
+      class="dropdown-item"
+      href="/en/comment/prompt_builder/{{prompt_builder['slug']}}"
+    >
+      Add Comment
+    </a>
+  </button>
+  {% endif %}
+</div>
+
+<div id="comments" class="my-5 row"></div>
+
+{% include 'comment/template.html' %}
+
+<style media="screen">
+  #prompt-icon-button .bi {
+    font-size: 1.666em;
+  }
+</style>
+
+<template id="prompt-item-template">
+  <div id="prompt-item" class="card col-2 me-3 mb-3 p-0">
+    <img id="prompt-image" src="" alt="Prompt image" class="w-100" />
+    <div class="card-body row" role="button">
+      <div class="col-8">
+        <p id="prompt-name" class="card-text"></p>
+      </div>
+      <div id="prompt-icon-button" class="col-4 text-center"></div>
+    </div>
+  </div>
+</template>
+
+<script src="{{ url_for('static', filename='features/comment/index.js') }}"></script>
+
+<script src="{{ url_for('static', filename='utils/formatTime.js') }}"></script>
+<script src="{{ url_for('static', filename='features/description/index.js') }}"></script>
+<script src="{{ url_for('static', filename='features/message/index.js') }}"></script>
+<script src="{{ url_for('static', filename='features/prompt_builder/main/index.js') }}"></script>
+<script src="{{ url_for('static', filename='utils/formatTime.js') }}"></script>
+<script src="{{ url_for('static', filename='utils/follow.js') }}"></script>
+
+<script type="text/javascript">
+  {% if current_user.is_authenticated %}
+    const current_user_slug = "{{current_user.get_slug()}}"
+  {% else %}
+    const current_user_slug = null
+  {% endif %}
+  getComments("prompt_builder", "{{prompt_builder["slug"]}}", current_user_slug);
+</script>
+
+<template id="category-nav-item-template">
+  <a
+    class="nav-link mb-1 category-nav-item"
+    id="category-nav-item"
+    data-toggle="pill"
+    href="#category-nav-item"
+    role="tab"
+    aria-controls="category-nav-item"
+    aria-selected="false"
+  ></a>
+</template>
+<script type="text/javascript">
+  var prompt_item_template = document.querySelector("#prompt-item-template");
+  var prompt_keywords = document.querySelector("#prompt-keywords");
+  var prompt_updated_date_str = "{{prompt_builder['updated_date']}}";
+  var dtStr = "{{prompt_builder_creator['registered_on']}}";
+  const profile_name = "{{prompt_builder_creator['profile_name']}}";
+  const slug = "{{prompt_builder['slug']}}";
+
+  var category_nav_item_template = document.querySelector(
+    "#category-nav-item-template"
+  );
+  var category_nav = document.querySelector("#category-nav");
+
+  var main = document.querySelector("#main");
+
+  getCategories("{{prompt_builder['slug']}}")
+    .then((data) => {
+      if (data["categories"].length) {
+        removeCategoryItems(category_nav);
+        createCategoryItems(data["categories"]);
+        category_nav.querySelector("a:first-child").click();
+      } else {
+        removeMain(main);
+        showMessage("Prompt builder ยังไม่มีข้อมูล");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  formatTimeDifference(prompt_updated_date_str);
+  document.getElementById("creator-registered-on").innerHTML = formatTime(
+    dtStr
+  );
+
+  $("#heart-button").on("click", function () {
+    likePromptCollection();
+  });
+
+  $("#bookmark-button").on("click", function () {
+    bookmarkPromptBuilder();
+  });
+
+  const followButton = document.querySelector("#follow-button");
+  if (followButton != null) {
+    followButton.addEventListener("click", async () => {
+      await toggleFollowButton("{{prompt_builder_creator['profile_name']}}");
+    });
+  }
+</script>
+
+{% endblock %}
