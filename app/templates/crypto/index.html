@@ -175,6 +175,53 @@
         <span>Full Screen</span>
       </button>
 
+      <div v-if="tickers[ticker]" class="grid grid-cols-7 gap-2">
+        <div>{*digitalClock*}</div>
+        <span :class="[status === 0 ? 'text-red-500	' : 'text-green-500']">
+          Status
+        </span>
+        <div>
+          <small>{*tickers[ticker]['pair']*}</small>
+          <span :class="tickers[ticker]['style']">
+            <span>{*tickers[ticker]['arrow']*}</span>
+            <span>{*tickers[ticker]['percent']*}%</span>
+          </span>
+
+          <span :class="tickers[ticker]['style']"
+            >{*parseNumber(tickers[ticker]['close'],
+            tickers[ticker]['asset'])*}</span
+          >
+        </div>
+        <div>
+          <small>24H Highest</small>
+          <span
+            >{*parseNumber(tickers[ticker]['high'],
+            tickers[ticker]['asset'])*}</span
+          >
+        </div>
+        <div>
+          <small>24H Lowest</small>
+          <span
+            >{*parseNumber(tickers[ticker]['low'],
+            tickers[ticker]['asset'])*}</span
+          >
+        </div>
+        <div>
+          <small>24H Volume</small>
+          <span
+            >{*parseNumber(tickers[ticker]['tokenVolume'],
+            tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
+          >
+        </div>
+        <div>
+          <small>24H Value</small>
+          <span
+            >{*parseNumber(tickers[ticker]['assetVolume'],
+            tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
+          >
+        </div>
+      </div>
+
       <div class="my-20 mx-5 pt-1">
         <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100">
           <div
@@ -269,33 +316,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script type="text/javascript">
-  // var socket = io();
-
   const socket = io("/crypto");
 
   socket.on("connect", () => {
-    console.log("Connected to server");
     setInterval(() => {
-      // socket.emit('my_event', {data: 'I\'m connected!'});
-      // socket.emit("ping");
-
-      // socket.emit("connect");
       socket.emit("my_ping");
-      // console.log("kuy");
-    }, 1000); // Send a ping every second
+    }, 1000);
   });
-
-  // socket.on("my_response", function (msg, cb) {
-  //   console.log("sis");
-  // });
-
-  // socket.on("pong", () => {
-  //   console.log("Received pong from server");
-  // });
-  // socket.on("ping", (payload) => {
-  //   console.log("ping");
-  //   console.log(payload);
-  // });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
@@ -324,11 +351,10 @@
       asset: "USDT",
       sort: "assetVolume",
       order: "desc",
-      //chart
       ticker: "BTCUSDT",
       container_id: CONTAINER_ID,
       change: "change",
-      numberOfTradesToShow: 10, // Set the number of trades to show
+      numberOfTradesToShow: 10,
       greenTradePercentage: "50%",
       redTradePercentage: "50%",
       totalTradeVolume: 0,
@@ -349,10 +375,6 @@
         hide_side_toolbar: false,
         allow_symbol_change: true,
         save_image: true,
-        // watchlist: [
-        //   'BITMEX:XBTUSD.P',
-        //   'BINANCE:XMRBTC',
-        // ],
         details: false,
         hotlist: false,
         studies: [
@@ -392,7 +414,7 @@
           this.sock.addEventListener("message", this.onSockData);
         } catch (err) {
           console.error("WebSocketError:", err.message || err);
-          this.status = -1; // error
+          this.status = -1;
           this.sock = null;
         }
       },
@@ -413,8 +435,6 @@
           return;
         }
         if (list.e === "depthUpdate") {
-          // this.asks = list.a;
-          // this.bids = list.b;
         }
 
         if (list.e === undefined) {
@@ -429,23 +449,23 @@
         }
       },
       onSockOpen() {
-        this.status = 1; // open
+        this.status = 1;
         console.info("WebSocketInfo:", "Connection open.");
         this.subscribeTicker();
       },
       onSockError(err) {
-        this.status = 0; // error
+        this.status = 0;
         console.error("WebSocketError:", err.message || err);
         setTimeout(() => {
           this.sockInit();
-        }, 10000); // try again
+        }, 10000);
       },
       onSockClose() {
-        this.status = 0; // closed
+        this.status = 0;
         console.info("WebSocketInfo:", "Connection closed.");
         setTimeout(() => {
           this.sockInit();
-        }, 10000); // try again
+        }, 10000);
       },
       sockClose() {
         if (this.sock) {
@@ -589,7 +609,6 @@
           params: [
             this.ticker.toLowerCase() + "@aggTrade",
             this.ticker.toLowerCase() + "@depth",
-            // this.ticker.toLowerCase() + "@kline_"+this.interval
           ],
           id: 2,
         };
@@ -764,13 +783,10 @@
       },
       filterTickers() {
         let tickers = this.cache;
-        // filter by search
         tickers = this.cache.filter((x) =>
           x.symbol.startsWith(this.inputSearch.toUpperCase())
         );
-        // filter by asset
         tickers = tickers.filter((i) => i.asset === this.asset);
-        // sort
         tickers = this.quickSort(tickers, this.sort, this.order);
 
         return tickers;
