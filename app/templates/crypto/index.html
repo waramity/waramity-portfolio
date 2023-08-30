@@ -123,7 +123,7 @@
       </div>
 
       <div
-        class="overflow-auto h-screen bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+        class="overflow-y-scroll h-screen bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
       >
         <div
           @click="changeTicker(ticker.symbol)"
@@ -246,7 +246,7 @@
       :class="{ 'col-span-8 grid grid-cols-2': fullScreenChart }"
     >
       <div
-        class="overflow-x-hidden grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+        class="overflow-x-hidden overflow-y-scroll grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
       >
         <div>
           <div
