@@ -37,11 +37,6 @@ def userConnected():
 
         recipient_user = User.query.filter(User.id == user_id).first()
         last_message = Message.query.filter(Message.match_id == match.id).order_by(Message.created_date.desc(), func.random()).first()
-        messages = Message.query.filter(Message.match_id == match.id).order_by(Message.created_date.desc()).all()
-        for msg in messages:
-            print(msg.message)
-            print(msg.created_date)
-        print(last_message.message)
         message = None
         if last_message:
             message = {"message": last_message.message, "datetime": json.dumps(last_message.created_date, default=stringifyDateTime)}
