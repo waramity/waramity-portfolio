@@ -155,7 +155,7 @@
         :class="{ 'h-[80vh]': fullScreenChart }"
       ></div>
       <button
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+        class="bg-red-500 hover:bg-red-400 shadow-lg shadow-red-500/50 hover:shadow-red-400/50 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition float-right m-4"
         @click="toggleFullScreenChart()"
       >
         <svg
@@ -175,7 +175,10 @@
         <span>Full Screen</span>
       </button>
 
-      <div v-if="tickers[ticker]" class="grid grid-cols-3 gap-x-1 gap-y-5 m-5">
+      <div
+        v-if="tickers[ticker]"
+        class="grid grid-cols-3 gap-x-1 gap-y-5 m-5 p-2"
+      >
         <div>
           <small class="text-lg">{*tickers[ticker]['pair']*}</small>
           <br />
