@@ -199,28 +199,25 @@
             tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
           >
         </div>
-      </div>
+        <div class="pt-1 col-span-1">
+          <h2 class="text-glow font-bold mb-2">
+            Last volume
+          </h2>
 
-      <div class="my-20 mx-5 pt-1">
-        <h2 class="text-glow font-bold">
-          Last volume
-        </h2>
-
-        <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100">
-          <div
-            :style="{ width: greenTradePercentage }"
-            class="bg-green-500 transition-all duration-500 ease-out"
-          ></div>
-          <div
-            :style="{ width: redTradePercentage }"
-            class="bg-red-500 transition-all duration-500 ease-out"
-          ></div>
+          <div class="mb-2 flex h-2 overflow-hidden rounded bg-gray-100">
+            <div
+              :style="{ width: greenTradePercentage }"
+              class="bg-green-500 transition-all duration-500 ease-out"
+            ></div>
+            <div
+              :style="{ width: redTradePercentage }"
+              class="bg-red-500 transition-all duration-500 ease-out"
+            ></div>
+          </div>
+          <span class="text-green-500">{*greenTradePercentage*}</span>
+          <span class="text-red-500 float-right">{*redTradePercentage*}</span>
+          <br />
         </div>
-        <span class="text-green-500">{*greenTradePercentage*}</span>
-        <span class="text-red-500">{*redTradePercentage*}</span>
-        <span>{*totalTradeVolume*}</span>
-        <span class="text-green-500">{*greenTradeVolume*}</span>
-        <span class="text-red-500">{*redTradeVolume*}</span>
       </div>
     </div>
 
@@ -301,7 +298,6 @@
   crossorigin="anonymous"
 ></script>
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script type="text/javascript">
   const socket = io("/crypto");
 
@@ -723,8 +719,8 @@
           const greenProportion = this.greenTradeVolume / this.totalTradeVolume;
           const redProportion = this.redTradeVolume / this.totalTradeVolume;
 
-          this.greenTradePercentage = greenProportion * 100 + "%";
-          this.redTradePercentage = redProportion * 100 + "%";
+          this.greenTradePercentage = (greenProportion * 100).toFixed(2) + "%";
+          this.redTradePercentage = (redProportion * 100).toFixed(2) + "%";
         }
       },
       resetTradeProportions() {
