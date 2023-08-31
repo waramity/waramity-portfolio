@@ -96,24 +96,45 @@
         class="overflow-y-scroll h-screen bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
       >
         <div
-          @click="changeTicker(ticker.symbol)"
           v-for="ticker in filterTickers"
           :key="ticker.symbol"
           class="hover:bg-[#eab30840] cursor-pointer"
         >
           <div class="flex gap-2">
-            <div class="w-1/2">
+            <div @click="changeTicker(ticker.symbol)" class="w-1/2">
               {*ticker.pair*}
             </div>
-            <div class="w-1/2" :class="ticker.style">
+            <div
+              @click="changeTicker(ticker.symbol)"
+              class="w-1/2"
+              :class="ticker.style"
+            >
               {*ticker.close*}
             </div>
-            <div class="w-1/2" :class="ticker.style">
+            <div
+              @click="changeTicker(ticker.symbol)"
+              class="w-1/2"
+              :class="ticker.style"
+            >
               {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
             </div>
-            <div class="w-1/2">
+            <div @click="changeTicker(ticker.symbol)" class="w-1/2">
               {*ticker.assetVolume*}
             </div>
+            <span @click="setFavorite(ticker.symbol)">
+              <svg
+                :class="favorites.includes(ticker.symbol) ? 'fill-[--color-primary-yellow]' : 'fill-gray-400'"
+                class="hover:fill-[--color-primary-yellow]"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+                />
+              </svg>
+            </span>
           </div>
         </div>
       </div>
@@ -323,6 +344,7 @@
       tickers: {},
       cache: [],
       trades: [],
+      favorites: ["BTCUSDT"],
       interval: "1d",
       digitalClock: null,
       asks: [],
@@ -733,6 +755,14 @@
       toggleFullScreenChart() {
         this.fullScreenChart = !this.fullScreenChart;
       },
+      setFavorite(symbol) {
+        var index = this.favorites.indexOf(symbol);
+        if (index >= 0) {
+          delete this.favorites[index];
+        } else {
+          this.favorites.push(symbol);
+        }
+      },
     },
     mounted() {
       this.sockInit();
@@ -766,7 +796,11 @@
         tickers = this.cache.filter((x) =>
           x.symbol.startsWith(this.inputSearch.toUpperCase())
         );
-        tickers = tickers.filter((i) => i.asset === this.asset);
+        if (this.asset == "FAV") {
+          tickers = tickers.filter((i) => this.favorites.includes(i.symbol));
+        } else {
+          tickers = tickers.filter((i) => i.asset === this.asset);
+        }
         tickers = this.quickSort(tickers, this.sort, this.order);
 
         return tickers;
