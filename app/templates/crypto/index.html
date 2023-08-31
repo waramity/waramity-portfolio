@@ -139,7 +139,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-4" :class="{ 'col-span-7': fullScreenChart }">
+    <div class="col-span-4" :class="{ 'col-span-6': fullScreenChart }">
       <h2 class="text-glow font-bold">
         Chart
       </h2>
@@ -242,16 +242,14 @@
       </div>
     </div>
 
-    <div
-      class="col-span-2"
-      :class="{ 'col-span-8 grid grid-cols-2': fullScreenChart }"
-    >
+    <div class="col-span-2" :class="{ 'col-span-8 ': fullScreenChart }">
       <h2 class="text-glow font-bold">
         Order book
       </h2>
 
       <div
         class="overflow-x-hidden overflow-y-scroll grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+        :class="{ 'grid grid-cols-2': fullScreenChart }"
       >
         <div>
           <div
