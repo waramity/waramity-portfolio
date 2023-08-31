@@ -23,10 +23,11 @@
         </div>
       </Transition>
 
-      <h2 class="text-glow font-bold">
-        Ticker list
-      </h2>
       <div class="mb-5 py-1 px-2">
+        <h2 class="text-glow font-bold mb-3">
+          Ticker list
+        </h2>
+
         <input
           v-model="inputSearch"
           name="query"
@@ -36,7 +37,7 @@
         />
       </div>
 
-      <ul class="grid grid-cols-3 gap-2">
+      <ul class="grid grid-cols-3 gap-1 mb-5">
         <li
           @click="filterAsset( 'USDT' )"
           :class="[asset === 'USDT' ? 'bg-blue-500' : '']"
