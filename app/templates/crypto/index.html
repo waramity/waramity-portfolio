@@ -23,6 +23,9 @@
         </div>
       </Transition>
 
+      <h2 class="text-glow font-bold">
+        Ticker list
+      </h2>
       <div class="mb-5 py-1 px-2">
         <input
           v-model="inputSearch"
@@ -115,6 +118,10 @@
       </div>
     </div>
     <div class="col-span-4" :class="{ 'col-span-7': fullScreenChart }">
+      <h2 class="text-glow font-bold">
+        Chart
+      </h2>
+
       <div
         :id="container_id"
         class="h-[70vh] mb-2"
@@ -194,6 +201,10 @@
       </div>
 
       <div class="my-20 mx-5 pt-1">
+        <h2 class="text-glow font-bold">
+          Last volume
+        </h2>
+
         <div class="mb-4 flex h-2 overflow-hidden rounded bg-gray-100">
           <div
             :style="{ width: greenTradePercentage }"
@@ -216,6 +227,10 @@
       class="col-span-2"
       :class="{ 'col-span-8 grid grid-cols-2': fullScreenChart }"
     >
+      <h2 class="text-glow font-bold">
+        Order book
+      </h2>
+
       <div
         class="overflow-x-hidden overflow-y-scroll grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
       >
