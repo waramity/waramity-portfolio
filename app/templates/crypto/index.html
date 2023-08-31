@@ -23,7 +23,7 @@
         </div>
       </Transition>
 
-      <div class="mb-5 py-1 px-2">
+      <div class="mb-5 py-1">
         <h2 class="text-glow font-bold mb-3">
           Ticker list
         </h2>
@@ -40,22 +40,22 @@
       <ul class="grid grid-cols-3 gap-1 mb-5">
         <li
           @click="filterAsset( 'USDT' )"
-          :class="[asset === 'USDT' ? 'bg-blue-500' : '']"
-          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
+          :class="[asset === 'USDT' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
         >
           USDT
         </li>
         <li
           @click="filterAsset( 'BTC' )"
-          :class="[asset === 'BTC' ? 'bg-blue-500' : '']"
-          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
+          :class="[asset === 'BTC' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
         >
           BTC
         </li>
         <li
           @click="filterAsset( 'FAV' )"
-          :class="[asset === 'FAV' ? 'bg-blue-500' : '']"
-          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 rounded-md border"
+          :class="[asset === 'FAV' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
         >
           FAV
         </li>
