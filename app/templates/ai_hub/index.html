@@ -7,18 +7,16 @@
 </div>
 
 <template id="prompt-template">
-  <div class="col-3">
-    <a id="link" href="#" class="text-decoration-none text-dark">
-      <div class="col-12 mb-2">
-        <img id="image" src="" class="w-100 rounded" />
-      </div>
-      <div class="row">
-        <div class="col-8">
-          <h4 id="topic"></h4>
-          <small id="updated_date"></small>
-        </div>
-        <div class="col-4" id="likes"></div>
-      </div>
+  <div class="col-3 mb-3">
+    <h4 id="topic" class="position-absolute"></h4>
+    <small id="updated_date" class="position-absolute"></small>
+    <span id="likes" class="position-absolute"></span>
+    <a
+      id="link"
+      href="#"
+      class="text-decoration-none text-dark position-static"
+    >
+      <img id="image" src="" class="w-100 rounded" />
     </a>
   </div>
 </template>
