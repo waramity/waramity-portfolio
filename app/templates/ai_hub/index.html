@@ -1,6 +1,6 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
 <style media="screen">
-  .middle {
+  .prompt-info {
     transition: 0.5s ease;
     position: absolute;
     opacity: 0;
@@ -11,7 +11,7 @@
     text-align: center;
   }
 
-  .image {
+  .prompt-image {
     opacity: 1;
     display: block;
     width: 100%;
@@ -20,11 +20,11 @@
     backface-visibility: hidden;
   }
 
-  .prompt-item:hover .image {
+  .prompt-item:hover .prompt-image {
     opacity: 0.3;
   }
 
-  .prompt-item:hover .middle {
+  .prompt-item:hover .prompt-info {
     opacity: 1;
   }
 </style>
@@ -46,9 +46,9 @@
     href="#"
     class="text-decoration-none text-dark position-relative prompt-item"
   >
-    <img id="image" src="" class="w-100 rounded mb-3 image" />
+    <img id="image" src="" class="w-100 rounded mb-3 prompt-image" />
 
-    <div class="middle">
+    <div class="prompt-info">
       <h4 id="topic"></h4>
       <small id="updated_date"></small>
       <span id="likes"></span>
