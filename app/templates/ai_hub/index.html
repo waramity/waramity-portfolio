@@ -41,19 +41,27 @@
 </div>
 
 <template id="prompt-template">
-  <a
-    id="link"
-    href="#"
-    class="text-decoration-none text-dark position-relative prompt-item"
-  >
-    <img id="image" src="" class="w-100 rounded mb-3 prompt-image" />
+  <div class="prompt-item position-relative">
+    <a id="link" href="#" class="text-decoration-none text-dark">
+      <img id="image" src="" class="w-100 rounded mb-3 prompt-image" />
+    </a>
 
     <div class="prompt-info">
       <h4 id="topic"></h4>
       <small id="updated_date"></small>
       <span id="likes"></span>
+      <button id="heart-button" type="button" class="btn btn-outline-secondary">
+        <i class="bi bi-heart-fill"></i>
+      </button>
+      <button
+        id="bookmark-button"
+        type="button"
+        class="btn btn-outline-secondary"
+      >
+        <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+      </button>
     </div>
-  </a>
+  </div>
 </template>
 
 <script type="text/javascript">
