@@ -23,6 +23,59 @@
 
 <script type="text/javascript">
   let pageIndex = 0;
+  let prompt_container = document.querySelector("#prompt-container");
+
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    fetchGetPrompts();
+  });
+
+  async function fetchGetPrompts() {
+    const res = await fetch(`/en/ai_hub/get-prompts/${pageIndex}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const data = await res.json();
+    const prompts = data["prompts"];
+
+    for (let i = 0; i < prompts.length; i++) {
+      var prompt_template = document.querySelector("#prompt-template");
+
+      let prompt_template_clone = prompt_template.content.cloneNode(true);
+
+      prompt_template_clone.querySelector(
+        "#link"
+      ).href = `/th/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
+
+      prompt_template_clone.querySelector(
+        "#topic"
+      ).innerHTML = `${prompts[i]["topic"]}`;
+
+      prompt_template_clone.querySelector(
+        "#image"
+      ).src = `${prompts[i]["prompts"][0]["image_url"]}`;
+
+      prompt_template_clone.querySelector(
+        "#likes"
+      ).innerHTML = `${prompts[i]["likes"]}`;
+
+      prompt_template_clone.querySelector(
+        "#updated_date"
+      ).innerHTML = `${prompts[i]["updated_date"]}`;
+
+      formatTimeDifference(
+        `${prompts[i]["updated_date"]}`,
+        prompt_template_clone.querySelector("#updated_date")
+      );
+
+      prompt_container.appendChild(prompt_template_clone.children[0]);
+    }
+
+    pageIndex += 1;
+  }
 
   function removeSpinner() {
     $(".spinner-border").toggleClass("invisible");
@@ -48,62 +101,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    let prompt_container = document.querySelector("#prompt-container");
-
-    async function fetchGetPrompts() {
-      const res = await fetch(`/en/ai_hub/get-prompts/${pageIndex}`, {
-        method: "GET",
-        headers: { Accept: "application/json" },
-      });
-      const data = await res.json();
-      const prompts = data["prompts"];
-
-      for (let i = 0; i < prompts.length; i++) {
-        var prompt_template = document.querySelector("#prompt-template");
-
-        let prompt_template_clone = prompt_template.content.cloneNode(true);
-
-        prompt_template_clone.querySelector(
-          "#link"
-        ).href = `/th/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
-
-        prompt_template_clone.querySelector(
-          "#topic"
-        ).innerHTML = `${prompts[i]["topic"]}`;
-
-        prompt_template_clone.querySelector(
-          "#image"
-        ).src = `${prompts[i]["prompts"][0]["image_url"]}`;
-
-        prompt_template_clone.querySelector(
-          "#likes"
-        ).innerHTML = `${prompts[i]["likes"]}`;
-
-        prompt_template_clone.querySelector(
-          "#updated_date"
-        ).innerHTML = `${prompts[i]["updated_date"]}`;
-
-        formatTimeDifference(
-          `${prompts[i]["updated_date"]}`,
-          prompt_template_clone.querySelector("#updated_date")
-        );
-
-        prompt_container.appendChild(prompt_template_clone.children[0]);
-      }
-
-      pageIndex += 1;
-    }
-
-    var intersectionObserver = new IntersectionObserver((entries) => {
-      if (entries[0].intersectionRatio <= 0) {
-        return;
-      }
-
-      fetchGetPrompts();
-    });
-
     intersectionObserver.observe(intersection);
-
     fetchGetPrompts();
     removeSpinner();
   });
