@@ -1,6 +1,11 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
 
-<div id="prompt-container" class="row"></div>
+<div id="prompt-container" class="row pe-5 ps-5">
+  <div id="prompt-container-0" class="col-3"></div>
+  <div id="prompt-container-1" class="col-3"></div>
+  <div id="prompt-container-2" class="col-3"></div>
+  <div id="prompt-container-3" class="col-3"></div>
+</div>
 
 <div class="d-flex justify-content-center m-5" id="intersection">
   <div class="spinner-border" role="status"></div>
@@ -17,7 +22,6 @@
 
 <script type="text/javascript">
   let pageIndex = 0;
-  let prompt_container = document.querySelector("#prompt-container");
 
   var intersectionObserver = new IntersectionObserver((entries) => {
     if (entries[0].intersectionRatio <= 0) {
@@ -34,18 +38,12 @@
     });
     const data = await res.json();
     const prompts = data["prompts"];
-    const limit_prompt = 9;
 
+    let prompt_column_count = 0;
+    const LIMIT_COLUMN = 4;
     for (let i = 0; i < prompts.length; i++) {
-      var prompt_template = document.querySelector("#prompt-template");
+      let prompt_template = document.querySelector("#prompt-template");
       let prompt_template_clone = prompt_template.content.cloneNode(true);
-      if (i % limit_prompt == 0) {
-        if (i != 0) {
-          prompt_container.appendChild(prompt_row);
-        }
-        var prompt_row = document.createElement("div");
-        prompt_row.className = "col-sm-1 col-md-4 col-lg-4 col-xs-1";
-      }
 
       prompt_template_clone.querySelector(
         "#link"
@@ -72,16 +70,14 @@
         prompt_template_clone.querySelector("#updated_date")
       );
 
-      console.log(prompt_template_clone);
-      console.log(prompt_row);
-      console.log(prompt_container);
-      console.log(i);
-      console.log(i / limit_prompt);
-      console.log(i % limit_prompt);
+      let prompt_container = document.querySelector(
+        `#prompt-container-${prompt_column_count}`
+      );
 
-      if (i % limit_prompt == 0 && i != 0) {
-      } else {
-        prompt_row.appendChild(prompt_template_clone.children[0]);
+      prompt_container.appendChild(prompt_template_clone.children[0]);
+      prompt_column_count += 1;
+      if (prompt_column_count == LIMIT_COLUMN) {
+        prompt_column_count = 0;
       }
     }
 
