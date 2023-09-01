@@ -1,5 +1,27 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
+<style media="screen">
+  .middle {
+    transition: 0.5s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
 
+  .image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: 0.5s ease;
+    backface-visibility: hidden;
+  }
+</style>
+
+<div class="myDIV">Hover over me.</div>
+<div class="hide">I am shown when someone hovers over the div above.</div>
 <div id="prompt-container" class="row pe-5 ps-5">
   <div id="prompt-container-0" class="col-3"></div>
   <div id="prompt-container-1" class="col-3"></div>
@@ -12,11 +34,18 @@
 </div>
 
 <template id="prompt-template">
-  <a id="link" href="#" class="text-decoration-none text-dark position-static">
-    <h4 id="topic" class="position-absolute"></h4>
-    <small id="updated_date" class="position-absolute"></small>
-    <span id="likes" class="position-absolute"></span>
-    <img id="image" src="" class="w-100 rounded mb-3" />
+  <a
+    id="link"
+    href="#"
+    class="text-decoration-none text-dark position-relative prompt-item"
+  >
+    <img id="image" src="" class="w-100 rounded mb-3 image" />
+
+    <div class="middle">
+      <h4 id="topic"></h4>
+      <small id="updated_date"></small>
+      <span id="likes"></span>
+    </div>
   </a>
 </template>
 
