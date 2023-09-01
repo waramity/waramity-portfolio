@@ -4,18 +4,14 @@
     transition: 0.5s ease;
     position: absolute;
     opacity: 0;
-    top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-    text-align: center;
   }
 
   .prompt-image {
     opacity: 1;
     display: block;
     width: 100%;
-    height: auto;
     transition: 0.5s ease;
     backface-visibility: hidden;
   }
@@ -46,23 +42,33 @@
       <img id="image" src="" class="w-100 rounded mb-3 prompt-image" />
     </a>
 
-    <div class="prompt-info">
-      <h4 id="topic"></h4>
-      <small id="updated_date"></small>
-      <span id="likes"></span>
-      {% if current_user.is_authenticated %}
+    <div class="prompt-info bottom-0 start-50 w-100 ps-4 pe-4">
+      <div class="row">
+        <div class="col-6 text-start">
+          <h2 id="topic"></h2>
+          <small id="updated_date" class="fs-6"></small>
+          <span id="likes"></span>
+        </div>
+        <div class="col-6 text-end">
+          {% if current_user.is_authenticated %}
 
-      <button id="heart-button" type="button" class="btn btn-outline-secondary">
-        <i class="bi bi-heart-fill"></i>
-      </button>
-      <button
-        id="bookmark-button"
-        type="button"
-        class="btn btn-outline-secondary"
-      >
-        <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
-      </button>
-      {%endif%}
+          <button
+            id="heart-button"
+            type="button"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0"
+          >
+            <i class="bi bi-heart-fill"></i>
+          </button>
+          <button
+            id="bookmark-button"
+            type="button"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0"
+          >
+            <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+          </button>
+          {%endif%}
+        </div>
+      </div>
     </div>
   </div>
 </template>
