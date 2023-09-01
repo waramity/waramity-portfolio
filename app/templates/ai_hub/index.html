@@ -3,6 +3,7 @@
   .middle {
     transition: 0.5s ease;
     position: absolute;
+    opacity: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -18,10 +19,16 @@
     transition: 0.5s ease;
     backface-visibility: hidden;
   }
+
+  .prompt-item:hover .image {
+    opacity: 0.3;
+  }
+
+  .prompt-item:hover .middle {
+    opacity: 1;
+  }
 </style>
 
-<div class="myDIV">Hover over me.</div>
-<div class="hide">I am shown when someone hovers over the div above.</div>
 <div id="prompt-container" class="row pe-5 ps-5">
   <div id="prompt-container-0" class="col-3"></div>
   <div id="prompt-container-1" class="col-3"></div>
