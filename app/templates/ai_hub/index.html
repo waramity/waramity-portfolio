@@ -7,18 +7,12 @@
 </div>
 
 <template id="prompt-template">
-  <div class="col-3 mb-3">
+  <a id="link" href="#" class="text-decoration-none text-dark position-static">
     <h4 id="topic" class="position-absolute"></h4>
     <small id="updated_date" class="position-absolute"></small>
     <span id="likes" class="position-absolute"></span>
-    <a
-      id="link"
-      href="#"
-      class="text-decoration-none text-dark position-static"
-    >
-      <img id="image" src="" class="w-100 rounded" />
-    </a>
-  </div>
+    <img id="image" src="" class="w-100 rounded mb-3" />
+  </a>
 </template>
 
 <script type="text/javascript">
@@ -40,15 +34,22 @@
     });
     const data = await res.json();
     const prompts = data["prompts"];
+    const limit_prompt = 9;
 
     for (let i = 0; i < prompts.length; i++) {
       var prompt_template = document.querySelector("#prompt-template");
-
       let prompt_template_clone = prompt_template.content.cloneNode(true);
+      if (i % limit_prompt == 0) {
+        if (i != 0) {
+          prompt_container.appendChild(prompt_row);
+        }
+        var prompt_row = document.createElement("div");
+        prompt_row.className = "col-sm-1 col-md-4 col-lg-4 col-xs-1";
+      }
 
       prompt_template_clone.querySelector(
         "#link"
-      ).href = `/th/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
+      ).href = `/en/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
 
       prompt_template_clone.querySelector(
         "#topic"
@@ -71,7 +72,17 @@
         prompt_template_clone.querySelector("#updated_date")
       );
 
-      prompt_container.appendChild(prompt_template_clone.children[0]);
+      console.log(prompt_template_clone);
+      console.log(prompt_row);
+      console.log(prompt_container);
+      console.log(i);
+      console.log(i / limit_prompt);
+      console.log(i % limit_prompt);
+
+      if (i % limit_prompt == 0 && i != 0) {
+      } else {
+        prompt_row.appendChild(prompt_template_clone.children[0]);
+      }
     }
 
     pageIndex += 1;
