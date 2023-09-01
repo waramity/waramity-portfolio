@@ -50,6 +50,8 @@
       <h4 id="topic"></h4>
       <small id="updated_date"></small>
       <span id="likes"></span>
+      {% if current_user.is_authenticated %}
+
       <button id="heart-button" type="button" class="btn btn-outline-secondary">
         <i class="bi bi-heart-fill"></i>
       </button>
@@ -60,6 +62,7 @@
       >
         <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
       </button>
+      {%endif%}
     </div>
   </div>
 </template>
