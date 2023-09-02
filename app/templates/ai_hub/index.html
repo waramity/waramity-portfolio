@@ -54,12 +54,13 @@
       <div class="row">
         <div class="col-6 text-start">
           <h2 id="topic"></h2>
-          <small id="updated_date" class="fs-6"></small>
+          <small id="updated_date" class="fs-6 me-2"></small>
+
+          <i class="bi bi-heart-fill"></i>
           <span id="likes"></span>
         </div>
         <div class="col-6 text-end">
           {% if current_user.is_authenticated %}
-
           <button
             id="heart-button"
             type="button"
