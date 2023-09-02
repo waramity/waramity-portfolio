@@ -129,16 +129,20 @@
         "#updated_date"
       ).innerHTML = `${prompts[i]["updated_date"]}`;
 
+      prompt_template_clone.querySelector(
+        ".prompt-item"
+      ).id = `${prompts[i]["slug"]}`;
+
       prompt_template_clone
         .querySelector("#bookmark-button")
         .addEventListener("click", function () {
-          toggleBookmark();
+          toggleBookmark(prompts[i]["slug"]);
         });
 
       prompt_template_clone
         .querySelector("#like-button")
         .addEventListener("click", function () {
-          toggleLike();
+          toggleLike(prompts[i]["slug"]);
         });
 
       formatTimeDifference(
@@ -149,7 +153,6 @@
       let prompt_container = document.querySelector(
         `#prompt-container-${prompt_column_count}`
       );
-
       prompt_container.appendChild(prompt_template_clone.children[0]);
       prompt_column_count += 1;
       if (prompt_column_count == LIMIT_COLUMN) {
@@ -183,12 +186,12 @@
     }
   }
 
-  function toggleBookmark() {
-    $(".bi-bookmark-fill").toggleClass("text-warning");
+  function toggleBookmark(prompt_id) {
+    $(`div#${prompt_id} .bi-bookmark-fill`).toggleClass("text-warning");
   }
 
-  function toggleLike() {
-    $(".bi-heart-fill").toggleClass("text-danger");
+  function toggleLike(prompt_id) {
+    $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
   }
 </script>
 
