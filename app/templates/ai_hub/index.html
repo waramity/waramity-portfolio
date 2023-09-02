@@ -155,6 +155,7 @@
       prompt_template_clone
         .querySelector("#like-button")
         .addEventListener("click", function () {
+          likePrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
           toggleLike(prompt_id);
         });
 
@@ -185,7 +186,19 @@
       headers: { "Content-Type": "application/json" },
     });
     const data = await res.json();
-    const prompts = data["prompts"];
+    if (data["status"] != 0) {
+      return;
+    } else {
+      console.error("error bookmark")
+    }
+  }
+
+  async function likePrompt(user_profile_name, prompt_slug) {
+    const res = await fetch(`/en/ai_hub/prompt-collection/${user_profile_name}/${prompt_slug}/like`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
     if (data["status"] != 0) {
       return;
     } else {
