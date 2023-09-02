@@ -57,7 +57,6 @@ def get_prompts(page_index):
     prompts = list(feature_db.prompt_collection.find().sort('created_date', -1).skip(page_index).limit(page_index * 25))
     prompt_payload = []
     for prompt in prompts:
-        print(prompt)
         user = user_db.profile.find_one({'_id': prompt['user_id']})
         if user:
             if current_user.is_authenticated:

@@ -157,8 +157,6 @@
           toggleLike(prompt_id);
         });
 
-        console.log(payload[i])
-
         if(payload[i]["like"]) {
           const likeButton = prompt_template_clone.querySelector("#like-button");
           likeButton.classList.add("text-danger");
