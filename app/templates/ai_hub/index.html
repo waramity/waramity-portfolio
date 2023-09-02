@@ -62,7 +62,7 @@
         <div class="col-6 text-end">
           {% if current_user.is_authenticated %}
           <button
-            id="heart-button"
+            id="like-button"
             type="button"
             class="btn btn-outline-secondary w-25 h-100 fs-1 border-0 me-3"
           >
@@ -132,7 +132,13 @@
       prompt_template_clone
         .querySelector("#bookmark-button")
         .addEventListener("click", function () {
-          toggleBookmarkButton();
+          toggleBookmark();
+        });
+
+      prompt_template_clone
+        .querySelector("#like-button")
+        .addEventListener("click", function () {
+          toggleLike();
         });
 
       formatTimeDifference(
@@ -177,8 +183,12 @@
     }
   }
 
-  function toggleBookmarkButton() {
+  function toggleBookmark() {
     $(".bi-bookmark-fill").toggleClass("text-warning");
+  }
+
+  function toggleLike() {
+    $(".bi-heart-fill").toggleClass("text-danger");
   }
 </script>
 
