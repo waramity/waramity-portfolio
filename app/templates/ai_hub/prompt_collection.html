@@ -109,13 +109,17 @@
                 </div>
               </a>
             </div>
-            <div class="col-5">
+            <div class="col-7">
               <a
                 href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
                 class="text-decoration-none text-black"
               >
-                <p>{{creator["profile_name"]}}</p>
-                <p>Joined <span id="creator-registered-on"></span></p>
+                <p class="lh-1" style="line-height: 0.3 !important;">
+                  {{creator["profile_name"]}}
+                </p>
+                <p class="lh-1" style="line-height: 1 !important;">
+                  Joined <span id="creator-registered-on"></span>
+                </p>
               </a>
             </div>
             <div class="col-4">
@@ -125,7 +129,7 @@
               <button
                 id="follow-button"
                 type="button"
-                class="btn btn-outline-primary w-100"
+                class="btn btn-outline-primary w-75"
               >
                 Unfollow
               </button>
@@ -133,7 +137,7 @@
               <button
                 id="follow-button"
                 type="button"
-                class="btn btn-primary w-100"
+                class="btn btn-primary w-75"
               >
                 Follow
               </button>
@@ -177,6 +181,66 @@
     </div>
 
     <div class="col-5">
+      <div class="row mb-5">
+        <div id="prompt-info" class="col-6">
+          <h3>{{prompt_collection['topic']}}</h3>
+          <p>
+            <small>Created <span id="prompt-created-date"></span></small>
+          </p>
+          <p id="prompt-description"></p>
+        </div>
+        <div class="col-6">
+          {% if current_user.is_authenticated %}
+          <button
+            id="heart-button"
+            type="button"
+            class="btn btn-outline-secondary"
+          >
+            {%if liked%}
+            <i class="bi bi-heart-fill text-danger"></i>
+            {%else%}
+            <i class="bi bi-heart-fill"></i>
+            {%endif%}
+            <span id="heart-amount">{{prompt_collection['likes']}}</span>
+          </button>
+
+          <button
+            id="bookmark-button"
+            type="button"
+            class="btn btn-outline-secondary"
+          >
+            {%if bookmarked%}
+            <i class="bi bi-bookmark-fill text-danger"></i>
+            {%else%}
+            <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+            {%endif%}
+          </button>
+          {% if creator["profile_name"] == current_user.get_profile_name() %}
+
+          <div class="col-3">
+            <a
+              class="btn btn-primary w-100"
+              href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+            >
+              <i class="bi bi-pencil-square"></i>
+              Edit
+            </a>
+          </div>
+
+          <div class="col-3">
+            <a
+              class="btn btn-outline-danger w-100"
+              href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+            >
+              <i class="bi bi-trash3"></i>
+
+              Destroy
+            </a>
+          </div>
+          {%endif%} {%endif%}
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-12">
           <div class="row mb-2">
@@ -443,64 +507,6 @@
     overflow: visible;
   }
 </style>
-
-<div class="container">
-  <div class="row mb-5">
-    <div id="prompt-info" class="col-6">
-      <h3>{{prompt_collection['topic']}}</h3>
-      <p>
-        <small>Created <span id="prompt-created-date"></span></small>
-      </p>
-      <p id="prompt-description"></p>
-    </div>
-    <div class="col-6">
-      {% if current_user.is_authenticated %}
-      <button id="heart-button" type="button" class="btn btn-outline-secondary">
-        {%if liked%}
-        <i class="bi bi-heart-fill text-danger"></i>
-        {%else%}
-        <i class="bi bi-heart-fill"></i>
-        {%endif%}
-        <span id="heart-amount">{{prompt_collection['likes']}}</span>
-      </button>
-
-      <button
-        id="bookmark-button"
-        type="button"
-        class="btn btn-outline-secondary"
-      >
-        {%if bookmarked%}
-        <i class="bi bi-bookmark-fill text-danger"></i>
-        {%else%}
-        <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
-        {%endif%}
-      </button>
-      {% if creator["profile_name"] == current_user.get_profile_name() %}
-
-      <div class="col-3">
-        <a
-          class="btn btn-primary w-100"
-          href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
-        >
-          <i class="bi bi-pencil-square"></i>
-          Edit
-        </a>
-      </div>
-
-      <div class="col-3">
-        <a
-          class="btn btn-outline-danger w-100"
-          href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
-        >
-          <i class="bi bi-trash3"></i>
-
-          Destroy
-        </a>
-      </div>
-      {%endif%} {%endif%}
-    </div>
-  </div>
-</div>
 
 <!-- Message Script -->
 <script type="text/javascript">
