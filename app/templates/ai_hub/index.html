@@ -23,6 +23,11 @@
   .prompt-item:hover .prompt-info {
     opacity: 1;
   }
+  .btn:hover {
+    background-color: inherit; /* Use the default background color or your desired color */
+    color: inherit; /* Use the default text color or your desired color */
+    text-decoration: none; /* Remove any text decoration on hover (e.g., underline) */
+  }
 </style>
 
 <div id="prompt-container" class="row pe-5 ps-5">
@@ -55,16 +60,16 @@
           <button
             id="heart-button"
             type="button"
-            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0 me-3"
           >
             <i class="bi bi-heart-fill"></i>
           </button>
           <button
             id="bookmark-button"
             type="button"
-            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0 me-3"
           >
-            <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+            <i class="bi bi-bookmark-fill"></i>
           </button>
           {%endif%}
         </div>
