@@ -92,7 +92,9 @@
 
     fetchGetPrompts();
   });
+</script>
 
+<script type="text/javascript">
   async function fetchGetPrompts() {
     const res = await fetch(`/en/ai_hub/get-prompts/${pageIndex}`, {
       method: "GET",
@@ -126,6 +128,12 @@
       prompt_template_clone.querySelector(
         "#updated_date"
       ).innerHTML = `${prompts[i]["updated_date"]}`;
+
+      prompt_template_clone
+        .querySelector("#bookmark-button")
+        .addEventListener("click", function () {
+          toggleBookmarkButton();
+        });
 
       formatTimeDifference(
         `${prompts[i]["updated_date"]}`,
@@ -169,6 +177,12 @@
     }
   }
 
+  function toggleBookmarkButton() {
+    $(".bi-bookmark-fill").toggleClass("text-warning");
+  }
+</script>
+
+<script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
     intersectionObserver.observe(intersection);
     fetchGetPrompts();
