@@ -148,10 +148,14 @@
         "button#like-button"
       ).id = `like-button-${prompt_id}`;
 
+      prompt_template_clone.querySelector(
+        "button#bookmark-button"
+      ).id = `bookmark-button-${prompt_id}`;
+
       {% if current_user.is_authenticated %}
 
       prompt_template_clone
-        .querySelector("#bookmark-button")
+        .querySelector(`#bookmark-button-${prompt_id}`)
         .addEventListener("click", function () {
           bookmarkPrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
           toggleBookmark(prompt_id);
@@ -172,7 +176,7 @@
         }
 
         if(payload[i]["bookmark"]) {
-          const bookmarkButton = prompt_template_clone.querySelector("#bookmark-button");
+          const bookmarkButton = prompt_template_clone.querySelector(`#bookmark-button-${prompt_id}`);
           bookmarkButton.classList.add("text-warning");
         }
 
@@ -249,7 +253,9 @@
   }
 
   function toggleBookmark(prompt_id) {
-    $(`div#${prompt_id} #bookmark-button`).toggleClass("text-warning");
+    $(`div#${prompt_id} button#bookmark-button-${prompt_id}`).toggleClass(
+      "text-warning"
+    );
   }
 
   function toggleLike(prompt_id) {
