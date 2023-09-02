@@ -61,14 +61,18 @@ def get_prompts(page_index):
         if user:
             if current_user.is_authenticated:
                 like = feature_db.engagement.find_one({'item_id': prompt['_id'], 'user_id': current_user.get_id(), 'engage_type': 'like', 'item_type': 'prompt_collection'})
+                bookmark = feature_db.engagement.find_one({'item_id': prompt['_id'], 'user_id': current_user.get_id(), 'engage_type': 'bookmark', 'item_type': 'prompt_collection'})
                 prompt.pop("_id")
                 combined_object = {
                     'prompt': prompt,
                     'user': user,
-                    'like': False
+                    'like': False,
+                    'bookmark': False
                 }
                 if like:
                     combined_object['like'] = True
+                if bookmark:
+                    combined_object['bookmark'] = True
             else:
                 prompt.pop("_id")
                 combined_object = {

@@ -163,6 +163,12 @@
           likeCountHeart.classList.add("text-danger");
         }
 
+        if(payload[i]["bookmark"]) {
+          const bookmarkButton = prompt_template_clone.querySelector("#bookmark-button");
+          bookmarkButton.classList.add("text-warning");
+        }
+
+
       {%endif%}
 
       formatTimeDifference(
@@ -235,7 +241,7 @@
   }
 
   function toggleBookmark(prompt_id) {
-    $(`div#${prompt_id} .bi-bookmark-fill`).toggleClass("text-warning");
+    $(`div#${prompt_id} #bookmark-button`).toggleClass("text-warning");
   }
 
   function toggleLike(prompt_id) {
