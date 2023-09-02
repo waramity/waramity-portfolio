@@ -157,9 +157,6 @@
         });
 
         if(payload[i]["like"]) {
-          $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
-          $(`div#${prompt_id} button#like-button`).toggleClass("text-danger");
-
           const likeButton = prompt_template_clone.querySelector("#like-button");
           likeButton.classList.add("text-danger");
           const likeCountHeart = prompt_template_clone.querySelector(".bi-heart-fill");
@@ -246,13 +243,15 @@
     if ($(`div#${prompt_id} .bi-heart-fill`).hasClass("text-danger")) {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
+      $(`div#${prompt_id} .bi-heart-fill`).removeClass("text-danger");
+      $(`div#${prompt_id} button#like-button`).removeClass("text-danger");
     } else {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
+      $(`div#${prompt_id} .bi-heart-fill`).addClass("text-danger");
+      $(`div#${prompt_id} button#like-button`).addClass("text-danger");
     }
 
-    $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
-    $(`div#${prompt_id} button#like-button`).toggleClass("text-danger");
     $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
   }
 </script>
