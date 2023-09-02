@@ -102,7 +102,6 @@
     });
     const res_data = await res.json();
     const payload = res_data["payload"];
-    // console.log(payload)
 
     let prompt_column_count = 0;
     const LIMIT_COLUMN = 4;
@@ -149,8 +148,8 @@
       prompt_template_clone
         .querySelector("#bookmark-button")
         .addEventListener("click", function () {
-          toggleBookmark(prompt_id);
           bookmarkPrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
+          toggleBookmark(prompt_id);
         });
 
       prompt_template_clone
@@ -181,32 +180,21 @@
   }
 
   async function bookmarkPrompt(user_profile_name, prompt_slug) {
-
     const res = await fetch(`/en/ai_hub/prompt-collection/${user_profile_name}/${prompt_slug}/bookmark`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
     const data = await res.json();
     const prompts = data["prompts"];
-
-    // fetch(
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //   }
-    // ).then((res) => {
-    //   res.json().then((data) => {
-    //     if (data["status"] == 0) {
-    //       removeErrorMessage();
-    //       showErrorMessage(data["error_message"]);
-    //     } else {
-    //       toggleBookmarkButton();
-    //     }
-    //
-    //     $("#bookmark-button").removeClass("disabled");
-    //   });
-    // });
+    if (data["status"] != 0) {
+      return;
+    } else {
+      console.error("error bookmark")
+    }
   }
+</script>
 
+<script type="text/javascript">
   function removeSpinner() {
     $(".spinner-border").toggleClass("invisible");
   }
@@ -235,15 +223,13 @@
   }
 
   function toggleLike(prompt_id) {
-    let likes_count
-    console.log('kuy')
-    console.log($(`div#${prompt_id} .bi-heart-fill`))
-    console.log(`${prompt_id}`)
-    console.log($(`div#${prompt_id} span#likes`).html())
+    let likes_count;
     if ($(`div#${prompt_id} .bi-heart-fill`).hasClass("text-danger")) {
-      likes_count = parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
+      likes_count =
+        parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
     } else {
-      likes_count = parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
+      likes_count =
+        parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
     }
 
     $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
