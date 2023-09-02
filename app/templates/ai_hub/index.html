@@ -260,7 +260,6 @@
 
   function toggleLike(prompt_id) {
     let likes_count;
-    console.log("kuy");
     if (
       $(`div#${prompt_id} button#like-button-${prompt_id}`).hasClass(
         "text-danger"
@@ -274,8 +273,6 @@
       $(`div#${prompt_id} button#like-button-${prompt_id}`).removeClass(
         "text-danger"
       );
-
-      console.log("sus");
     } else {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
@@ -283,12 +280,6 @@
       $(`div#${prompt_id} button#like-button-${prompt_id}`).addClass(
         "text-danger"
       );
-
-      console.log("here");
-      console.log(prompt_id);
-      console.log($(`div#${prompt_id} i#like-count-${prompt_id}`));
-      console.log($(`div#${prompt_id} button#like-button-${prompt_id}`));
-      console.log($(`div#${prompt_id} `));
     }
 
     $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
