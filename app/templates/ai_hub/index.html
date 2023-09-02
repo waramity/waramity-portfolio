@@ -133,6 +133,9 @@
         ".prompt-item"
       ).id = `${prompts[i]["slug"]}`;
 
+      {% if current_user.is_authenticated %}
+
+
       prompt_template_clone
         .querySelector("#bookmark-button")
         .addEventListener("click", function () {
@@ -144,6 +147,9 @@
         .addEventListener("click", function () {
           toggleLike(prompts[i]["slug"]);
         });
+
+      {%endif%}
+
 
       formatTimeDifference(
         `${prompts[i]["updated_date"]}`,
