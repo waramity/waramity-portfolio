@@ -8,37 +8,39 @@
   }
 </style>
 
-<div class="mb-4">
-  <h1>
-    {{_('My bookmark')}}
-  </h1>
-</div>
-
-<hr class="my-4" />
-
-<div class="mb-5">
-  <ul class="nav nav-pills">
-    <li class="nav-item me-3">
-      <a
-        id="prompt-collection-nav"
-        class="nav-link active"
-        onclick="togglePromptCollection()"
-        >Prompt Collection</a
-      >
-    </li>
-  </ul>
-</div>
-
-<div id="main" class="my-5">
-  <div id="collections" class="row g-4"></div>
-
-  <div class="my-5 text-center">
-    <div id="nav-spinner" class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+<div class="container">
+  <div class="mb-4">
+    <h1>
+      {{_('My bookmark')}}
+    </h1>
   </div>
-  <div class="my-5 text-center">
-    <span id="message" class=""></span>
+
+  <hr class="my-4" />
+
+  <div class="mb-5">
+    <ul class="nav nav-pills">
+      <li class="nav-item me-3">
+        <a
+          id="prompt-collection-nav"
+          class="nav-link active"
+          onclick="togglePromptCollection()"
+          >Prompt Collection</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div id="main" class="my-5">
+    <div id="collections" class="row g-4"></div>
+
+    <div class="my-5 text-center">
+      <div id="nav-spinner" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div class="my-5 text-center">
+      <span id="message" class=""></span>
+    </div>
   </div>
 </div>
 

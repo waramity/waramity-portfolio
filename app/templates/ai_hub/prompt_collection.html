@@ -91,212 +91,220 @@
   }
 </style>
 
-<div class="my-3 text-danger">
-  <span id="error-message" class=""></span>
-</div>
-<div class="row mb-2">
-  <div class="col-7">
-    <div class="row">
-      <div class="col-1 my-auto">
-        <div class="swiper-button-prev prompt-swiper-button-prev"></div>
-      </div>
-
-      <div class="col-10">
-        <div class="swiper prompt-swiper">
-          <div class="swiper-wrapper">
-            {% for prompt in prompt_collection['prompts'] %}
-            <div class="swiper-slide my-auto">
-              <img
-                data-enlargable
-                src="{{prompt['image_url']}}"
-                class="w-100"
-                data-prompt="{{ prompt['prompt'] }}"
-                data-negative-prompt="{{ prompt['negative_prompt'] }}"
-                data-sampler="{{ prompt['sampler'] }}"
-                data-steps="{{ prompt['steps'] }}"
-                data-seed="{{ prompt['seed'] }}"
-                data-size="{{ prompt['size'] }}"
-                data-cfg-scale="{{ prompt['cfg_scale'] }}"
-                data-model-hash="{{ prompt['model_hash'] }}"
-              />
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="swiper-pagination mt-3 prompt-swiper-pagination"></div>
-      </div>
-      <div class="col-1 my-auto">
-        <div class="swiper-button-next prompt-swiper-button-next"></div>
-      </div>
-    </div>
+<div class="container">
+  <div class="my-3 text-danger">
+    <span id="error-message" class=""></span>
   </div>
+  <div class="row mb-2">
+    <div class="col-7">
+      <div class="row">
+        <div class="col-1 my-auto">
+          <div class="swiper-button-prev prompt-swiper-button-prev"></div>
+        </div>
 
-  <div class="col-5">
-    <div class="row mb-5">
-      <div class="col-3">
-        <a
-          href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
-        >
-          <div class="image-container">
-            <img src="{{creator['image_url']}}" class="img-fluid" />
+        <div class="col-10">
+          <div class="swiper prompt-swiper">
+            <div class="swiper-wrapper">
+              {% for prompt in prompt_collection['prompts'] %}
+              <div class="swiper-slide my-auto">
+                <img
+                  data-enlargable
+                  src="{{prompt['image_url']}}"
+                  class="w-100"
+                  data-prompt="{{ prompt['prompt'] }}"
+                  data-negative-prompt="{{ prompt['negative_prompt'] }}"
+                  data-sampler="{{ prompt['sampler'] }}"
+                  data-steps="{{ prompt['steps'] }}"
+                  data-seed="{{ prompt['seed'] }}"
+                  data-size="{{ prompt['size'] }}"
+                  data-cfg-scale="{{ prompt['cfg_scale'] }}"
+                  data-model-hash="{{ prompt['model_hash'] }}"
+                />
+              </div>
+              {% endfor %}
+            </div>
           </div>
-        </a>
-      </div>
-      <div class="col-5">
-        <a
-          href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
-          class="text-decoration-none text-black"
-        >
-          <p>{{creator["profile_name"]}}</p>
-          <p>Joined <span id="creator-registered-on"></span></p>
-        </a>
-      </div>
-      <div class="col-4">
-        {% if current_user.is_authenticated %} {% if creator["profile_name"] !=
-        current_user.get_profile_name() %} {%if followed%}
-        <button
-          id="follow-button"
-          type="button"
-          class="btn btn-outline-primary w-100"
-        >
-          Unfollow
-        </button>
-        {%else%}
-        <button id="follow-button" type="button" class="btn btn-primary w-100">
-          Follow
-        </button>
-        {%endif%} {%endif%} {%endif%}
+
+          <div class="swiper-pagination mt-3 prompt-swiper-pagination"></div>
+        </div>
+        <div class="col-1 my-auto">
+          <div class="swiper-button-next prompt-swiper-button-next"></div>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12">
-        <div class="row mb-2">
-          <div class="col-10">
-            <label for="promptFormControlInput" class="form-label"
-              >Prompt:</label
-            >
-          </div>
-          <div class="col-2">
-            <button
-              id="copy-prompt-button"
-              class="w-100 p-0 btn btn-outline-secondary"
-            >
-              <i class="bi bi-clipboard"></i> Copy
-            </button>
-          </div>
+    <div class="col-5">
+      <div class="row mb-5">
+        <div class="col-3">
+          <a
+            href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+          >
+            <div class="image-container">
+              <img src="{{creator['image_url']}}" class="img-fluid" />
+            </div>
+          </a>
         </div>
-        <textarea
-          id="prompt-input"
-          class="form-control remove-scroll mb-2"
-          aria-label="prompt input"
-          disabled
-        >
+        <div class="col-5">
+          <a
+            href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+            class="text-decoration-none text-black"
+          >
+            <p>{{creator["profile_name"]}}</p>
+            <p>Joined <span id="creator-registered-on"></span></p>
+          </a>
+        </div>
+        <div class="col-4">
+          {% if current_user.is_authenticated %} {% if creator["profile_name"]
+          != current_user.get_profile_name() %} {%if followed%}
+          <button
+            id="follow-button"
+            type="button"
+            class="btn btn-outline-primary w-100"
+          >
+            Unfollow
+          </button>
+          {%else%}
+          <button
+            id="follow-button"
+            type="button"
+            class="btn btn-primary w-100"
+          >
+            Follow
+          </button>
+          {%endif%} {%endif%} {%endif%}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="row mb-2">
+            <div class="col-10">
+              <label for="promptFormControlInput" class="form-label"
+                >Prompt:</label
+              >
+            </div>
+            <div class="col-2">
+              <button
+                id="copy-prompt-button"
+                class="w-100 p-0 btn btn-outline-secondary"
+              >
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
+          </div>
+          <textarea
+            id="prompt-input"
+            class="form-control remove-scroll mb-2"
+            aria-label="prompt input"
+            disabled
+          >
 {{prompt_collection['prompts'][0]['prompt']}}
       </textarea
-        >
+          >
 
-        <div class="row mb-2">
-          <div class="col-10">
-            <label for="negativePromptFormControlInput" class="form-label"
-              >Negative prompt:</label
-            >
+          <div class="row mb-2">
+            <div class="col-10">
+              <label for="negativePromptFormControlInput" class="form-label"
+                >Negative prompt:</label
+              >
+            </div>
+            <div class="col-2">
+              <button
+                id="copy-negative-prompt-button"
+                class="w-100 p-0 btn btn-outline-secondary"
+              >
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
           </div>
-          <div class="col-2">
-            <button
-              id="copy-negative-prompt-button"
-              class="w-100 p-0 btn btn-outline-secondary"
-            >
-              <i class="bi bi-clipboard"></i> Copy
-            </button>
-          </div>
-        </div>
-        <textarea
-          id="negative-prompt-input"
-          class="form-control remove-scroll mb-2"
-          aria-label="negative prompt input"
-          disabled
-        >
+          <textarea
+            id="negative-prompt-input"
+            class="form-control remove-scroll mb-2"
+            aria-label="negative prompt input"
+            disabled
+          >
 {{prompt_collection['prompts'][0]['negative_prompt']}}
       </textarea
-        >
-      </div>
-      <div class="col-6">
-        <label for="samplerFormControlInput" class="form-label">Sampler:</label>
-        <input
-          id="sampler-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="sampler input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['sampler']}}"
-        />
-        <label for="seedFormControlInput" class="form-label">Seed:</label>
-        <input
-          id="seed-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="seed input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['seed']}}"
-        />
-        <label for="CFGScaleFormControlInput" class="form-label"
-          >CFG Scale:</label
-        >
-        <input
-          id="cfg-scale-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="cfg scale input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['cfg_scale']}}"
-        />
-      </div>
+          >
+        </div>
+        <div class="col-6">
+          <label for="samplerFormControlInput" class="form-label"
+            >Sampler:</label
+          >
+          <input
+            id="sampler-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="sampler input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['sampler']}}"
+          />
+          <label for="seedFormControlInput" class="form-label">Seed:</label>
+          <input
+            id="seed-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="seed input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['seed']}}"
+          />
+          <label for="CFGScaleFormControlInput" class="form-label"
+            >CFG Scale:</label
+          >
+          <input
+            id="cfg-scale-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="cfg scale input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['cfg_scale']}}"
+          />
+        </div>
 
-      <div class="col-6">
-        <label for="stepsFormControlInput" class="form-label">Steps:</label>
-        <input
-          id="steps-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="steps input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['steps']}}"
-        />
-        <label for="sizeFormControlInput" class="form-label">Size:</label>
-        <input
-          id="size-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="size input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['size']}}"
-        />
+        <div class="col-6">
+          <label for="stepsFormControlInput" class="form-label">Steps:</label>
+          <input
+            id="steps-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="steps input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['steps']}}"
+          />
+          <label for="sizeFormControlInput" class="form-label">Size:</label>
+          <input
+            id="size-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="size input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['size']}}"
+          />
 
-        <label for="modelHashFormControlInput" class="form-label"
-          >Model hash:</label
-        >
-        <input
-          id="model-hash-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="model hash input"
-          disabled
-          value="{{prompt_collection['prompts'][0]['model_hash']}}"
-        />
-      </div>
+          <label for="modelHashFormControlInput" class="form-label"
+            >Model hash:</label
+          >
+          <input
+            id="model-hash-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="model hash input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['model_hash']}}"
+          />
+        </div>
 
-      <div class="col-12">
-        <label for="modelFormControlInput" class="form-label">Model:</label>
-        <input
-          id="model-input"
-          class="form-control form-control-sm mb-2"
-          type="text"
-          aria-label="modelinput"
-          disabled
-          value="{{prompt_collection['model_name']}}"
-        />
+        <div class="col-12">
+          <label for="modelFormControlInput" class="form-label">Model:</label>
+          <input
+            id="model-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="modelinput"
+            disabled
+            value="{{prompt_collection['model_name']}}"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -434,59 +442,61 @@
   }
 </style>
 
-<div class="row mb-5">
-  <div id="prompt-info" class="col-6">
-    <h3>{{prompt_collection['topic']}}</h3>
-    <p>
-      <small>Created <span id="prompt-created-date"></span></small>
-    </p>
-    <p id="prompt-description"></p>
-  </div>
-  <div class="col-6">
-    {% if current_user.is_authenticated %}
-    <button id="heart-button" type="button" class="btn btn-outline-secondary">
-      {%if liked%}
-      <i class="bi bi-heart-fill text-danger"></i>
-      {%else%}
-      <i class="bi bi-heart-fill"></i>
-      {%endif%}
-      <span id="heart-amount">{{prompt_collection['likes']}}</span>
-    </button>
-
-    <button
-      id="bookmark-button"
-      type="button"
-      class="btn btn-outline-secondary"
-    >
-      {%if bookmarked%}
-      <i class="bi bi-bookmark-fill text-danger"></i>
-      {%else%}
-      <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
-      {%endif%}
-    </button>
-    {% if creator["profile_name"] == current_user.get_profile_name() %}
-
-    <div class="col-3">
-      <a
-        class="btn btn-primary w-100"
-        href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
-      >
-        <i class="bi bi-pencil-square"></i>
-        Edit
-      </a>
+<div class="container">
+  <div class="row mb-5">
+    <div id="prompt-info" class="col-6">
+      <h3>{{prompt_collection['topic']}}</h3>
+      <p>
+        <small>Created <span id="prompt-created-date"></span></small>
+      </p>
+      <p id="prompt-description"></p>
     </div>
+    <div class="col-6">
+      {% if current_user.is_authenticated %}
+      <button id="heart-button" type="button" class="btn btn-outline-secondary">
+        {%if liked%}
+        <i class="bi bi-heart-fill text-danger"></i>
+        {%else%}
+        <i class="bi bi-heart-fill"></i>
+        {%endif%}
+        <span id="heart-amount">{{prompt_collection['likes']}}</span>
+      </button>
 
-    <div class="col-3">
-      <a
-        class="btn btn-outline-danger w-100"
-        href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+      <button
+        id="bookmark-button"
+        type="button"
+        class="btn btn-outline-secondary"
       >
-        <i class="bi bi-trash3"></i>
+        {%if bookmarked%}
+        <i class="bi bi-bookmark-fill text-danger"></i>
+        {%else%}
+        <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+        {%endif%}
+      </button>
+      {% if creator["profile_name"] == current_user.get_profile_name() %}
 
-        Destroy
-      </a>
+      <div class="col-3">
+        <a
+          class="btn btn-primary w-100"
+          href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+        >
+          <i class="bi bi-pencil-square"></i>
+          Edit
+        </a>
+      </div>
+
+      <div class="col-3">
+        <a
+          class="btn btn-outline-danger w-100"
+          href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+        >
+          <i class="bi bi-trash3"></i>
+
+          Destroy
+        </a>
+      </div>
+      {%endif%} {%endif%}
     </div>
-    {%endif%} {%endif%}
   </div>
 </div>
 
@@ -693,22 +703,24 @@
 <div class="swiper-pagination invisible"></div>
 <!-- END: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
 
-<div class="my-5 mt-5 d-flex">
-  <h2 class="me-3">Comment</h2>
+<div class="container">
+  <div class="my-5 mt-5 d-flex">
+    <h2 class="me-3">Comment</h2>
 
-  {% if current_user.is_authenticated %}
-  <button type="button" class="btn btn-outline-primary">
-    <a
-      class="dropdown-item"
-      href="/en/ai_hub/comment/prompt_collection/{{prompt_collection['slug']}}"
-    >
-      Add Comment
-    </a>
-  </button>
-  {% endif %}
+    {% if current_user.is_authenticated %}
+    <button type="button" class="btn btn-outline-primary">
+      <a
+        class="dropdown-item"
+        href="/en/ai_hub/comment/prompt_collection/{{prompt_collection['slug']}}"
+      >
+        Add Comment
+      </a>
+    </button>
+    {% endif %}
+  </div>
+
+  <div id="comments" class="my-5 row"></div>
 </div>
-
-<div id="comments" class="my-5 row"></div>
 
 <!-- Comment template -->
 <style media="screen">

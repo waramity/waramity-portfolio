@@ -1,57 +1,59 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
 
-<div class="row mb-3">
-  <div class="my-3 text-danger">
-    <span id="error-message" class=""></span>
+<div class="container">
+  <div class="row mb-3">
+    <div class="my-3 text-danger">
+      <span id="error-message" class=""></span>
+    </div>
+    <div class="col-10">
+      <h2>อัพโหลด Prompt ของคุณ</h2>
+    </div>
+
+    <div class="col-2">
+      <button
+        id="submit-upload-button"
+        type="button"
+        class="btn btn-outline-primary w-100"
+      >
+        อัพโหลด
+      </button>
+    </div>
   </div>
-  <div class="col-10">
-    <h2>อัพโหลด Prompt ของคุณ</h2>
+  <div class="mb-5">
+    <label for="topic-input" class="form-label">
+      Topic <span class="text-danger">*</span>
+    </label>
+    <input
+      id="topic-input"
+      class="form-control mb-3"
+      type="text"
+      maxlength="32"
+    />
+    <label for="description-textarea" class="form-label">รายละเอียด</label>
+    <textarea
+      class="form-control mb-3"
+      id="description-textarea"
+      rows="3"
+      maxlength="188"
+    ></textarea>
+
+    <label for="model-input" class="form-label">
+      Model ที่ใช้
+    </label>
+    <input
+      id="model-input"
+      class="form-control"
+      type="text"
+      aria-label=".form-controlg example"
+      maxlength="100"
+    />
   </div>
 
-  <div class="col-2">
-    <button
-      id="submit-upload-button"
-      type="button"
-      class="btn btn-outline-primary w-100"
-    >
-      อัพโหลด
-    </button>
+  <div class="dropzone">
+    <p>Drag and drop images here or click to select files</p>
   </div>
+  <div class="prompt-container"></div>
 </div>
-<div class="mb-5">
-  <label for="topic-input" class="form-label">
-    Topic <span class="text-danger">*</span>
-  </label>
-  <input
-    id="topic-input"
-    class="form-control mb-3"
-    type="text"
-    maxlength="32"
-  />
-  <label for="description-textarea" class="form-label">รายละเอียด</label>
-  <textarea
-    class="form-control mb-3"
-    id="description-textarea"
-    rows="3"
-    maxlength="188"
-  ></textarea>
-
-  <label for="model-input" class="form-label">
-    Model ที่ใช้
-  </label>
-  <input
-    id="model-input"
-    class="form-control"
-    type="text"
-    aria-label=".form-controlg example"
-    maxlength="100"
-  />
-</div>
-
-<div class="dropzone">
-  <p>Drag and drop images here or click to select files</p>
-</div>
-<div class="prompt-container"></div>
 
 <template id="prompt-item-dropzone-template">
   <div class="row mb-3">

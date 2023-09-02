@@ -9,89 +9,91 @@
   }
 </style>
 
-<div class="my-3 text-danger">
-  <span id="error-message" class=""></span>
-</div>
+<div class="container">
+  <div class="my-3 text-danger">
+    <span id="error-message" class=""></span>
+  </div>
 
-{% if current_user.is_authenticated and profile_name ==
-current_user.get_profile_name() %}
-<h1 class="mb-3">
-  โปรไฟล์ของฉัน
-</h1>
+  {% if current_user.is_authenticated and profile_name ==
+  current_user.get_profile_name() %}
+  <h1 class="mb-3">
+    โปรไฟล์ของฉัน
+  </h1>
 
-{%endif%}
+  {%endif%}
 
-<div class="row mb-4">
-  <div class="my-3 col-12 col-lg-2">
-    <div class="image-container">
-      <img src="{{user['image_url']}}" class="img-fluid" />
+  <div class="row mb-4">
+    <div class="my-3 col-12 col-lg-2">
+      <div class="image-container">
+        <img src="{{user['image_url']}}" class="img-fluid" />
+      </div>
     </div>
-  </div>
-  <div class="my-3 col-12 col-lg-7">
-    <h4 class="text-muted">Profile</h4>
-    <h1 class="mb-4">
-      {{user['profile_name']}}
-    </h1>
-    <p class="text-muted">
-      {{user['description']}}
-    </p>
-    <p class="text-muted">
-      Following:
-      <span>{{user['total_engagement']['followings']}}</span>
-      Follower:
-      <span>{{user['total_engagement']['followers']}}</span>
-    </p>
-  </div>
-  <div class="my-2 col-12 col-lg-3">
-    {% if current_user.is_authenticated and current_user.get_profile_name() !=
-    profile_name %} {%if followed%}
-    <button id="follow-button" type="button" class="btn btn-outline-primary">
-      Unfollow
-    </button>
-    {%else%}
-    <button id="follow-button" type="button" class="btn btn-primary">
-      Follow
-    </button>
-    {%endif%} {%endif%}
-    <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Total engagement</h5>
-        <p class="card-text">
-          {{user['total_engagement']['likes']}} Likes
-        </p>
-        <p class="card-text">
-          {{user['total_engagement']['bookmarks']}} Bookmarks
-        </p>
-        <p class="card-text">
-          {{user['total_engagement']['comments']}} Comments
-        </p>
+    <div class="my-3 col-12 col-lg-7">
+      <h4 class="text-muted">Profile</h4>
+      <h1 class="mb-4">
+        {{user['profile_name']}}
+      </h1>
+      <p class="text-muted">
+        {{user['description']}}
+      </p>
+      <p class="text-muted">
+        Following:
+        <span>{{user['total_engagement']['followings']}}</span>
+        Follower:
+        <span>{{user['total_engagement']['followers']}}</span>
+      </p>
+    </div>
+    <div class="my-2 col-12 col-lg-3">
+      {% if current_user.is_authenticated and current_user.get_profile_name() !=
+      profile_name %} {%if followed%}
+      <button id="follow-button" type="button" class="btn btn-outline-primary">
+        Unfollow
+      </button>
+      {%else%}
+      <button id="follow-button" type="button" class="btn btn-primary">
+        Follow
+      </button>
+      {%endif%} {%endif%}
+      <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Total engagement</h5>
+          <p class="card-text">
+            {{user['total_engagement']['likes']}} Likes
+          </p>
+          <p class="card-text">
+            {{user['total_engagement']['bookmarks']}} Bookmarks
+          </p>
+          <p class="card-text">
+            {{user['total_engagement']['comments']}} Comments
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-12 mb-5">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a
-          id="prompt-collection-nav"
-          class="nav-link active disabled"
-          onclick="togglePromptCollection()"
-          >Prompt collection</a
-        >
-      </li>
-    </ul>
-  </div>
-  <div id="main" class="col-12 mb-5">
-    <div id="collections" class="row g-4"></div>
-
-    <div class="mb-5 text-center">
-      <div id="nav-spinner" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+  <div class="row">
+    <div class="col-12 mb-5">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a
+            id="prompt-collection-nav"
+            class="nav-link active disabled"
+            onclick="togglePromptCollection()"
+            >Prompt collection</a
+          >
+        </li>
+      </ul>
     </div>
-    <div class="mb-5 text-center">
-      <span id="message" class=""></span>
+    <div id="main" class="col-12 mb-5">
+      <div id="collections" class="row g-4"></div>
+
+      <div class="mb-5 text-center">
+        <div id="nav-spinner" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div class="mb-5 text-center">
+        <span id="message" class=""></span>
+      </div>
     </div>
   </div>
 </div>
