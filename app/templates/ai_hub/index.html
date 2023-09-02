@@ -157,9 +157,13 @@
         });
 
         if(payload[i]["like"]) {
+          $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
+          $(`div#${prompt_id} button#like-button`).toggleClass("text-danger");
+
           const likeButton = prompt_template_clone.querySelector("#like-button");
           likeButton.classList.add("text-danger");
-          $(`.bi-heart-fill`).addClass("text-danger");
+          const likeCountHeart = prompt_template_clone.querySelector(".bi-heart-fill");
+          likeCountHeart.classList.add("text-danger");
         }
 
       {%endif%}
