@@ -55,7 +55,17 @@ def index():
 @ai_hub.route('/get-prompts/<int:page_index>', methods=["GET"])
 def get_prompts(page_index):
     prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}).sort('created_date', -1).skip(page_index).limit(page_index * 25))
-    return make_response(jsonify({"status": 0, 'prompts': prompts}), 200)
+    prompt_payload = []
+    for prompt in prompts:
+        user = user_db.profile.find_one({'_id': prompt['user_id']})
+        if user:
+            combined_object = {
+                'prompt': prompt,
+                'user': user
+            }
+            prompt_payload.append(combined_object)
+
+    return make_response(jsonify({"status": 0, 'payload': prompt_payload}), 200)
 
 
 @ai_hub.route('/logout')
