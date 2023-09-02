@@ -54,16 +54,29 @@ def index():
 
 @ai_hub.route('/get-prompts/<int:page_index>', methods=["GET"])
 def get_prompts(page_index):
-    prompts = list(feature_db.prompt_collection.find({}, {'_id': 0}).sort('created_date', -1).skip(page_index).limit(page_index * 25))
+    prompts = list(feature_db.prompt_collection.find().sort('created_date', -1).skip(page_index).limit(page_index * 25))
     prompt_payload = []
     for prompt in prompts:
+        print(prompt)
         user = user_db.profile.find_one({'_id': prompt['user_id']})
         if user:
-            combined_object = {
-                'prompt': prompt,
-                'user': user
-            }
-            prompt_payload.append(combined_object)
+            if current_user.is_authenticated:
+                like = feature_db.engagement.find_one({'item_id': prompt['_id'], 'user_id': current_user.get_id(), 'engage_type': 'like', 'item_type': 'prompt_collection'})
+                prompt.pop("_id")
+                combined_object = {
+                    'prompt': prompt,
+                    'user': user,
+                    'like': False
+                }
+                if like:
+                    combined_object['like'] = True
+            else:
+                prompt.pop("_id")
+                combined_object = {
+                    'prompt': prompt,
+                    'user': user
+                }
+        prompt_payload.append(combined_object)
 
     return make_response(jsonify({"status": 0, 'payload': prompt_payload}), 200)
 

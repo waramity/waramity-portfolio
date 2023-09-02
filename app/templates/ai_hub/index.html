@@ -120,8 +120,6 @@
         "#topic"
       ).innerHTML = `${payload[i]["prompt"]["topic"]}`;
 
-      console.log(payload[i]["prompt"])
-
       prompt_template_clone.querySelector(
         "#image"
       ).src = `${payload[i]["prompt"]["prompts"][0]["image_url"]}`;
@@ -158,6 +156,13 @@
           likePrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
           toggleLike(prompt_id);
         });
+
+        console.log(payload[i])
+
+        if(payload[i]["like"]) {
+          const likeButton = prompt_template_clone.querySelector("#like-button");
+          likeButton.classList.add("text-danger");
+        }
 
       {%endif%}
 
