@@ -71,7 +71,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12 mb-5">
+    <div class="col-12 mb-5 position-absolute invisible">
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a
@@ -296,15 +296,6 @@
     $(element_id).toggleClass("active disabled");
     removeCollections();
     removeMessage();
-  }
-
-  async function togglePromptBuilder() {
-    toggleButton("#prompt-builder-nav");
-
-    $("#nav-spinner").removeClass("invisible");
-
-    await getPromptBuilder();
-    $("#nav-spinner").addClass("invisible");
   }
 
   async function togglePromptCollection() {
