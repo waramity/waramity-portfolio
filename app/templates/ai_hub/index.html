@@ -140,7 +140,6 @@
         "span#likes"
       ).id = `likes-${prompt_id}`;
 
-
       {% if current_user.is_authenticated %}
 
       prompt_template_clone
@@ -160,10 +159,10 @@
         if(payload[i]["like"]) {
           const likeButton = prompt_template_clone.querySelector("#like-button");
           likeButton.classList.add("text-danger");
+          $(`.bi-heart-fill`).addClass("text-danger");
         }
 
       {%endif%}
-
 
       formatTimeDifference(
         `${payload[i]["prompt"]["updated_date"]}`,
@@ -205,7 +204,7 @@
     if (data["status"] != 0) {
       return;
     } else {
-      console.error("error bookmark")
+      console.error("error like")
     }
   }
 </script>
@@ -249,6 +248,7 @@
     }
 
     $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
+    $(`div#${prompt_id} button#like-button`).toggleClass("text-danger");
     $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
   }
 </script>
