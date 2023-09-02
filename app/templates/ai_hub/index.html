@@ -140,6 +140,14 @@
         "span#likes"
       ).id = `likes-${prompt_id}`;
 
+      prompt_template_clone.querySelector(
+        "i#like-count"
+      ).id = `like-count-${prompt_id}`;
+
+      prompt_template_clone.querySelector(
+        "button#like-button"
+      ).id = `like-button-${prompt_id}`;
+
       {% if current_user.is_authenticated %}
 
       prompt_template_clone
@@ -150,16 +158,16 @@
         });
 
       prompt_template_clone
-        .querySelector("#like-button")
+        .querySelector(`#like-button-${prompt_id}`)
         .addEventListener("click", function () {
           likePrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
           toggleLike(prompt_id);
         });
 
         if(payload[i]["like"]) {
-          const likeButton = prompt_template_clone.querySelector("#like-button");
+          const likeButton = prompt_template_clone.querySelector(`#like-button-${prompt_id}`);
           likeButton.classList.add("text-danger");
-          const likeCountHeart = prompt_template_clone.querySelector("#like-count");
+          const likeCountHeart = prompt_template_clone.querySelector(`#like-count-${prompt_id}`);
           likeCountHeart.classList.add("text-danger");
         }
 
@@ -246,16 +254,35 @@
 
   function toggleLike(prompt_id) {
     let likes_count;
-    if ($(`div#${prompt_id} button#like-button`).hasClass("text-danger")) {
+    console.log("kuy");
+    if (
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).hasClass(
+        "text-danger"
+      )
+    ) {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
-      $(`div#${prompt_id} i#like-count`).removeClass("text-danger");
-      $(`div#${prompt_id} button#like-button`).removeClass("text-danger");
+      $(`div#${prompt_id} i#like-count-${prompt_id}`).removeClass(
+        "text-danger"
+      );
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).removeClass(
+        "text-danger"
+      );
+
+      console.log("sus");
     } else {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
-      $(`div#${prompt_id} i#like-count`).addClass("text-danger");
-      $(`div#${prompt_id} button#like-button`).addClass("text-danger");
+      $(`div#${prompt_id} i#like-count-${prompt_id}`).addClass("text-danger");
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).addClass(
+        "text-danger"
+      );
+
+      console.log("here");
+      console.log(prompt_id);
+      console.log($(`div#${prompt_id} i#like-count-${prompt_id}`));
+      console.log($(`div#${prompt_id} button#like-button-${prompt_id}`));
+      console.log($(`div#${prompt_id} `));
     }
 
     $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
