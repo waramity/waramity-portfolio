@@ -109,6 +109,9 @@
       let prompt_template = document.querySelector("#prompt-template");
       let prompt_template_clone = prompt_template.content.cloneNode(true);
 
+      const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+      let prompt_id = prompts[i]["slug"] + genRanHex(6)
+
       prompt_template_clone.querySelector(
         "#link"
       ).href = `/en/ai_hub/prompt-collection/${prompts[i]["slug"]}`;
@@ -131,20 +134,24 @@
 
       prompt_template_clone.querySelector(
         ".prompt-item"
-      ).id = `${prompts[i]["slug"]}`;
+      ).id = `${prompt_id}`;
+
+      prompt_template_clone.querySelector(
+        "span#likes"
+      ).id = `likes-${prompt_id}`;
 
       {% if current_user.is_authenticated %}
 
       prompt_template_clone
         .querySelector("#bookmark-button")
         .addEventListener("click", function () {
-          toggleBookmark(prompts[i]["slug"]);
+          toggleBookmark(prompt_id);
         });
 
       prompt_template_clone
         .querySelector("#like-button")
         .addEventListener("click", function () {
-          toggleLike(prompts[i]["slug"]);
+          toggleLike(prompt_id);
         });
 
       {%endif%}
@@ -197,14 +204,18 @@
 
   function toggleLike(prompt_id) {
     let likes_count
+    console.log('kuy')
+    console.log($(`div#${prompt_id} .bi-heart-fill`))
+    console.log(`${prompt_id}`)
+    console.log($(`div#${prompt_id} span#likes`).html())
     if ($(`div#${prompt_id} .bi-heart-fill`).hasClass("text-danger")) {
-      likes_count = parseInt($(`div#${prompt_id} span#likes`).html()) - 1;
+      likes_count = parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
     } else {
-      likes_count = parseInt($(`div#${prompt_id} span#likes`).html()) + 1;
+      likes_count = parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
     }
 
     $(`div#${prompt_id} .bi-heart-fill`).toggleClass("text-danger");
-    $(`div#${prompt_id} span#likes`).html(`${likes_count}`);
+    $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
   }
 </script>
 
