@@ -144,6 +144,9 @@
         "i#like-count"
       ).id = `like-count-${prompt_id}`;
 
+
+      {% if current_user.is_authenticated %}
+
       prompt_template_clone.querySelector(
         "button#like-button"
       ).id = `like-button-${prompt_id}`;
@@ -152,7 +155,6 @@
         "button#bookmark-button"
       ).id = `bookmark-button-${prompt_id}`;
 
-      {% if current_user.is_authenticated %}
 
       prompt_template_clone
         .querySelector(`#bookmark-button-${prompt_id}`)
@@ -191,6 +193,7 @@
       let prompt_container = document.querySelector(
         `#prompt-container-${prompt_column_count}`
       );
+
       prompt_container.appendChild(prompt_template_clone.children[0]);
       prompt_column_count += 1;
       if (prompt_column_count == LIMIT_COLUMN) {

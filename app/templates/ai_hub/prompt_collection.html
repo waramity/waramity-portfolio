@@ -91,13 +91,56 @@
   }
 </style>
 
-<div class="container">
+<div class="container mb-5">
   <div class="my-3 text-danger">
     <span id="error-message" class=""></span>
   </div>
   <div class="row mb-2">
     <div class="col-7">
       <div class="row">
+        <div class="col-12">
+          <div class="row mb-5">
+            <div class="col-1">
+              <a
+                href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+              >
+                <div class="image-container">
+                  <img src="{{creator['image_url']}}" class="img-fluid" />
+                </div>
+              </a>
+            </div>
+            <div class="col-5">
+              <a
+                href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+                class="text-decoration-none text-black"
+              >
+                <p>{{creator["profile_name"]}}</p>
+                <p>Joined <span id="creator-registered-on"></span></p>
+              </a>
+            </div>
+            <div class="col-4">
+              {% if current_user.is_authenticated %} {% if
+              creator["profile_name"] != current_user.get_profile_name() %} {%if
+              followed%}
+              <button
+                id="follow-button"
+                type="button"
+                class="btn btn-outline-primary w-100"
+              >
+                Unfollow
+              </button>
+              {%else%}
+              <button
+                id="follow-button"
+                type="button"
+                class="btn btn-primary w-100"
+              >
+                Follow
+              </button>
+              {%endif%} {%endif%} {%endif%}
+            </div>
+          </div>
+        </div>
         <div class="col-1 my-auto">
           <div class="swiper-button-prev prompt-swiper-button-prev"></div>
         </div>
@@ -134,47 +177,6 @@
     </div>
 
     <div class="col-5">
-      <div class="row mb-5">
-        <div class="col-3">
-          <a
-            href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
-          >
-            <div class="image-container">
-              <img src="{{creator['image_url']}}" class="img-fluid" />
-            </div>
-          </a>
-        </div>
-        <div class="col-5">
-          <a
-            href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
-            class="text-decoration-none text-black"
-          >
-            <p>{{creator["profile_name"]}}</p>
-            <p>Joined <span id="creator-registered-on"></span></p>
-          </a>
-        </div>
-        <div class="col-4">
-          {% if current_user.is_authenticated %} {% if creator["profile_name"]
-          != current_user.get_profile_name() %} {%if followed%}
-          <button
-            id="follow-button"
-            type="button"
-            class="btn btn-outline-primary w-100"
-          >
-            Unfollow
-          </button>
-          {%else%}
-          <button
-            id="follow-button"
-            type="button"
-            class="btn btn-primary w-100"
-          >
-            Follow
-          </button>
-          {%endif%} {%endif%} {%endif%}
-        </div>
-      </div>
-
       <div class="row">
         <div class="col-12">
           <div class="row mb-2">
