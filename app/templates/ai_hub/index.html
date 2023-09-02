@@ -56,7 +56,7 @@
           <h2 id="topic"></h2>
           <small id="updated_date" class="fs-6 me-2"></small>
 
-          <i class="bi bi-heart-fill"></i>
+          <i id="like-count" class="bi bi-heart-fill"></i>
           <span id="likes"></span>
         </div>
         <div class="col-6 text-end">
@@ -159,7 +159,7 @@
         if(payload[i]["like"]) {
           const likeButton = prompt_template_clone.querySelector("#like-button");
           likeButton.classList.add("text-danger");
-          const likeCountHeart = prompt_template_clone.querySelector(".bi-heart-fill");
+          const likeCountHeart = prompt_template_clone.querySelector("#like-count");
           likeCountHeart.classList.add("text-danger");
         }
 
@@ -246,15 +246,15 @@
 
   function toggleLike(prompt_id) {
     let likes_count;
-    if ($(`div#${prompt_id} .bi-heart-fill`).hasClass("text-danger")) {
+    if ($(`div#${prompt_id} button#like-button`).hasClass("text-danger")) {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
-      $(`div#${prompt_id} .bi-heart-fill`).removeClass("text-danger");
+      $(`div#${prompt_id} i#like-count`).removeClass("text-danger");
       $(`div#${prompt_id} button#like-button`).removeClass("text-danger");
     } else {
       likes_count =
         parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
-      $(`div#${prompt_id} .bi-heart-fill`).addClass("text-danger");
+      $(`div#${prompt_id} i#like-count`).addClass("text-danger");
       $(`div#${prompt_id} button#like-button`).addClass("text-danger");
     }
 

@@ -54,7 +54,7 @@ def index():
 
 @ai_hub.route('/get-prompts/<int:page_index>', methods=["GET"])
 def get_prompts(page_index):
-    prompts = list(feature_db.prompt_collection.find().sort('created_date', -1).skip(page_index).limit(page_index * 25))
+    prompts = list(feature_db.prompt_collection.find().sort('created_date', -1).skip(page_index).limit(page_index * 9))
     prompt_payload = []
     for prompt in prompts:
         user = user_db.profile.find_one({'_id': prompt['user_id']})
