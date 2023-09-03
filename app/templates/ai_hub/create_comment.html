@@ -1,69 +1,72 @@
 {% extends "ai_hub/_base.html" %} {% block content %}
 
-<div class="row mb-3">
-  <div class="my-3 text-danger">
-    <span id="error-message" class=""></span>
-  </div>
-  <div class="col-10">
-    <h2 class="mb-4">
-      Add comment
-    </h2>
+<div class="container">
+  <div class="row mb-3">
+    <div class="my-3 text-danger">
+      <span id="error-message" class=""></span>
+    </div>
+    <div class="col-10">
+      <h2 class="mb-4">
+        Add comment
+      </h2>
+    </div>
+
+    <div class="col-2">
+      <button
+        id="submit-comment-button"
+        type="button"
+        class="btn btn-outline-primary w-100"
+      >
+        Comment
+      </button>
+    </div>
   </div>
 
-  <div class="col-2">
-    <button
-      id="submit-comment-button"
-      type="button"
-      class="btn btn-outline-primary w-100"
-    >
-      Comment
-    </button>
+  <textarea
+    class="form-control"
+    id="comment-textarea"
+    rows="3"
+    placeholder="ต่ำกว่า 150 ตัวอักษร (Optional)"
+    maxlength="150"
+  ></textarea>
+
+  <script type="text/javascript">
+    function showErrorMessage(error_message) {
+      $('span[id="error-message"]').text("* " + error_message);
+    }
+
+    function removeErrorMessage() {
+      $('span[id="error-message"]').text("");
+    }
+
+    function showMessage(message) {
+      $('span[id="message"]').text("" + message);
+    }
+
+    function removeMessage() {
+      $('span[id="message"]').text("");
+    }
+  </script>
+
+  <!-- dropzone -->
+  <style media="screen">
+    .dropzone {
+      border: 2px dashed gray;
+      padding: 20px;
+      text-align: center;
+      margin: 20px;
+    }
+    .prompt-container {
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+  </style>
+  <div class="dropzone">
+    <p>Drag and drop images here or click to select files</p>
   </div>
+  <div class="prompt-container"></div>
 </div>
 
-<textarea
-  class="form-control"
-  id="comment-textarea"
-  rows="3"
-  placeholder="ต่ำกว่า 150 ตัวอักษร (Optional)"
-  maxlength="150"
-></textarea>
-
-<script type="text/javascript">
-  function showErrorMessage(error_message) {
-    $('span[id="error-message"]').text("* " + error_message);
-  }
-
-  function removeErrorMessage() {
-    $('span[id="error-message"]').text("");
-  }
-
-  function showMessage(message) {
-    $('span[id="message"]').text("" + message);
-  }
-
-  function removeMessage() {
-    $('span[id="message"]').text("");
-  }
-</script>
-
-<!-- dropzone -->
-<style media="screen">
-  .dropzone {
-    border: 2px dashed gray;
-    padding: 20px;
-    text-align: center;
-    margin: 20px;
-  }
-  .prompt-container {
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
-</style>
-<div class="dropzone">
-  <p>Drag and drop images here or click to select files</p>
-</div>
-<div class="prompt-container"></div>
 <template id="prompt-item-dropzone-template">
   <div class="row mb-3">
     <div class="col-2">
