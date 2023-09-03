@@ -199,7 +199,7 @@
             <button
               id="heart-button"
               type="button"
-              class="btn btn-outline-secondary border-0"
+              class="btn btn-outline-secondary border-0 fs-5"
             >
               {%if liked%}
               <i class="bi bi-heart-fill text-danger"></i>
@@ -212,10 +212,10 @@
             <button
               id="bookmark-button"
               type="button"
-              class="btn btn-outline-secondary border-0"
+              class="btn btn-outline-secondary border-0 fs-5"
             >
               {%if bookmarked%}
-              <i class="bi bi-bookmark-fill text-danger"></i>
+              <i class="bi bi-bookmark-fill text-warning"></i>
               {%else%}
               <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
               {%endif%}
@@ -584,7 +584,7 @@
   });
 
   function toggleBookmarkButton() {
-    $(".bi-bookmark-fill").toggleClass("text-danger");
+    $(".bi-bookmark-fill").toggleClass("text-warning");
   }
 
   function promptCollectionBookmark() {
