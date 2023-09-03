@@ -1,43 +1,51 @@
 [
   {
     "title": "Programming Languages",
-    "labels": ["Python", "Javascript", "HTML", "CSS"],
-    "images": ["python.png", "javascript.png", "html.png", "css.png"]
+    "labels": ["Python", "Javascript", "HTML", "CSS", "Swift"],
+    "images": [
+      "python.png",
+      "javascript.png",
+      "html.png",
+      "css.png",
+      "swift.webp"
+    ]
   },
   {
-    "title": "Web & Mobile Development",
+    "title": "Web Development",
     "labels": [
       "JQuery",
-      "SCSS",
       "TypeScript",
       "Babel",
       "Flask",
-      "SQLAlchemy",
-      "React",
-      "React Native",
-      "Expo",
       "Socket.io",
-      "Tailwind CSS",
+      "React",
       "Vue",
-      "Mongo DB",
-      "PostgreSQL"
+      "SCSS",
+      "Tailwind CSS",
+      "Bootstrap"
     ],
     "images": [
       "jquery.png",
-      "scss.png",
       "type-script.png",
       "babel.png",
       "flask.png",
-      "sqlalchemy.png",
-      "react.png",
-      "react-native.jpeg",
-      "expo.png",
       "socket-io.png",
-      "tailwind.png",
+      "react.png",
       "vue.png",
-      "mongo.jpg",
-      "postgres.png"
+      "scss.png",
+      "tailwind.png",
+      "bootstrap.webp"
     ]
+  },
+  {
+    "title": "Mobile Development",
+    "labels": ["React Native", "Expo"],
+    "images": ["react-native.jpeg", "expo.png"]
+  },
+  {
+    "title": "Database",
+    "labels": ["SQLAlchemy", "Mongo DB", "PostgreSQL"],
+    "images": ["sqlalchemy.png", "mongo.jpg", "postgres.png"]
   },
   {
     "title": "Machine Learning & AI",
