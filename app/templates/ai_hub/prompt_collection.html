@@ -191,7 +191,7 @@
 
     <div class="col-5">
       <div class="row mb-5">
-        <div id="prompt-info" class="col-6">
+        <div id="prompt-info" class="col-12">
           <div class="d-flex">
             <h3>{{prompt_collection['topic']}}</h3>
             {% if current_user.is_authenticated %}
@@ -228,35 +228,11 @@
           </p>
           <p id="prompt-description"></p>
         </div>
-        <div class="col-6">
-          {% if current_user.is_authenticated %}
-          <button
-            id="heart-button"
-            type="button"
-            class="btn btn-outline-secondary"
-          >
-            {%if liked%}
-            <i class="bi bi-heart-fill text-danger"></i>
-            {%else%}
-            <i class="bi bi-heart-fill"></i>
-            {%endif%}
-            <span id="heart-amount">{{prompt_collection['likes']}}</span>
-          </button>
+        <div class="col-12 row">
+          {% if current_user.is_authenticated %} {% if creator["profile_name"]
+          == current_user.get_profile_name() %}
 
-          <button
-            id="bookmark-button"
-            type="button"
-            class="btn btn-outline-secondary"
-          >
-            {%if bookmarked%}
-            <i class="bi bi-bookmark-fill text-danger"></i>
-            {%else%}
-            <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
-            {%endif%}
-          </button>
-          {% if creator["profile_name"] == current_user.get_profile_name() %}
-
-          <div class="col-3">
+          <div class="col-6">
             <a
               class="btn btn-primary w-100"
               href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
@@ -266,7 +242,7 @@
             </a>
           </div>
 
-          <div class="col-3">
+          <div class="col-6">
             <a
               class="btn btn-outline-danger w-100"
               href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
