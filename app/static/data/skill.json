@@ -1,0 +1,71 @@
+[
+  {
+    "title": "Programming Languages",
+    "labels": ["Python", "Javascript", "HTML", "CSS", "Swift"],
+    "images": [
+      "python.png",
+      "javascript.png",
+      "html.png",
+      "css.png",
+      "swift.webp"
+    ]
+  },
+  {
+    "title": "Web Development",
+    "labels": [
+      "JQuery",
+      "TypeScript",
+      "Babel",
+      "Flask",
+      "Socket.io",
+      "React",
+      "Vue",
+      "SCSS",
+      "Tailwind CSS",
+      "Bootstrap"
+    ],
+    "images": [
+      "jquery.png",
+      "type-script.png",
+      "babel.png",
+      "flask.png",
+      "socket-io.png",
+      "react.png",
+      "vue.png",
+      "scss.png",
+      "tailwind.png",
+      "bootstrap.webp"
+    ]
+  },
+  {
+    "title": "Mobile Development",
+    "labels": ["React Native", "Expo"],
+    "images": ["react-native.jpeg", "expo.png"]
+  },
+  {
+    "title": "Database",
+    "labels": ["SQLAlchemy", "Mongo DB", "PostgreSQL"],
+    "images": ["sqlalchemy.png", "mongo.jpg", "postgres.png"]
+  },
+  {
+    "title": "Machine Learning & AI",
+    "labels": ["Stable Diffusion", "TensorFlow"],
+    "images": ["stable-diffusion.png", "tensorflow.png"]
+  },
+  {
+    "title": "Cloud Services",
+    "labels": ["Docker", "Kubertenes", "Digital Ocean", "Heroku", "GoDaddy"],
+    "images": [
+      "docker.webp",
+      "kubernetes.png",
+      "digital-ocean.png",
+      "heroku.png",
+      "go-daddy.png"
+    ]
+  },
+  {
+    "title": "Authentication",
+    "labels": ["OAuth", "LINE Official Account"],
+    "images": ["oauth.png", "line-official-account.png"]
+  }
+]
