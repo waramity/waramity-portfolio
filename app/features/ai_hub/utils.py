@@ -6,6 +6,7 @@ import os
 import time
 from app import user_db, feature_db
 import re
+from flask_login import current_user
 
 def is_valid_permission(profile_name, slug):
     prompt_collection = feature_db.prompt_collection.find_one({'slug': slug})
