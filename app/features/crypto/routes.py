@@ -26,8 +26,3 @@ def before_request():
 @crypto.route('/crypto')
 def index():
     return render_template('crypto/index.html', title=_('waramity portfolio'))
-
-@crypto.route("/crypto/greeting") # Blueprints don't use the Flask "app" context. They use their own
-def greeting():
-    # print('nahee')
-    return jsonify({'greeting': 'Hello from Flask!'})

@@ -5,9 +5,6 @@ from flask_socketio import SocketIO
 #         socketio.sleep(10)
 #         socketio.emit('ping')
 #
-# def ping():
-#     print('ping')
-#     socketio.emit('ping', {'message': 'ping'}, broadcast=True)
 
 socketio = SocketIO()
 
