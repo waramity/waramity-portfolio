@@ -89,6 +89,15 @@
   .prompt-swiper-pagination {
     position: static;
   }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: inherit; /* Use the default background color or your desired color */
+    color: inherit; /* Use the default text color or your desired color */
+    text-decoration: none; /* Remove any text decoration on hover (e.g., underline) */
+    --bs-btn-active-bg: none;
+  }
 </style>
 
 <div class="container mb-5">
@@ -183,7 +192,37 @@
     <div class="col-5">
       <div class="row mb-5">
         <div id="prompt-info" class="col-6">
-          <h3>{{prompt_collection['topic']}}</h3>
+          <div class="d-flex">
+            <h3>{{prompt_collection['topic']}}</h3>
+            {% if current_user.is_authenticated %}
+
+            <button
+              id="heart-button"
+              type="button"
+              class="btn btn-outline-secondary border-0"
+            >
+              {%if liked%}
+              <i class="bi bi-heart-fill text-danger"></i>
+              {%else%}
+              <i class="bi bi-heart-fill"></i>
+              {%endif%}
+              <span id="heart-amount">{{prompt_collection['likes']}}</span>
+            </button>
+
+            <button
+              id="bookmark-button"
+              type="button"
+              class="btn btn-outline-secondary border-0"
+            >
+              {%if bookmarked%}
+              <i class="bi bi-bookmark-fill text-danger"></i>
+              {%else%}
+              <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+              {%endif%}
+            </button>
+            {%endif%}
+          </div>
+
           <p>
             <small>Created <span id="prompt-created-date"></span></small>
           </p>
