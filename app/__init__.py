@@ -90,3 +90,13 @@ with app.app_context():
     social_generator()
     gender_generator()
     passion_generator()
+
+    # Check the connection status
+    try:
+        server_info = mongo_client.server_info()
+        if server_info.get('ok') == 1:
+            print("Connected to MongoDB")
+        else:
+            print("Failed to connect to MongoDB")
+    except Exception as e:
+        print("Error:", str(e))
