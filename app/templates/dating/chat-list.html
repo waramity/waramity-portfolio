@@ -1,0 +1,173 @@
+<style media="screen">
+  #chat-list a {
+    color: #e9ecef;
+    background-color: #212529;
+  }
+
+  #chat-list a.active {
+    color: #f8f9fa;
+    background-color: #343a40;
+  }
+</style>
+
+<div class="container p-3">
+  <h1 class="text-white m-3">Chat</h1>
+  <hr class="border border-secondary mb-4" />
+
+  <div id="chat-list" class="list-group ms-3 me-3"></div>
+</div>
+
+<template id="chat-item-template">
+  <a
+    id="chat-item__link"
+    href="#"
+    class="list-group-item list-group-item-action border border-secondary list-group-item-dark"
+    aria-current="true"
+  >
+    <div class="row mt-2 mb-2">
+      <div class="col-2">
+        <img
+          id="profile-image"
+          src=""
+          alt="profile-image"
+          class="w-100 h-100 rounded-circle"
+        />
+      </div>
+
+      <div class="col-10">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 id="given-name" class="mb-2"></h5>
+          <small id="updated-date"></small>
+        </div>
+        <small id="last-message"></small>
+      </div>
+    </div>
+  </a>
+</template>
+
+<!-- template schema, hidden from the dom -->
+<script>
+  var chat_item_template = document.querySelector("#chat-item-template");
+  var chat_list = document.querySelector("#chat-list");
+
+  function formatTimeDifference(date_str, element) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      element.innerHTML = diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      element.innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      element.innerHTML = diffDays + " days ago";
+    } else {
+      element.innerHTML = diffMonths + " months ago";
+    }
+  }
+
+  function createChatItem(
+    match_id,
+    user_id,
+    given_name,
+    profile_image_uri,
+    last_message
+  ) {
+    let template_clone = chat_item_template.content.cloneNode(true);
+    template_clone.querySelector("#given-name").innerHTML = `${given_name}`;
+
+    template_clone.querySelector(
+      "#profile-image"
+    ).src = `data:image/png;base64,${profile_image_uri}`;
+
+    if (last_message["message"] != null) {
+      template_clone.querySelector(
+        "#last-message"
+      ).innerHTML = `${last_message["message"]}`;
+      formatTimeDifference(
+        `${last_message["datetime"]}`,
+        template_clone.querySelector("#updated-date")
+      );
+    } else {
+      template_clone.querySelector(
+        "#last-message"
+      ).innerHTML = `คุณได้เชื่อมต่อกับ ${given_name} แล้ว`;
+    }
+
+    function toggleClose(user_id) {
+      return function (event) {
+        event.preventDefault();
+        $("#messaging").addClass("invisible");
+        $(this).removeClass("active");
+        $(`#chat-item__link-${user_id}`).removeClass("active");
+      };
+    }
+
+    function changeChat(user_id, match_id) {
+      return function (event) {
+        event.preventDefault();
+        if ($(this).hasClass("active")) {
+          $(this).removeClass("active");
+          $("#messaging").addClass("invisible");
+          $("#messaging").css({ "z-index": -1 });
+          $("#messaging__close").removeClass("active");
+          $("#msg_history").removeClass("msg_history");
+        } else {
+          $("#chat-list a").removeClass("active");
+          $(this).addClass("active");
+          $("#messaging").removeClass("invisible");
+          $("#messaging").css({ "z-index": 2 });
+          $("#messaging__close").addClass("active");
+          $("#messaging__close").click(toggleClose(user_id));
+          $("#msg_history").addClass("msg_history");
+          $("#messaging_header img").attr(
+            "src",
+            `data:image/png;base64,${profile_image_uri}`
+          );
+
+          $("#messaging_header h4").html(`${given_name}`);
+
+          socket.emit("changeChat", user_id, match_id);
+
+          $("button.msg_send_btn")
+            .unbind("click")
+            .bind("click", (event) => {
+              event.preventDefault();
+              submitMessage();
+            });
+
+          $("input.write_msg").keyup(function (event) {
+            if (event.which === 13) {
+              event.preventDefault();
+              submitMessage();
+            }
+          });
+
+          function submitMessage(element) {
+            if ($("input.write_msg").val() != "") {
+              socket.emit("message", {
+                match_id: match_id,
+                recipient_id: user_id,
+                message: $("input.write_msg").val(),
+              });
+              $("input.write_msg").val("");
+            }
+          }
+        }
+      };
+    }
+
+    template_clone
+      .querySelector("#chat-item__link")
+      .addEventListener("click", changeChat(user_id, match_id));
+
+    template_clone.querySelector(
+      "#chat-item__link"
+    ).id = `chat-item__link-${user_id}`;
+
+    chat_list.insertBefore(template_clone.children[0], chat_list.children[0]);
+  }
+</script>

@@ -1,0 +1,370 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+
+<style media="screen">
+  .nav-link {
+    cursor: pointer;
+  }
+  a {
+    text-decoration: none;
+  }
+</style>
+
+<div class="container">
+  <div class="my-3 text-danger">
+    <span id="error-message" class=""></span>
+  </div>
+
+  {% if current_user.is_authenticated and profile_name ==
+  current_user.get_profile_name() %}
+  <h1 class="mb-3">
+    โปรไฟล์ของฉัน
+  </h1>
+
+  {%endif%}
+
+  <div class="row mb-4">
+    <div class="my-3 col-12 col-lg-2">
+      <div class="image-container">
+        <img src="{{user['image_url']}}" class="img-fluid" />
+      </div>
+    </div>
+    <div class="my-3 col-12 col-lg-7">
+      <h4 class="text-muted">Profile</h4>
+      <h1 class="mb-4">
+        {{user['profile_name']}}
+      </h1>
+      <p class="text-muted">
+        {{user['description']}}
+      </p>
+      <p class="text-muted">
+        Following:
+        <span>{{user['total_engagement']['followings']}}</span>
+        Follower:
+        <span>{{user['total_engagement']['followers']}}</span>
+      </p>
+    </div>
+    <div class="my-2 col-12 col-lg-3">
+      {% if current_user.is_authenticated and current_user.get_profile_name() !=
+      profile_name %} {%if followed%}
+      <button id="follow-button" type="button" class="btn btn-outline-primary">
+        Unfollow
+      </button>
+      {%else%}
+      <button id="follow-button" type="button" class="btn btn-primary">
+        Follow
+      </button>
+      {%endif%} {%endif%}
+      <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Total engagement</h5>
+          <p class="card-text">
+            {{user['total_engagement']['likes']}} Likes
+          </p>
+          <p class="card-text">
+            {{user['total_engagement']['bookmarks']}} Bookmarks
+          </p>
+          <p class="card-text">
+            {{user['total_engagement']['comments']}} Comments
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mb-5 position-absolute invisible">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a
+            id="prompt-collection-nav"
+            class="nav-link active disabled"
+            onclick="togglePromptCollection()"
+            >Prompt collection</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div id="main" class="col-12 mb-5">
+      <div id="collections" class="row g-4"></div>
+
+      <div class="mb-5 text-center">
+        <div id="nav-spinner" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div class="mb-5 text-center">
+        <span id="message" class=""></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- START: prompt builder item template -->
+<template id="prompt-builder-item-template">
+  <div class="col-3">
+    <a id="prompt-builder-link" href="#">
+      <div class="row">
+        <div class="col-5 ps-1">
+          <img
+            id="prompt-builder-image"
+            src=""
+            class="img-fluid rounded object-fit-cover"
+          />
+        </div>
+        <div class="col-7 p-1">
+          <h5 id="prompt-builder-name" class="text-dark"></h5>
+          <!-- <p id="prompt-builder-description"></p> -->
+          <p>
+            <small id="prompt-builder-updated-date" class="text-muted"></small>
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+</template>
+<!-- END: prompt builder item template -->
+
+<!-- START: prompt collection item template -->
+
+<style>
+  .overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    text-shadow: 1px 1px #000;
+  }
+
+  .overlay i {
+    font-size: 24px;
+  }
+
+  .overlay .star-count {
+    margin-left: 5px;
+  }
+
+  .object-fit-cover {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<!-- Message script -->
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+</script>
+<!-- END Message script -->
+
+<template id="prompt-collection-item-template">
+  <div class="col-3">
+    <a href="#">
+      <div class="image-container">
+        <img src="" class="img-fluid" />
+        <div class="overlay"></div>
+      </div>
+    </a>
+  </div>
+</template>
+<!-- END: prompt collection item template -->
+
+<!-- START: main script -->
+<script type="text/javascript">
+  var prompt_builder_item_template = document.querySelector(
+    "#prompt-builder-item-template"
+  );
+
+  var prompt_collection_item_template = document.querySelector(
+    "#prompt-collection-item-template"
+  );
+
+  var main = document.querySelector("#main");
+</script>
+<!-- END: main script -->
+
+<!-- START: format time script -->
+<script type="text/javascript">
+  let prompt_updated_date_str = "";
+  let description = "";
+  function formatTimeDifference(date_str, element) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      element.innerHTML = diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      element.innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      element.innerHTML = diffDays + " days ago";
+    } else {
+      element.innerHTML = diffMonths + " months ago";
+    }
+  }
+</script>
+<!-- END: format time script -->
+
+<!-- START: error message script -->
+<script type="text/javascript">
+  function removeCollections() {
+    $("#collections").html(``);
+  }
+</script>
+<!-- END: error message script -->
+
+<!-- START: prompt builder function -->
+<script type="text/javascript">
+  function appendPromptCollection(prompt_collection) {
+    let prompt_collection_item_template_clone = prompt_collection_item_template.content.cloneNode(
+      true
+    );
+
+    prompt_collection_item_template_clone.querySelector(
+      "img"
+    ).src = `${prompt_collection["image_url"]}`;
+
+    prompt_collection_item_template_clone.querySelector(
+      "a"
+    ).href = `/th/ai_hub/prompt-collection/${prompt_collection["slug"]}`;
+
+    if (prompt_collection["multiple_images"]) {
+      prompt_collection_item_template_clone.querySelector(
+        ".overlay"
+      ).innerHTML = '<i class="bi bi-collection-fill"></i>';
+    }
+    main
+      .querySelector("#collections")
+      .appendChild(prompt_collection_item_template_clone.children[0]);
+  }
+
+  function createPromptCollections(prompt_collections) {
+    for (var i = prompt_collections.length - 1; i >= 0; i--) {
+      appendPromptCollection(prompt_collections[i]);
+    }
+  }
+
+  async function getPromptCollection() {
+    try {
+      const res = await fetch(
+        `/en/ai_hub/get-prompt-collections-profile/{{profile_name}}`,
+        {
+          method: "GET",
+          headers: { Accept: "application/json" },
+        }
+      );
+      const data = await res.json();
+      if (data["status"] == 0) {
+        removeErrorMessage();
+        showErrorMessage(data["error_message"]);
+      } else {
+        removeMessage();
+
+        if (data["message"]) {
+          showMessage(data["message"]);
+        } else {
+          createPromptCollections(data["prompt_collections"]);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+</script>
+<!-- END: prompt builder function -->
+
+<!-- START: toggle function -->
+<script type="text/javascript">
+  function toggleButton(element_id) {
+    $(".nav-link.active").toggleClass("active");
+    $(".nav-link.disabled").toggleClass("disabled");
+    $(element_id).toggleClass("active disabled");
+    removeCollections();
+    removeMessage();
+  }
+
+  async function togglePromptCollection() {
+    toggleButton("#prompt-collection-nav");
+
+    $("#nav-spinner").removeClass("invisible");
+
+    await getPromptCollection();
+    $("#nav-spinner").addClass("invisible");
+  }
+
+  togglePromptCollection();
+</script>
+<!-- END: toggle function -->
+
+<!-- START: follow script -->
+<script type="text/javascript">
+    async function toggleFollowButton() {
+
+      var button = document.getElementById("follow-button");
+
+      $("#follow-button").toggleClass("disabled");
+
+      await followUser();
+
+      $("#follow-button.disabled").toggleClass("disabled");
+
+      if(button.classList.contains("btn-primary")) {
+          button.classList.remove("btn-primary");
+          button.classList.add("btn-outline-primary");
+          button.innerHTML = "Unfollow";
+      } else {
+          button.classList.remove("btn-outline-primary");
+          button.classList.add("btn-primary");
+          button.innerHTML = "Follow";
+      }
+    }
+
+    async function followUser() {
+      let follow_json = {
+        following_profile_name: "{{user["profile_name"]}}"
+      }
+      console.log(follow_json)
+      fetch(`/en/ai_hub/follow`, {
+        method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+        body: JSON.stringify(follow_json),
+      }).then((res) => {
+        res.json().then((data) => {
+          if (data["status"] == 0) {
+            removeErrorMessage();
+            showErrorMessage(data["error_message"]);
+          } else {
+
+          }
+        });
+      });
+    }
+
+  const followButton = document.querySelector('#follow-button');
+  if(followButton != null) {
+    followButton.addEventListener('click', async () => {
+      await toggleFollowButton();
+    });
+  }
+</script>
+<!-- END: follow script -->
+
+{% endblock %}

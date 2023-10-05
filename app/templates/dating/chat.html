@@ -1,0 +1,248 @@
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+  crossorigin="anonymous"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment-with-locales.min.js"></script>
+<style media="screen">
+  img#profile_image {
+    max-width: 100%;
+  }
+
+  .inbox_msg {
+    border: 1px solid #c4c4c4;
+    clear: both;
+    overflow: hidden;
+  }
+
+  .chat_list {
+    border-bottom: 1px solid #c4c4c4;
+    margin: 0;
+    padding: 18px 16px 10px;
+  }
+
+  .incoming_msg_img {
+    display: inline-block;
+    width: 6%;
+  }
+
+  .received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+  }
+
+  .received_withd_msg {
+    background: #ebebeb none repeat scroll 0 0;
+    color: #646464;
+    margin: 0;
+  }
+
+  .time_date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+  }
+
+  .mesgs {
+    float: left;
+    width: 100%;
+  }
+
+  .sent_msg p {
+    margin: 0;
+    color: #fff;
+    width: 100%;
+  }
+
+  .outgoing_msg {
+    overflow: hidden;
+  }
+
+  .sent_msg {
+    float: right;
+  }
+
+  .input_msg_write input {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #4c4c4c;
+    font-size: 15px;
+    min-height: 48px;
+    outline: none;
+  }
+
+  .type_msg {
+    border-top: 1px solid #c4c4c4;
+  }
+
+  .msg_send_btn {
+    border: medium none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 17px;
+    height: 33px;
+    width: 33px;
+  }
+
+  .messaging {
+    z-index: -1;
+    background-color: white;
+    position: absolute;
+  }
+
+  .msg_history {
+    height: 85vh;
+    overflow-y: auto;
+  }
+
+  #messaging_header img {
+    width: 3rem;
+  }
+</style>
+
+<div id="messaging" class="messaging w-100 invisible">
+  <button
+    id="messaging__close"
+    type="button"
+    class="btn-close float-start p-4"
+    aria-label="Close"
+  ></button>
+
+  <div id="messaging_header" class="row">
+    <div class="col-auto mt-2">
+      <img src="" class="rounded-circle" />
+    </div>
+    <div class="col pt-3">
+      <h4></h4>
+    </div>
+  </div>
+
+  <div class="inbox_msg">
+    <div class="mesgs">
+      <div id="msg_history" class="p-4"></div>
+      <div class="type_msg">
+        <div class="input_msg_write">
+          <input
+            type="text"
+            class="write_msg w-75 p-3"
+            placeholder="Type a message"
+            style="font-size: 1.22rem;"
+            required
+          />
+          <button
+            class="msg_send_btn bg-light float-end m-3 me-4"
+            type="button"
+          >
+            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="incoming-msg__template">
+  <div class="incoming_msg">
+    <div class="incoming_msg_img ms-2">
+      <img id="profile_image" class="rounded-circle" src="" alt="sunil" />
+    </div>
+    <div class="received_msg">
+      <p class="message p-2 received_withd_msg rounded-pill pe-3 ps-3"></p>
+      <span class="time_date"></span>
+    </div>
+  </div>
+</template>
+
+<template id="outgoing-msg__template">
+  <div class="outgoing_msg me-2 mb-3">
+    <div class="sent_msg">
+      <p class="message p-2 bg-dark rounded-pill pe-3 ps-3"></p>
+      <span class="time_date"></span>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  socket.on("displayAllMessages", (payload) => {
+    $(".msg_history").html("");
+    let all_messages = payload["all_messages"];
+    let recipient_profile_image_uri = payload["profile_image_uri"];
+
+    for (const message_info of all_messages) {
+      const { match_id, message_type, created_date, message } = message_info;
+      if (message_type == "receivedMessage") {
+        displayReceivedMessage(
+          created_date,
+          message,
+          recipient_profile_image_uri
+        );
+      } else if (message_type == "sentMessage") {
+        displaySentMessage(created_date, message);
+      }
+    }
+
+    $("#msg_history").scrollTop($("#msg_history")[0].scrollHeight);
+  });
+
+  socket.on("sentMessage", (payload) => {
+    displaySentMessage(payload["created_date"], payload["message"]);
+    $("#chat-list a.active #last-message").html(`${payload["message"]}`);
+    $("#msg_history").scrollTop($("#msg_history")[0].scrollHeight);
+  });
+</script>
+
+<script type="text/javascript">
+  const displayReceivedMessage = (created_date, message, profile_image_uri) => {
+    var message_box = document.querySelector(".msg_history");
+
+    var incoming_message_template = document.querySelector(
+      "#incoming-msg__template"
+    );
+
+    let template_clone = incoming_message_template.content.cloneNode(true);
+    template_clone.querySelector(
+      "#profile_image"
+    ).src = `data:image/png;base64,${profile_image_uri}`;
+
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${formatTimestamp(
+      created_date
+    )}`;
+
+    message_box.append(template_clone.children[0]);
+  };
+
+  const displaySentMessage = (created_date, message) => {
+    var message_box = document.querySelector(".msg_history");
+
+    var outgoing_message_template = document.querySelector(
+      "#outgoing-msg__template"
+    );
+
+    let template_clone = outgoing_message_template.content.cloneNode(true);
+    template_clone.querySelector(".message").innerHTML = `${message}`;
+    template_clone.querySelector(".time_date").innerHTML = `${formatTimestamp(
+      created_date
+    )}`;
+
+    message_box.append(template_clone.children[0]);
+  };
+</script>
+
+<script type="text/javascript">
+  function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const formattedDate = `${month}·${day}`;
+    const formattedTime = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+    return `${formattedDate} ${formattedTime}`;
+  }
+</script>

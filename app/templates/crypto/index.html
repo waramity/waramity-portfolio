@@ -1,0 +1,811 @@
+{% extends "crypto/_base.html" %} {% block content %}
+
+<div id="vm">
+  <div class="grid grid-cols-8 gap-2">
+    <div class="col-span-2" :class="{ 'col-span-1': fullScreenChart }">
+      <Transition>
+        <div v-if="!tickers[ticker]">
+          {*statusMsg*}
+        </div>
+      </Transition>
+
+      <Transition>
+        <div v-if="tickers[ticker]" class="grid grid-cols-7 gap-2">
+          <div class="p-4">
+            <span class="text-2xl text-glow">{*digitalClock*}</span>
+            <span
+              class="text-xl text-glow"
+              :class="[status === 0 ? 'text-red-700	' : 'text-green-700']"
+            >
+              {*status === 0 ? 'Offline' : 'Online'*}
+            </span>
+          </div>
+        </div>
+      </Transition>
+
+      <div class="mb-5 mx-2">
+        <h2 class="text-glow font-bold mb-3">
+          Ticker list
+        </h2>
+
+        <input
+          v-model="inputSearch"
+          name="query"
+          placeholder="Search..."
+          type="text"
+          class="w-full py-2 px-5 text-gray-100 focus:outline-none focus:outline-red-500 focus:outline-1 dark:bg-slate-800"
+        />
+      </div>
+
+      <ul class="grid grid-cols-3 gap-1 mb-5">
+        <li
+          @click="filterAsset( 'USDT' )"
+          :class="[asset === 'USDT' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
+        >
+          USDT
+        </li>
+        <li
+          @click="filterAsset( 'BTC' )"
+          :class="[asset === 'BTC' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
+        >
+          BTC
+        </li>
+        <li
+          @click="filterAsset( 'FAV' )"
+          :class="[asset === 'FAV' ? 'bg-gray-800' : '']"
+          class="cursor-pointer py-2 px-4 md:py-1 md:px-3 border border-red-700"
+        >
+          FAV
+        </li>
+      </ul>
+
+      <div class="flex gap-2">
+        <div
+          @click="sortBy( 'token', 'desc' )"
+          class="w-1/2"
+          :class="[sort === 'token' ? 'font-bold' : '']"
+        >
+          Pair
+        </div>
+        <div
+          @click="sortBy( 'close', 'desc' )"
+          class="w-1/2"
+          :class="[sort === 'close' ? 'font-bold' : '']"
+        >
+          Price
+        </div>
+        <div
+          @click="sortBy( 'percent', 'desc' )"
+          class="w-1/2"
+          :class="[sort === 'percent' ? 'font-bold' : '']"
+        >
+          Change
+        </div>
+        <div
+          @click="sortBy( 'assetVolume', 'desc' )"
+          class="w-1/2"
+          :class="[sort === 'assetVolume' ? 'font-bold' : '']"
+        >
+          Volume
+        </div>
+      </div>
+
+      <div
+        class="overflow-y-scroll h-screen bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+      >
+        <div
+          v-for="ticker in filterTickers"
+          :key="ticker.symbol"
+          class="hover:bg-[#eab30840] cursor-pointer"
+        >
+          <div class="flex gap-2">
+            <div @click="changeTicker(ticker.symbol)" class="w-1/2">
+              {*ticker.pair*}
+            </div>
+            <div
+              @click="changeTicker(ticker.symbol)"
+              class="w-1/2"
+              :class="ticker.style"
+            >
+              {*ticker.close*}
+            </div>
+            <div
+              @click="changeTicker(ticker.symbol)"
+              class="w-1/2"
+              :class="ticker.style"
+            >
+              {*ticker.arrow*} {*ticker.percent.toFixed(2)*}
+            </div>
+            <div @click="changeTicker(ticker.symbol)" class="w-1/2">
+              {*ticker.assetVolume*}
+            </div>
+            <span @click="setFavorite(ticker.symbol)">
+              <svg
+                :class="favorites.includes(ticker.symbol) ? 'fill-[--color-primary-yellow]' : 'fill-gray-400'"
+                class="hover:fill-[--color-primary-yellow]"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-4" :class="{ 'col-span-6': fullScreenChart }">
+      <h2 class="text-glow font-bold">
+        Chart
+      </h2>
+
+      <div
+        :id="container_id"
+        class="h-[70vh] mb-2"
+        :class="{ 'h-[80vh]': fullScreenChart }"
+      ></div>
+      <button
+        class="bg-red-500 hover:bg-red-400 shadow-lg shadow-red-500/50 hover:shadow-red-400/50 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition float-right m-4"
+        @click="toggleFullScreenChart()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="fill-current w-4 h-4 mr-2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+        <span>Full Screen</span>
+      </button>
+
+      <div
+        v-if="tickers[ticker]"
+        class="grid grid-cols-3 gap-x-1 gap-y-5 m-5 p-2"
+      >
+        <div>
+          <small class="text-lg">{*tickers[ticker]['pair']*}</small>
+          <br />
+          <span :class="tickers[ticker]['style']" class="text-3xl"
+            >{*parseNumber(tickers[ticker]['close'],
+            tickers[ticker]['asset'])*}</span
+          >
+          <br />
+          <span :class="tickers[ticker]['style']" class="text-lg">
+            <span>{*tickers[ticker]['arrow']*}</span>
+            <span>{*tickers[ticker]['percent']*}%</span>
+          </span>
+        </div>
+        <div>
+          <small class="text-lg">24H Highest</small>
+          <br />
+          <span class="text-3xl"
+            >{*parseNumber(tickers[ticker]['high'],
+            tickers[ticker]['asset'])*}</span
+          >
+        </div>
+        <div>
+          <small class="text-lg">24H Lowest</small>
+          <br />
+          <span class="text-3xl"
+            >{*parseNumber(tickers[ticker]['low'],
+            tickers[ticker]['asset'])*}</span
+          >
+        </div>
+        <div>
+          <small class="text-lg">24H Volume</small>
+          <br />
+          <span class="text-3xl"
+            >{*parseNumber(tickers[ticker]['tokenVolume'],
+            tickers[ticker]['token'])*} {*tickers[ticker]['token']*}</span
+          >
+        </div>
+        <div>
+          <small class="text-lg">24H Value</small>
+
+          <br />
+          <span class="text-3xl"
+            >{*parseNumber(tickers[ticker]['assetVolume'],
+            tickers[ticker]['asset'])*} {*tickers[ticker]['asset']*}</span
+          >
+        </div>
+        <div class="pt-1 col-span-1">
+          <h2 class="text-glow font-bold mb-2">
+            Last volume
+          </h2>
+
+          <div class="mb-2 flex h-2 overflow-hidden rounded bg-gray-100">
+            <div
+              :style="{ width: greenTradePercentage }"
+              class="bg-green-500 transition-all duration-500 ease-out"
+            ></div>
+            <div
+              :style="{ width: redTradePercentage }"
+              class="bg-red-500 transition-all duration-500 ease-out"
+            ></div>
+          </div>
+          <span class="text-green-500">{*greenTradePercentage*}</span>
+          <span class="text-red-500 float-right">{*redTradePercentage*}</span>
+          <br />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-2" :class="{ 'col-span-8 ': fullScreenChart }">
+      <h2 class="text-glow font-bold">
+        Order book
+      </h2>
+
+      <div
+        class="overflow-x-hidden overflow-y-scroll grid grid-cols-2 gap-2 overflow-auto h-[80vh] bg-white dark:bg-slate-800 dark:highlight-white/5 rounded-xl divide-y dark:divide-slate-200/5"
+        :class="{ 'grid grid-cols-2': fullScreenChart }"
+      >
+        <div>
+          <div
+            v-for="order in bids"
+            class="flex gap-2"
+            :style="`background: linear-gradient(to left, #00ff0030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
+          >
+            <div class="w-1/3">
+              {*parseNumber((order[0] * order[1]), asset)*}
+            </div>
+            <div class="w-1/3">
+              {*parseFloat((order[1]))*}
+            </div>
+            <div class="w-1/3">
+              {*parseFloat(order[0])*}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            v-for="order in asks"
+            class="flex gap-2"
+            :style="`background: linear-gradient(to right, #ff000030 0 ${(order[2] / maxAsk) * 100}%, #ffffff00 ${(order[2] / maxAsk) * 100}% 100%)`"
+          >
+            <div class="w-1/3 flex-1 text-left">{*parseFloat(order[0])*}</div>
+            <div class="w-1/3 flex-1 text-center text-[--color-primary-silver]">
+              {*parseFloat((order[1]))*}
+            </div>
+            <div class="w-1/3 flex-1 text-end text-[--color-primary-silver]">
+              {*parseNumber((order[0] * order[1]), asset)*}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tickers w-full">
+        <h2 class="text-glow font-bold">
+          Latest Trades
+        </h2>
+
+        <div class="flex">
+          <div class="w-1/2">Time</div>
+          <div class="w-1/2">Price</div>
+          <div class="w-1/2">Volume</div>
+        </div>
+
+        <div v-for="(trade, index) in latestTrades" class="flex">
+          <div class="w-1/2">{*timestampToDate(trade[0])*}</div>
+          <div
+            :class="[trades[index+1] != undefined && trades[index+1][1] > trades[index][1] ? 'text-red-500' : 'text-green-500']"
+            class="w-1/2"
+          >
+            {*parseFloat(trade[1])*}
+          </div>
+          <div class="w-1/2">
+            {*parseFloat(trade[2])*}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+  crossorigin="anonymous"
+></script>
+
+<script type="text/javascript">
+  const socket = io("/crypto");
+
+  socket.on("connect", () => {
+    setInterval(() => {
+      socket.emit("my_ping");
+    }, 1000);
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script type="text/javascript">
+  const apiEndpoint = `/en/crypto/`;
+  const SCRIPT_ID = "tradingview-widget-script";
+  const CONTAINER_ID = "vue-trading-view";
+
+  const vm = new Vue({
+    el: "#vm",
+    delimiters: ["{*", "*}"],
+    data: {
+      sock: null,
+      status: 0,
+      tickers: {},
+      cache: [],
+      trades: [],
+      favorites: ["BTCUSDT"],
+      interval: "1d",
+      digitalClock: null,
+      asks: [],
+      bids: [],
+      maxAsk: 0,
+      bgImageUrl: null,
+      showSettings: false,
+      inputSearch: "",
+      asset: "USDT",
+      sort: "assetVolume",
+      order: "desc",
+      ticker: "BTCUSDT",
+      container_id: CONTAINER_ID,
+      change: "change",
+      numberOfTradesToShow: 10,
+      greenTradePercentage: "50%",
+      redTradePercentage: "50%",
+      totalTradeVolume: 0,
+      greenTradeVolume: 0,
+      redTradeVolume: 0,
+      fullScreenChart: false,
+      options: {
+        autosize: true,
+        symbol: "BINANCE:BTCUSDT",
+        interval: "5",
+        timezone: "Asia/Bangkok",
+        theme: "dark",
+        style: "1",
+        locale: "en",
+        toolbar_bg: "#f1f3f6",
+        enable_publishing: false,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        allow_symbol_change: true,
+        save_image: true,
+        details: false,
+        hotlist: false,
+        studies: [
+          {
+            id: "VWAP@tv-basicstudies",
+          },
+          {
+            id: "MAExp@tv-basicstudies",
+            inputs: {
+              length: 200,
+            },
+          },
+        ],
+      },
+    },
+    created: async function () {
+      const gResponse = await fetch(apiEndpoint + "greeting");
+      const gObject = await gResponse.json();
+      this.flaskGreeting = gObject.greeting;
+    },
+    methods: {
+      startClock() {
+        this.digitalClock = new Date(Date.now()).toLocaleTimeString("en-GB");
+        setTimeout(() => {
+          this.startClock();
+        }, 250);
+      },
+      sockInit() {
+        if (this.status > 0) return;
+        try {
+          this.status = 0;
+
+          this.sock = new WebSocket("wss://fstream.binance.com/ws/!ticker@arr");
+          this.sock.addEventListener("open", this.onSockOpen);
+          this.sock.addEventListener("close", this.onSockClose);
+          this.sock.addEventListener("error", this.onSockError);
+          this.sock.addEventListener("message", this.onSockData);
+        } catch (err) {
+          console.error("WebSocketError:", err.message || err);
+          this.status = -1;
+          this.sock = null;
+        }
+      },
+      onSockData(e) {
+        let list = JSON.parse(e.data) || [];
+        if (list["error"]) {
+          console.error(e);
+        }
+        if (list.id > 0) {
+          return;
+        }
+
+        if (list.e === "aggTrade") {
+          this.trades.unshift([list.E, list.p, list.q, list.m]);
+          if (this.trades.length >= 200) {
+            this.trades = this.trades.slice(0, 150);
+          }
+
+          return;
+        }
+        if (list.e === "depthUpdate") {
+        }
+
+        if (list.e === undefined) {
+          for (let item of list) {
+            let coin = this.getCoinData(item);
+            this.tickers[coin.symbol] = coin;
+            if (coin.symbol === this.ticker) {
+              this.status = 2;
+            }
+          }
+          this.cache = Object.keys(this.tickers).map((s) => this.tickers[s]);
+        }
+      },
+      onSockOpen() {
+        this.status = 1;
+        console.info("WebSocketInfo:", "Connection open.");
+        this.subscribeTicker();
+      },
+      onSockError(err) {
+        this.status = 0;
+        console.error("WebSocketError:", err.message || err);
+        setTimeout(() => {
+          this.sockInit();
+        }, 10000);
+      },
+      onSockClose() {
+        this.status = 0;
+        console.info("WebSocketInfo:", "Connection closed.");
+        setTimeout(() => {
+          this.sockInit();
+        }, 10000);
+      },
+      sockClose() {
+        if (this.sock) {
+          this.sock.close();
+        }
+      },
+      getCoinData(item) {
+        let reg = /^([A-Z]+)(BTC|ETH|BNB|USDT|TUSD)$/;
+        let symbol = String(item.s)
+          .replace(/[^\w\-]+/g, "")
+          .toUpperCase();
+        let token = symbol.replace(reg, "$1");
+        let asset = symbol.replace(reg, "$2");
+        let name = token;
+        let pair = token + "/" + asset;
+        let icon = "/" + token.toLowerCase() + "_.png";
+        let open = parseFloat(item.o);
+        let high = parseFloat(item.h);
+        let low = parseFloat(item.l);
+        let close = parseFloat(item.c);
+        let change = parseFloat(item.p);
+        let percent = parseFloat(item.P);
+        let trades = parseInt(item.n);
+        let tokenVolume = Math.round(item.v);
+        let assetVolume = Math.round(item.q);
+        let sign = percent >= 0 ? "+" : "";
+        let arrow = percent >= 0 ? "▲" : "▼";
+        let info = [
+          pair,
+          close.toFixed(8),
+          "(",
+          arrow,
+          sign + percent.toFixed(2) + "%",
+          "|",
+          sign + change.toFixed(8),
+          ")",
+        ].join(" ");
+        let style = "";
+
+        if (percent > 0) style = "text-green-500";
+        if (percent < 0) style = "text-red-500";
+
+        return {
+          symbol,
+          token,
+          asset,
+          name,
+          pair,
+          icon,
+          open,
+          high,
+          low,
+          close,
+          change,
+          percent,
+          trades,
+          tokenVolume,
+          assetVolume,
+          sign,
+          arrow,
+          style,
+          info,
+        };
+      },
+      subscribeTicker() {
+        let streams = {
+          method: "SUBSCRIBE",
+          params: [
+            this.ticker.toLowerCase() + "@aggTrade",
+            this.ticker.toLowerCase() + "@depth",
+          ],
+          id: 1,
+        };
+
+        this.sock.send(JSON.stringify(streams));
+      },
+      parseNumber(number, currency = "") {
+        if (currency.includes(["USDT"])) {
+          return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            trailingZeroDisplay: "stripIfInteger",
+          }).format(number);
+        }
+        return new Intl.NumberFormat("en-US", {
+          minimumFractionDigits: 10,
+          trailingZeroDisplay: "stripIfInteger",
+        }).format(number);
+      },
+      quickSort(arr, key, order) {
+        if (arr.length <= 1) {
+          return arr;
+        }
+
+        const pivotIndex = Math.floor(arr.length / 2);
+        const pivot = arr[pivotIndex];
+        const left = [];
+        const right = [];
+
+        for (let i = 0; i < arr.length; i++) {
+          if (i === pivotIndex) {
+            continue;
+          }
+
+          if (order === "asc") {
+            arr[i][key] < pivot[key] ? left.push(arr[i]) : right.push(arr[i]);
+          } else {
+            arr[i][key] > pivot[key] ? left.push(arr[i]) : right.push(arr[i]);
+          }
+        }
+
+        return [
+          ...this.quickSort(left, key, order),
+          pivot,
+          ...this.quickSort(right, key, order),
+        ];
+      },
+      sortBy(key, order) {
+        if (this.sort !== key) {
+          this.order = order || "asc";
+        } else {
+          this.order = this.order === "asc" ? "desc" : "asc";
+        }
+        this.sort = key;
+      },
+      filterAsset(asset) {
+        this.asset = String(asset || this.asset);
+      },
+      changeTicker(symbol) {
+        this.resetTradeProportions();
+        this.unsubscribeTicker();
+        this.ticker = symbol;
+        this.setSymbol(symbol);
+        this.subscribeTicker();
+      },
+      unsubscribeTicker() {
+        this.trades = [];
+        this.depth = [];
+        let streams = {
+          method: "UNSUBSCRIBE",
+          params: [
+            this.ticker.toLowerCase() + "@aggTrade",
+            this.ticker.toLowerCase() + "@depth",
+          ],
+          id: 2,
+        };
+        this.sock.send(JSON.stringify(streams));
+      },
+      setSymbol(symbol) {
+        var elIframeWidget = document.querySelectorAll(
+          "iframe[id*=tradingview_]"
+        )[0];
+
+        if (!elIframeWidget || !elIframeWidget.contentWindow) {
+          return;
+        }
+
+        elIframeWidget.contentWindow.postMessage(
+          {
+            name: "set-symbol",
+            data: {
+              symbol: symbol,
+            },
+          },
+          "*"
+        );
+      },
+      appendScript(onload) {
+        if (!this.canUseDOM()) {
+          onload();
+          return;
+        }
+
+        if (this.scriptExists()) {
+          if (typeof TradingView === "undefined") {
+            this.updateOnloadListener(onload);
+            return;
+          }
+          onload();
+          return;
+        }
+        const script = document.createElement("script");
+        script.id = SCRIPT_ID;
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = "https://s3.tradingview.com/tv.js";
+        script.onload = onload;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      },
+      canUseDOM() {
+        return (
+          typeof window !== "undefined" &&
+          window.document &&
+          window.document.createElement
+        );
+      },
+      scriptExists() {
+        return this.getScriptElement() !== null;
+      },
+      getScriptElement() {
+        return document.getElementById(SCRIPT_ID);
+      },
+      initWidget() {
+        if (typeof TradingView === "undefined") {
+          return;
+        }
+        const widget = new window.TradingView.widget(
+          Object.assign({ container_id: this.container_id }, this.options)
+        );
+      },
+      async prepareOrderBook() {
+        await fetch(
+          "https://api.binance.com/api/v3/depth?symbol=" +
+            this.ticker +
+            "&limit=100"
+        )
+          .then((response) => response.text())
+          .then((data) => {
+            let depth = JSON.parse(data);
+            this.asks = depth.asks;
+            this.bids = depth.bids;
+
+            for (let i = 0; i < this.asks.length; i++) {
+              var arr = this.asks.map((x) => {
+                return Number(x[1]);
+              });
+              this.asks[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+            }
+            for (let i = 0; i < this.bids.length; i++) {
+              var arr = this.bids.map((x) => {
+                return Number(x[1]);
+              });
+              this.bids[i].push(arr.slice(0, i + 1).reduce((a, b) => a + b));
+            }
+          });
+
+        this.maxAsk = Math.max(
+          ...this.asks.map((x) => {
+            return x[2];
+          })
+        );
+        setTimeout(async () => {
+          await this.prepareOrderBook();
+        }, 500);
+      },
+      timestampToDate(timestamp) {
+        var options = {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false,
+          timeZone: "Asia/Bangkok",
+        };
+        return new Intl.DateTimeFormat("en-GB", options).format(timestamp);
+      },
+      calculateTradeProportions() {
+        if (this.trades && this.trades.length > 0) {
+          const firstTrade = this.trades[0];
+
+          this.totalTradeVolume += parseFloat(firstTrade[2]);
+
+          if (firstTrade[3]) {
+            this.greenTradeVolume += parseFloat(firstTrade[2]);
+          } else {
+            this.redTradeVolume += parseFloat(firstTrade[2]);
+          }
+
+          const greenProportion = this.greenTradeVolume / this.totalTradeVolume;
+          const redProportion = this.redTradeVolume / this.totalTradeVolume;
+
+          this.greenTradePercentage = (greenProportion * 100).toFixed(2) + "%";
+          this.redTradePercentage = (redProportion * 100).toFixed(2) + "%";
+        }
+      },
+      resetTradeProportions() {
+        this.totalTradeVolume = 0;
+        this.greenTradeVolume = 0;
+        this.redTradeVolume = 0;
+        this.greenTradePercentage = "0%";
+        this.redTradePercentage = "0%";
+      },
+      toggleFullScreenChart() {
+        this.fullScreenChart = !this.fullScreenChart;
+      },
+      setFavorite(symbol) {
+        var index = this.favorites.indexOf(symbol);
+        if (index >= 0) {
+          delete this.favorites[index];
+        } else {
+          this.favorites.push(symbol);
+        }
+      },
+    },
+    mounted() {
+      this.sockInit();
+      this.startClock();
+      this.appendScript(this.initWidget);
+      this.prepareOrderBook();
+    },
+    unmounted() {
+      this.sockClose();
+    },
+    computed: {
+      statusMsg() {
+        let msg = "";
+        if (this.status == 0) {
+          msg = "Connecting...";
+        }
+        if (this.status == 1) {
+          msg = "Loading...";
+        }
+        if (this.status == 2) {
+          msg = "Done";
+        }
+        return msg;
+      },
+      latestTrades() {
+        this.calculateTradeProportions();
+        return this.trades.slice(0, this.numberOfTradesToShow);
+      },
+      filterTickers() {
+        let tickers = this.cache;
+        tickers = this.cache.filter((x) =>
+          x.symbol.startsWith(this.inputSearch.toUpperCase())
+        );
+        if (this.asset == "FAV") {
+          tickers = tickers.filter((i) => this.favorites.includes(i.symbol));
+        } else {
+          tickers = tickers.filter((i) => i.asset === this.asset);
+        }
+        tickers = this.quickSort(tickers, this.sort, this.order);
+
+        return tickers;
+      },
+    },
+  });
+</script>
+
+{%endblock%}

@@ -1,0 +1,771 @@
+{% extends "dating/_base.html" %} {% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<!-- form style -->
+<style media="screen">
+  @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+  * {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    font-family: "Poppins", sans-serif;
+  }
+  :root {
+    --primary: #333;
+    --secondary: #333;
+    --errorColor: red;
+    --stepNumber: 6;
+    --containerWidth: 100%;
+    --screenHeight: 100vh;
+    --bgColor: #333;
+    --inputBorderColor: lightgray;
+  }
+  ::selection {
+    color: #fff;
+    background: var(--primary);
+  }
+  .container {
+    width: var(--containerWidth);
+    background: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 50px 35px 10px 35px;
+  }
+  .container header {
+    font-size: 35px;
+    font-weight: 600;
+    margin: 0 0 30px 0;
+  }
+  .container .form-outer {
+    width: 100%;
+    overflow: hidden;
+  }
+  .container .form-outer form {
+    display: flex;
+    width: calc(100% * var(--stepNumber));
+  }
+  .form-outer form .page {
+    width: calc(100% / var(--stepNumber));
+    transition: margin-left 0.3s ease-in-out;
+  }
+  .form-outer form .page .title {
+    text-align: left;
+    font-size: 25px;
+    font-weight: 500;
+  }
+  .form-outer form .page .field {
+    height: 45px;
+    margin: 45px 0;
+    display: flex;
+    position: relative;
+  }
+  form .page .field .label {
+    position: absolute;
+    top: -30px;
+    font-weight: 500;
+  }
+  form .page .field input {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    border: 1px solid var(--inputBorderColor);
+    border-radius: 5px;
+    padding-left: 15px;
+    margin: 0 1px;
+    font-size: 18px;
+    transition: border-color 150ms ease;
+  }
+  form .page .field input.invalid-input {
+    border-color: var(--errorColor);
+  }
+  form .page .field select {
+    width: 100%;
+    padding-left: 10px;
+    font-size: 17px;
+    font-weight: 500;
+  }
+  form .page .field button {
+    width: 100%;
+    height: calc(100% + 5px);
+    border: none;
+    background: var(--secondary);
+    margin-top: -20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.5s ease;
+  }
+  form .page .field button:hover {
+    background: #000;
+  }
+  form .page .btns button {
+    margin-top: -20px !important;
+  }
+  form .page .btns button.prev {
+    margin-right: 3px;
+    font-size: 17px;
+  }
+  form .page .btns button.next {
+    margin-left: 3px;
+  }
+  .container .progress-bar {
+    display: flex;
+    margin: 40px 0;
+    user-select: none;
+  }
+  .container .progress-bar .step {
+    text-align: center;
+    width: 100%;
+    position: relative;
+  }
+  .container .progress-bar .step p {
+    font-weight: 500;
+    font-size: 18px;
+    color: #000;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    flex-direction: initial;
+  }
+  .progress-bar .step .bullet {
+    height: 25px;
+    width: 25px;
+    border: 2px solid #000;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    transition: 0.2s;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 25px;
+  }
+  .progress-bar .step .bullet.active {
+    border-color: var(--primary);
+    background: var(--primary);
+  }
+  .progress-bar .step .bullet span {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .progress-bar .step .bullet.active span {
+    display: none;
+  }
+  .progress-bar .step .bullet:before,
+  .progress-bar .step .bullet:after {
+    position: absolute;
+    content: "";
+    bottom: 11px;
+    right: -51px;
+    height: 3px;
+    width: 44px;
+    background: #262626;
+  }
+  .progress-bar .step .bullet.active:after {
+    background: var(--primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: animate 0.3s linear forwards;
+  }
+  @keyframes animate {
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  .progress-bar .step:last-child .bullet:before,
+  .progress-bar .step:last-child .bullet:after {
+    display: none;
+  }
+  .progress-bar .step p.active {
+    color: var(--primary);
+    transition: 0.2s linear;
+  }
+  .progress-bar .step .check {
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    font-size: 15px;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+  .progress-bar .step .check.active {
+    display: block;
+    color: #fff;
+  }
+
+  @media screen and (max-width: 660px) {
+    :root {
+      --containerWidth: 400px;
+    }
+    .progress-bar .step p {
+      display: none;
+    }
+    .progress-bar .step .bullet::after,
+    .progress-bar .step .bullet::before {
+      display: none;
+    }
+    .progress-bar .step .bullet {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-bar .step .check {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 15px;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  @media screen and (max-width: 490px) {
+    :root {
+      --containerWidth: 100%;
+    }
+    .container {
+      box-sizing: border-box;
+      border-radius: 0;
+    }
+  }
+</style>
+<!-- end form style -->
+<!-- photo upload style -->
+<style media="screen">
+  .image-upload {
+    display: flex;
+    justify-content: center;
+  }
+
+  .image-upload-container {
+    display: grid;
+    grid-template-areas: "img-u-one img-u-two img-u-three img-u-four img-u-five img-u-six";
+  }
+
+  .form-input input {
+    display: none;
+  }
+  .form-input label {
+    display: block;
+    width: 100px;
+    height: auto;
+    max-height: 100px;
+    background: #333;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .form-input img {
+    width: 100px;
+    height: 100px;
+    margin: 2px;
+    opacity: 0.4;
+  }
+
+  .imgRemove {
+    position: relative;
+    bottom: 114px;
+    left: 68%;
+    background-color: #000;
+    border: none;
+    font-size: 30px;
+    outline: none;
+  }
+  .imgRemove::after {
+    content: "\2613";
+    color: #fff;
+    font-weight: 900;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .image-upload-container {
+      grid-template-areas:
+        "img-u-one img-u-two img-u-three"
+        "img-u-four img-u-five img-u-six";
+    }
+  }
+</style>
+<!-- end photo upload style -->
+
+<header>{{_('Create your profile')}}</header>
+<div class="progress-bar">
+  <div class="step">
+    <p>{{_('Given name')}}</p>
+    <div class="bullet">
+      <span>1</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+  <div class="step">
+    <p>{{_('Birthday')}}</p>
+    <div class="bullet">
+      <span>2</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+  <div class="step">
+    <p>{{_('Gender')}}</p>
+    <div class="bullet">
+      <span>3</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+  <div class="step">
+    <p>{{_('Show me')}}</p>
+    <div class="bullet">
+      <span>4</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+  <div class="step">
+    <p>{{_('Interests')}}</p>
+    <div class="bullet">
+      <span>5</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+  <div class="step">
+    <p>{{_('Profile image')}}</p>
+    <div class="bullet">
+      <span>6</span>
+    </div>
+    <div class="check fas fa-check"></div>
+  </div>
+</div>
+<div class="form-outer">
+  <form
+    action="{{ url_for('auth.create_profile') }}"
+    method="POST"
+    enctype="multipart/form-data"
+    class="create-profile-form"
+  >
+    {{ form.csrf_token }}
+    <div class="page slide-page">
+      <div class="title">{{_('Your given name')}}</div>
+      <div class="field">
+        <div class="label">{{_('This name will be displayed in public.')}}</div>
+        {{ form.given_name(class="given-name") }}
+        <span class="error">
+          {% if form.given_name.errors %} {% for error in form.given_name.errors
+          %} {{ error }} {% endfor %} {% endif %}
+        </span>
+      </div>
+      <div class="field">
+        <button class="first-next next">{{_('Next')}}</button>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="title">{{_('Your birthday')}}</div>
+      <div class="row">
+        <div class="field col-xs-1 col-md-4">
+          <div class="label">{{_('Day')}}</div>
+          {{ form.birth_day(class="day_picker") }}
+          <span class="error">
+            {% if form.birth_day.errors %} {% for error in form.birth_day.errors
+            %} {{ error }} {% endfor %} {% endif %}
+          </span>
+        </div>
+        <div class="field col-xs-1 col-md-4">
+          <div class="label">{{_('Month')}}</div>
+          {{ form.birth_month(class="month_picker") }}
+          <span class="error">
+            {% if form.birth_month.errors %} {% for error in
+            form.birth_month.errors %} {{ error }} {% endfor %} {% endif %}
+          </span>
+        </div>
+        <div class="field col-xs-1 col-md-4">
+          <div class="label">{{_('Year')}}</div>
+          {{ form.birth_year(class="year_picker") }}
+          <span class="error">
+            {% if form.birth_year.errors %} {% for error in
+            form.birth_year.errors %} {{ error }} {% endfor %} {% endif %}
+          </span>
+        </div>
+      </div>
+      <div class="field btns">
+        <button class="prev-1 prev">{{_('Previous')}}</button>
+        <button class="next-1 next">{{_('Next')}}</button>
+      </div>
+    </div>
+    <div class="page">
+      <div class="title mb-4">{{_('My gender')}}</div>
+
+      <span class="error">
+        {% if form.gender.errors %} {% for error in form.gender.errors %} {{
+        error }} {% endfor %} {% endif %}
+      </span>
+      <div
+        class="list-group"
+        style="overflow: scroll; max-height: var(--screenHeight);"
+      >
+        <div class="row">
+          {% for gender in form.gender %}
+          <div class="col-xs-1 col-md-2 mb-4">
+            {{ gender(class="gender btn-check") }} {{ gender.label(class="btn
+            btn-outline-secondary w-100") }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="field btns">
+        <button class="prev-2 prev">{{_('Previous')}}</button>
+        <button class="next-2 next">{{_('Next')}}</button>
+      </div>
+    </div>
+    <div class="page">
+      <div class="title mb-4">{{_('Show me')}}</div>
+      <span class="error">
+        {% if form.showme.errors %} {% for error in form.showme.errors %} {{
+        error }} {% endfor %} {% endif %}
+      </span>
+      <div class="row">
+        {% for showme in form.showme %}
+        <div class="col-xs-1 col-md-2 mb-4">
+          {{ showme(class="showme btn-check") }} {{ showme.label(class="btn
+          btn-outline-secondary w-100") }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="field btns">
+        <button class="prev-3 prev">{{_('Previous')}}</button>
+        <button class="next-3 next">{{_('Next')}}</button>
+      </div>
+    </div>
+    <div class="page">
+      <div class="title mb-4">{{_('Interests')}}</div>
+      <div class="row">
+        <span class="error">
+          {% if form.passion.errors %} {% for error in form.passion.errors %} {{
+          error }} {% endfor %} {% endif %}
+        </span>
+        {% for passion in form.passion %}
+        <div class="col-xs-1 col-md-2 mb-4">
+          {{ passion(class="passion btn-check") }} {{ passion.label(class="btn
+          btn-outline-secondary w-100") }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="field btns">
+        <button class="prev-4 prev">{{_('Previous')}}</button>
+        <button class="next-4 next">{{_('Next')}}</button>
+      </div>
+    </div>
+    <div class="page">
+      <div class="title mb-4">{{_('Upload profile image')}}</div>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} {% endwith %}
+      <div class="profile-image-warns"></div>
+      <div class="image-upload-container"></div>
+      <script type="text/javascript">
+        const imageUploadContainer = document.querySelector(
+          ".image-upload-container"
+        );
+        let imageUploadString = "";
+        for (let i = 1; i < 7; i++) {
+          imageUploadString += `
+                <div class="image-upload">
+                  <div class="form-input">
+                    <label for="file-ip-${i}">
+                      <img
+                        id="file-ip-${i}-preview"
+                        src="https://i.ibb.co/ZVFsg37/default.png"
+                      />
+                      <button
+                        type="button"
+                        class="imgRemove"
+                        onclick="myImgRemove(${i})"
+                      ></button>
+                    </label>
+                    <input
+                      type="file"
+                      name="profile_image"
+                      class="profile-image"
+                      id="file-ip-${i}"
+                      accept="image/*"
+                      onchange="showPreview(event, ${i});"
+                    />
+                  </div>
+                </div>
+        `;
+        }
+        imageUploadContainer.innerHTML = imageUploadString;
+      </script>
+
+      <div class="field btns">
+        <button class="prev-5 prev">{{_('Previous')}}</button>
+        <button class="submit">{{_('Submit')}}</button>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- photo upload script -->
+<script type="text/javascript">
+  var number = 1;
+  do {
+    function showPreview(event, number) {
+      if (event.target.files.length > 0) {
+        let src = URL.createObjectURL(event.target.files[0]);
+        let preview = document.getElementById("file-ip-" + number + "-preview");
+        preview.src = src;
+        preview.style.display = "block";
+      }
+    }
+    function myImgRemove(number) {
+      document.getElementById("file-ip-" + number + "-preview").src =
+        "https://i.ibb.co/ZVFsg37/default.png";
+      document.getElementById("file-ip-" + number).value = null;
+    }
+    number++;
+  } while (number < 5);
+</script>
+<!-- end photo upload script -->
+<!-- date picker script -->
+<script type="text/javascript">
+  const month_names = [
+    "{{_('January')}}",
+    "{{_('February')}}",
+    "{{_('March')}}",
+    "{{_('April')}}",
+    "{{_('May')}}",
+    "{{_('June')}}",
+    "{{_('July')}}",
+    "{{_('August')}}",
+    "{{_('September')}}",
+    "{{_('October')}}",
+    "{{_('November')}}",
+    "{{_('December')}}",
+  ];
+
+  var dateFieldDay = document.querySelector(".day_picker");
+  var dateFieldMonth = document.querySelector(".month_picker");
+  var dateFieldYear = document.querySelector(".year_picker");
+
+  const dateFields = [dateFieldYear, dateFieldMonth, dateFieldDay];
+
+  const dayOptions = [];
+  for (var i = 1; i <= 31; i++) {
+    var newOption = document.createElement("option");
+    newOption.value = (i < 10 ? "0" : "") + i;
+    newOption.textContent = i;
+    dayOptions.push(newOption);
+    dateFieldDay.add(newOption);
+  }
+
+  const dateChangeHandler = function () {
+    const month = parseInt(dateFieldMonth.value, 10);
+    const year = parseInt(dateFieldYear.value, 10);
+    let maxDays = 31;
+
+    if (month === 2) {
+      const isLeapYear = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+      maxDays = isLeapYear ? 28 : 27;
+    } else if ([2, 4, 6, 9, 11].indexOf(month) >= 0) {
+      maxDays = 29;
+    }
+
+    dayOptions.filter(function (o, i) {
+      o.hidden = i > maxDays;
+      if (o.hidden && o.selected) {
+        emptyDayOption.selected = true;
+      }
+    });
+  };
+
+  dateFieldDay.addEventListener("change", dateChangeHandler);
+  dateFieldMonth.addEventListener("change", dateChangeHandler);
+  dateFieldYear.addEventListener("change", dateChangeHandler);
+  dateChangeHandler();
+</script>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+  type="text/javascript"
+></script>
+<script type="text/javascript">
+  jQuery.validator.addMethod(
+    "alphanumeric",
+    function (value, element) {
+      return this.optional(element) || /^\w+$/i.test(value);
+    },
+    "{{_('Do not use special characters or spaces.')}}"
+  );
+  jQuery(".create-profile-form").validate({
+    debug: false,
+    errorClass: "text-danger",
+    errorElement: "p",
+    rules: {
+      given_name: {
+        minlength: 2,
+        maxlength: 35,
+        required: true,
+        alphanumeric: true,
+      },
+      gender: {
+        required: true,
+      },
+      showme: {
+        required: true,
+        minlength: 1,
+      },
+      passion: {
+        required: true,
+        minlength: 1,
+      },
+      profile_image: {
+        required: true,
+        minlength: 1,
+        extension: "png|jpe?g|webp",
+      },
+    },
+    messages: {
+      given_name: {
+        minlength: "{{_('*Given name must be between 2-35 characters.')}}",
+        maxlength: "{{_('*Given name must be between 2-35 characters.')}}",
+        required: "{{_('*Please enter the given name.')}}",
+      },
+      gender: {
+        required: "{{_('*Please select a gender.')}}",
+      },
+      showme: {
+        required: "{{_('*Please select the gender to be displayed.')}}",
+        minlength: "{{_('*Please select the gender to be displayed.')}}",
+      },
+      passion: {
+        required: "{{_('*Please select interests.')}}",
+        minlength: "{{_('*Please select interests.')}}",
+      },
+      profile_image: {
+        required: "{{_('*Please upload a photo.')}}",
+        minlength: "{{_('*Please upload a photo.')}}",
+        extension: "{{_('*Please upload a PNG, JPEG, or WEBP file.')}}",
+      },
+    },
+    highlight: function (element, errorClass) {
+      $(element).addClass(errorClass);
+    },
+    unhighlight: function (element, errorClass) {
+      $(element).removeClass(errorClass);
+    },
+  });
+</script>
+
+<!-- script to slide page sync with next and previous button -->
+<script type="text/javascript">
+  initMultiStepForm();
+
+  function initMultiStepForm() {
+    const progressNumber = document.querySelectorAll(".step").length;
+    const slidePage = document.querySelector(".slide-page");
+    const submitBtn = document.querySelector(".submit");
+    const progressText = document.querySelectorAll(".step p");
+    const progressCheck = document.querySelectorAll(".step .check");
+    const bullet = document.querySelectorAll(".step .bullet");
+    const pages = document.querySelectorAll(".page");
+    const nextButtons = document.querySelectorAll(".next");
+    const prevButtons = document.querySelectorAll(".prev");
+    const stepsNumber = pages.length;
+
+    if (progressNumber !== stepsNumber) {
+      console.warn(
+        "Error, number of steps in progress bar do not match number of pages"
+      );
+    }
+
+    document.documentElement.style.setProperty("--stepNumber", stepsNumber);
+
+    let current = 1;
+
+    for (let i = 0; i < nextButtons.length; i++) {
+      nextButtons[i].addEventListener("click", function (event) {
+        event.preventDefault();
+
+        inputsValid = validateInputs(this);
+
+        if (inputsValid) {
+          slidePage.style.marginLeft = `-${(100 / stepsNumber) * current}%`;
+          bullet[current - 1].classList.add("active");
+          progressCheck[current - 1].classList.add("active");
+          progressText[current - 1].classList.add("active");
+          current += 1;
+        }
+      });
+    }
+
+    for (let i = 0; i < prevButtons.length; i++) {
+      prevButtons[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        slidePage.style.marginLeft = `-${(100 / stepsNumber) * (current - 2)}%`;
+        bullet[current - 2].classList.remove("active");
+        progressCheck[current - 2].classList.remove("active");
+        progressText[current - 2].classList.remove("active");
+        current -= 1;
+      });
+    }
+
+    submitBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      inputs = $(".profile-image");
+      count_image = 0;
+      file_valid = true;
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value == "") {
+          count_image += 1;
+        } else if (!inputs[i].value.match(/\.(jpg|jpeg|png|webp)$/i)) {
+          $(".profile-image-warns").append(
+            "<p>*กรุณาอัพโหลดไฟล์นามสกุล PNG, JPG, JPEG, WEBP</p>"
+          );
+          file_valid = false;
+        }
+      }
+
+      if (count_image != 6 && file_valid) {
+        bullet[current - 1].classList.add("active");
+        progressCheck[current - 1].classList.add("active");
+        progressText[current - 1].classList.add("active");
+        current += 1;
+        jQuery(".create-profile-form").submit();
+      } else if (count_image == 6) {
+        $(".profile-image-warns").append("<p>*กรุณาอัพโหลดรูปถ่าย</p>");
+      }
+    });
+
+    function validateInputs(ths) {
+      let inputsValid = true;
+
+      const inputs = ths.parentElement.parentElement.querySelectorAll("input");
+      for (let i = 0; i < inputs.length; i++) {
+        const valid = $("." + inputs[i].classList[0]).valid();
+        if (!valid) {
+          inputsValid = false;
+          inputs[i].classList.add("invalid-input");
+        } else {
+          inputs[i].classList.remove("invalid-input");
+        }
+      }
+      return inputsValid;
+    }
+  }
+</script>
+<!-- end script to slide page sync with next and previous button -->
+{% endblock %}

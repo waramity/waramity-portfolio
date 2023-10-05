@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-07-30 21:34+0700\n"
+"POT-Creation-Date: 2023-08-28 14:37+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,443 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: app/features/main/routes.py:59
+#: app/features/ai_hub/forms.py:10
+msgid "Type the name 'Slug' to delete the Prompt."
+msgstr ""
+
+#: app/features/ai_hub/forms.py:10
+msgid "*Please enter the Prompt"
+msgstr ""
+
+#: app/features/ai_hub/forms.py:10
+msgid "*Prompt must be between 2-35 characters"
+msgstr ""
+
+#: app/features/ai_hub/forms.py:11
+msgid "Delete prompt"
+msgstr ""
+
+#: app/features/ai_hub/routes.py:53 app/features/crypto/routes.py:28
+#: app/features/main/routes.py:43
 msgid "waramity portfolio"
 msgstr ""
 
-#: app/templates/main/aboutme.html:2
+#: app/features/ai_hub/routes.py:161 app/features/auth/routes.py:207
+#: app/templates/ai_hub/create-profile.html:2
+msgid "Create profile"
+msgstr ""
+
+#: app/features/ai_hub/routes.py:191 app/features/ai_hub/routes.py:266
+#: app/features/ai_hub/routes.py:276 app/features/ai_hub/routes.py:391
+#: app/features/ai_hub/routes.py:650
+msgid "The deep pub"
+msgstr ""
+
+#: app/features/ai_hub/routes.py:383
+msgid "Please enter a correct slug."
+msgstr ""
+
+#: app/features/ai_hub/routes.py:446
+msgid "My profile"
+msgstr ""
+
+#: app/features/ai_hub/routes.py:454 app/templates/ai_hub/bookmark.html:13
+msgid "My bookmark"
+msgstr ""
+
+#: app/features/ai_hub/routes.py:462 app/templates/ai_hub/nav.html:138
+msgid "Edit profile"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:546
+msgid "January"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:547
+msgid "February"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:548
+msgid "March"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:549
+msgid "April"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:550
+msgid "May"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:551
+msgid "June"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:552
+msgid "July"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:553
+msgid "August"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:554
+msgid "September"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:555
+msgid "October"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:556
+msgid "November"
+msgstr ""
+
+#: app/features/auth/forms.py:16 app/templates/auth/create-profile.html:557
+msgid "December"
+msgstr ""
+
+#: app/features/auth/forms.py:56 app/templates/auth/create-profile.html:308
+msgid "Given name"
+msgstr ""
+
+#: app/features/auth/forms.py:56
+msgid "*Please enter your given name."
+msgstr ""
+
+#: app/features/auth/forms.py:56 app/templates/auth/create-profile.html:643
+#: app/templates/auth/create-profile.html:644
+msgid "*Given name must be between 2-35 characters."
+msgstr ""
+
+#: app/features/auth/forms.py:57 app/templates/auth/create-profile.html:377
+msgid "Day"
+msgstr ""
+
+#: app/features/auth/forms.py:57
+msgid "*Please select birth day."
+msgstr ""
+
+#: app/features/auth/forms.py:58 app/templates/auth/create-profile.html:385
+msgid "Month"
+msgstr ""
+
+#: app/features/auth/forms.py:58
+msgid "*Please select birth month"
+msgstr ""
+
+#: app/features/auth/forms.py:59 app/templates/auth/create-profile.html:393
+#: app/templates/dating/preferences.html:13
+msgid "Year"
+msgstr ""
+
+#: app/features/auth/forms.py:59
+msgid "*Please select birth year"
+msgstr ""
+
+#: app/features/auth/forms.py:60 app/templates/auth/create-profile.html:322
+msgid "Gender"
+msgstr ""
+
+#: app/features/auth/forms.py:60
+msgid "*Please select gender"
+msgstr ""
+
+#: app/features/auth/forms.py:61
+msgid "Show me to"
+msgstr ""
+
+#: app/features/auth/forms.py:61
+msgid "*Please select which one you desired"
+msgstr ""
+
+#: app/features/auth/forms.py:62 app/templates/auth/create-profile.html:336
+#: app/templates/auth/create-profile.html:451
+msgid "Interests"
+msgstr ""
+
+#: app/features/auth/forms.py:62
+msgid "*Please select your interests"
+msgstr ""
+
+#: app/features/auth/routes.py:165 app/features/auth/routes.py:170
+#: app/templates/auth/create-profile.html:659
+#: app/templates/auth/create-profile.html:660
+msgid "*Please upload a photo."
+msgstr ""
+
+#: app/features/dating/routes.py:68 app/features/dating/routes.py:82
+msgid "Life partner you are looking for"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:20
+msgid "Upload Image"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:33
+msgid "Profile name"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:39
+msgid "2 - 15 characters"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:45
+msgid "Description"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:51
+msgid "Less than 188 characters"
+msgstr ""
+
+#: app/templates/ai_hub/create-profile.html:59
+msgid "Confirm"
+msgstr ""
+
+#: app/templates/ai_hub/edit-profile.html:57
+#: app/templates/dating/preferences.html:95
+msgid "Save"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:56 app/templates/ai_hub/nav.html:71
+msgid "Sign in"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:88 app/templates/dating/index.html:40
+#: app/templates/dating/nav.html:74
+msgid "Sign in with Google Account"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:96
+msgid "+ Upload Prompt"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:123
+msgid "Profile"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:129
+msgid "Bookmark"
+msgstr ""
+
+#: app/templates/ai_hub/nav.html:144
+msgid "Sign out"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:305
+msgid "Create your profile"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:315
+msgid "Birthday"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:329
+#: app/templates/auth/create-profile.html:432
+#: app/templates/dating/preferences.html:55
+msgid "Show me"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:343
+msgid "Profile image"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:359
+msgid "Your given name"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:361
+msgid "This name will be displayed in public."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:369
+#: app/templates/auth/create-profile.html:403
+#: app/templates/auth/create-profile.html:428
+#: app/templates/auth/create-profile.html:447
+#: app/templates/auth/create-profile.html:466
+msgid "Next"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:374
+msgid "Your birthday"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:402
+#: app/templates/auth/create-profile.html:427
+#: app/templates/auth/create-profile.html:446
+#: app/templates/auth/create-profile.html:465
+#: app/templates/auth/create-profile.html:516
+msgid "Previous"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:407
+msgid "My gender"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:470
+msgid "Upload profile image"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:517
+msgid "Submit"
+msgstr ""
+
+#: app/templates/auth/create-profile.html:611
+msgid "Do not use special characters or spaces."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:645
+msgid "*Please enter the given name."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:648
+msgid "*Please select a gender."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:651
+#: app/templates/auth/create-profile.html:652
+msgid "*Please select the gender to be displayed."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:655
+#: app/templates/auth/create-profile.html:656
+msgid "*Please select interests."
+msgstr ""
+
+#: app/templates/auth/create-profile.html:661
+msgid "*Please upload a PNG, JPEG, or WEBP file."
+msgstr ""
+
+#: app/templates/auth/geolocation.html:2
+msgid "Confirm to allow us to access your location"
+msgstr ""
+
+#: app/templates/auth/geolocation.html:4
+msgid ""
+"We would like to access your location data to provide you with\n"
+"  personalized recommendations and location-based services within our "
+"mobile\n"
+"  app."
+msgstr ""
+
+#: app/templates/auth/geolocation.html:14
+msgid "I'm confirmed."
+msgstr ""
+
+#: app/templates/dating/_base.html:35
+msgid "Connect with the life partner you are looking for."
+msgstr ""
+
+#: app/templates/dating/_base.html:44
+msgid "Coming soon"
+msgstr ""
+
+#: app/templates/dating/_base.html:74
+msgid "Social"
+msgstr ""
+
+#: app/templates/dating/_base.html:139
+msgid "Legal"
+msgstr ""
+
+#: app/templates/dating/_base.html:143
+msgid "Privacy policy"
+msgstr ""
+
+#: app/templates/dating/_base.html:148
+msgid "Term of Uses"
+msgstr ""
+
+#: app/templates/dating/_base.html:153
+msgid "Cookie policy"
+msgstr ""
+
+#: app/templates/dating/_base.html:163
+msgid "Learn"
+msgstr ""
+
+#: app/templates/dating/_base.html:167
+msgid "How to"
+msgstr ""
+
+#: app/templates/dating/_base.html:172
+msgid "FAQ"
+msgstr ""
+
+#: app/templates/dating/_base.html:182
+msgid "Contact us"
+msgstr ""
+
+#: app/templates/dating/index.html:5
+msgid "The life partner you are looking for."
+msgstr ""
+
+#: app/templates/dating/index.html:12
+msgid "Create account"
+msgstr ""
+
+#: app/templates/dating/index.html:26 app/templates/dating/nav.html:43
+#: app/templates/dating/nav.html:58
+msgid "Sign In"
+msgstr ""
+
+#: app/templates/dating/match.html:87
+msgid "Log out"
+msgstr ""
+
+#: app/templates/dating/nav.html:27
+msgid "My account"
+msgstr ""
+
+#: app/templates/dating/nav.html:82
+msgid "Sign Out"
+msgstr ""
+
+#: app/templates/dating/nav.html:104
+msgid "English"
+msgstr ""
+
+#: app/templates/dating/nav.html:105
+msgid "Thai"
+msgstr ""
+
+#: app/templates/dating/preferences.html:9
+msgid "Age range."
+msgstr ""
+
+#: app/templates/dating/preferences.html:17
+msgid "Distance"
+msgstr ""
+
+#: app/templates/dating/preferences.html:21
+msgid "km."
+msgstr ""
+
+#: app/templates/dating/preferences.html:32
+msgid "Settings"
+msgstr ""
+
+#: app/templates/dating/preferences.html:66
+msgid "Men"
+msgstr ""
+
+#: app/templates/dating/preferences.html:79
+msgid "Women"
+msgstr ""
+
+#: app/templates/dating/preferences.html:92
+msgid "Close"
+msgstr ""
+
+#: app/templates/main/aboutme.html:32
 msgid "Hello, I'm Full stack Developer"
+msgstr ""
+
+#: app/templates/main/aboutme.html:35
+msgid "* this website compatible for desktop"
+msgstr ""
+
+#: app/templates/main/experience.html:83
+msgid "Experience"
 msgstr ""
 

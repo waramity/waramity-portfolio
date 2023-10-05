@@ -1,0 +1,164 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+<h1 class="mb-5">{{_('Create profile')}}</h1>
+
+<div class="mb-3 text-danger">
+  <span id="error-message" class=""></span>
+</div>
+
+<div class="row">
+  <div class="col-2 me-4">
+    <div id="profile-image-preview-container" class="mb-3">
+      <img
+        id="profile-image"
+        src="{{ url_for('static', filename='/assets/images/ai_hub/blank-image.png') }}"
+        alt="profile image"
+        class="w-100"
+      />
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+      <label class="btn btn-primary" for="profile-image-input">
+        {{_('Upload Image')}}
+        <input
+          accept="image/*"
+          type="file"
+          id="profile-image-input"
+          class="d-none"
+        />
+      </label>
+    </div>
+  </div>
+  <div class="col-5">
+    <div class="mb-4">
+      <label for="profile-name-input" class="form-label"
+        >{{_('Profile name')}}</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="profile-name-input"
+        placeholder="{{_('2 - 15 characters')}}"
+        maxlength="15"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="description-textarea" class="form-label"
+        >{{_('Description')}}
+      </label>
+      <textarea
+        class="form-control"
+        id="description-textarea"
+        rows="3"
+        placeholder="{{_('Less than 188 characters')}}"
+        maxlength="188"
+      ></textarea>
+    </div>
+    <button
+      onclick="submitCreateProfile()"
+      class="submit btn btn-outline-primary"
+    >
+      {{_('Confirm')}}
+    </button>
+  </div>
+</div>
+
+<!-- START: profile image script -->
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+
+  function processBase64Image(
+    inputId,
+    previewId,
+    new_image_id,
+    maxWidth,
+    maxHeight
+  ) {
+    var fileInput = document.getElementById(inputId);
+    fileInput.addEventListener("change", function () {
+      var file = fileInput.files[0];
+      var reader = new FileReader();
+      reader.addEventListener("load", function () {
+        var img = new Image();
+        img.src = reader.result;
+        img.onload = function () {
+          var canvas = document.createElement("canvas");
+          var newWidth = maxWidth;
+          var newHeight = maxHeight;
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+          var newDataUrl = canvas.toDataURL("image/png");
+          var newImg = new Image();
+          newImg.src = newDataUrl;
+          newImg.classList.add("w-100");
+          var previewContainer = document.getElementById(previewId);
+          newImg.id = new_image_id;
+          var existingImg = previewContainer.querySelector("img");
+          if (existingImg) {
+            previewContainer.replaceChild(newImg, existingImg);
+          } else {
+            previewContainer.appendChild(newImg);
+          }
+        };
+      });
+      reader.readAsDataURL(file);
+    });
+  }
+
+  processBase64Image(
+    "profile-image-input",
+    "profile-image-preview-container",
+    "profile-image",
+    512,
+    512
+  );
+</script>
+<!-- END: profile image script -->
+
+<!-- START: create profile button -->
+<script type="text/javascript">
+  function submitCreateProfile() {
+    let profile = {
+      profile: {
+        name: $("#profile-name-input").val(),
+        base64_image: $("#profile-image").attr("src"),
+        description: $("#description-textarea").val(),
+      },
+    };
+
+    fetch(`/en/ai_hub/submit-create-profile`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(profile),
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+          window.location.pathname = "/en/ai_hub/ai_hub";
+        }
+      });
+    });
+  }
+</script>
+<!-- END: create profile button -->
+
+{% endblock %}

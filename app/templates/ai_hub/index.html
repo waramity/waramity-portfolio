@@ -1,0 +1,300 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+<style media="screen">
+  .prompt-info {
+    transition: 0.5s ease;
+    position: absolute;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
+  .prompt-image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    transition: 0.5s ease;
+    backface-visibility: hidden;
+  }
+
+  .prompt-item:hover .prompt-image {
+    opacity: 0.3;
+  }
+
+  .prompt-item:hover .prompt-info {
+    opacity: 1;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: inherit; /* Use the default background color or your desired color */
+    color: inherit; /* Use the default text color or your desired color */
+    text-decoration: none; /* Remove any text decoration on hover (e.g., underline) */
+    --bs-btn-active-bg: none;
+  }
+</style>
+
+<div id="prompt-container" class="row pe-5 ps-5">
+  <div id="prompt-container-0" class="col-3"></div>
+  <div id="prompt-container-1" class="col-3"></div>
+  <div id="prompt-container-2" class="col-3"></div>
+  <div id="prompt-container-3" class="col-3"></div>
+</div>
+
+<div class="d-flex justify-content-center m-5" id="intersection">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+<template id="prompt-template">
+  <div class="prompt-item position-relative">
+    <a id="link" href="#" class="text-decoration-none text-dark">
+      <img id="image" src="" class="w-100 rounded mb-3 prompt-image" />
+    </a>
+
+    <div class="prompt-info bottom-0 start-50 w-100 ps-4 pe-4">
+      <div class="row">
+        <div class="col-6 text-start">
+          <h2 id="topic"></h2>
+          <small id="updated_date" class="fs-6 me-2"></small>
+
+          <i id="like-count" class="bi bi-heart-fill"></i>
+          <span id="likes"></span>
+        </div>
+        <div class="col-6 text-end">
+          {% if current_user.is_authenticated %}
+          <button
+            id="like-button"
+            type="button"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0 me-3"
+          >
+            <i class="bi bi-heart-fill"></i>
+          </button>
+          <button
+            id="bookmark-button"
+            type="button"
+            class="btn btn-outline-secondary w-25 h-100 fs-1 border-0 me-3"
+          >
+            <i class="bi bi-bookmark-fill"></i>
+          </button>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  let pageIndex = 0;
+
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    fetchGetPrompts();
+  });
+</script>
+
+<script type="text/javascript">
+  async function fetchGetPrompts() {
+    const res = await fetch(`/en/ai_hub/get-prompts/${pageIndex}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const res_data = await res.json();
+    const payload = res_data["payload"];
+
+    let prompt_column_count = 0;
+    const LIMIT_COLUMN = 4;
+    for (let i = 0; i < payload.length; i++) {
+      let prompt_template = document.querySelector("#prompt-template");
+      let prompt_template_clone = prompt_template.content.cloneNode(true);
+
+      const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+      let prompt_id = payload[i]["prompt"]["slug"] + genRanHex(6)
+
+      prompt_template_clone.querySelector(
+        "#link"
+      ).href = `/en/ai_hub/prompt-collection/${payload[i]["prompt"]["slug"]}`;
+
+      prompt_template_clone.querySelector(
+        "#topic"
+      ).innerHTML = `${payload[i]["prompt"]["topic"]}`;
+
+      prompt_template_clone.querySelector(
+        "#image"
+      ).src = `${payload[i]["prompt"]["prompts"][0]["image_url"]}`;
+
+      prompt_template_clone.querySelector(
+        "#likes"
+      ).innerHTML = `${payload[i]["prompt"]["likes"]}`;
+
+      prompt_template_clone.querySelector(
+        "#updated_date"
+      ).innerHTML = `${payload[i]["prompt"]["updated_date"]}`;
+
+      prompt_template_clone.querySelector(
+        ".prompt-item"
+      ).id = `${prompt_id}`;
+
+      prompt_template_clone.querySelector(
+        "span#likes"
+      ).id = `likes-${prompt_id}`;
+
+      prompt_template_clone.querySelector(
+        "i#like-count"
+      ).id = `like-count-${prompt_id}`;
+
+
+      {% if current_user.is_authenticated %}
+
+      prompt_template_clone.querySelector(
+        "button#like-button"
+      ).id = `like-button-${prompt_id}`;
+
+      prompt_template_clone.querySelector(
+        "button#bookmark-button"
+      ).id = `bookmark-button-${prompt_id}`;
+
+
+      prompt_template_clone
+        .querySelector(`#bookmark-button-${prompt_id}`)
+        .addEventListener("click", function () {
+          bookmarkPrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
+          toggleBookmark(prompt_id);
+        });
+
+      prompt_template_clone
+        .querySelector(`#like-button-${prompt_id}`)
+        .addEventListener("click", function () {
+          likePrompt(payload[i]["user"]["profile_name"], payload[i]["prompt"]["slug"])
+          toggleLike(prompt_id);
+        });
+
+        if(payload[i]["like"]) {
+          const likeButton = prompt_template_clone.querySelector(`#like-button-${prompt_id}`);
+          likeButton.classList.add("text-danger");
+          const likeCountHeart = prompt_template_clone.querySelector(`#like-count-${prompt_id}`);
+          likeCountHeart.classList.add("text-danger");
+        }
+
+        if(payload[i]["bookmark"]) {
+          const bookmarkButton = prompt_template_clone.querySelector(`#bookmark-button-${prompt_id}`);
+          bookmarkButton.classList.add("text-warning");
+        }
+
+
+      {%endif%}
+
+      formatTimeDifference(
+        `${payload[i]["prompt"]["updated_date"]}`,
+        prompt_template_clone.querySelector("#updated_date")
+      );
+
+      let prompt_container = document.querySelector(
+        `#prompt-container-${prompt_column_count}`
+      );
+
+      prompt_container.appendChild(prompt_template_clone.children[0]);
+      prompt_column_count += 1;
+      if (prompt_column_count == LIMIT_COLUMN) {
+        prompt_column_count = 0;
+      }
+    }
+
+    pageIndex += 1;
+  }
+
+  async function bookmarkPrompt(user_profile_name, prompt_slug) {
+    const res = await fetch(`/en/ai_hub/prompt-collection/${user_profile_name}/${prompt_slug}/bookmark`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    if (data["status"] != 0) {
+      return;
+    } else {
+      console.error("error bookmark")
+    }
+  }
+
+  async function likePrompt(user_profile_name, prompt_slug) {
+    const res = await fetch(`/en/ai_hub/prompt-collection/${user_profile_name}/${prompt_slug}/like`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    if (data["status"] != 0) {
+      return;
+    } else {
+      console.error("error like")
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  function removeSpinner() {
+    $(".spinner-border").toggleClass("invisible");
+  }
+
+  function formatTimeDifference(date_str, element) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      element.innerHTML = diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      element.innerHTML = diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      element.innerHTML = diffDays + " days ago";
+    } else {
+      element.innerHTML = diffMonths + " months ago";
+    }
+  }
+
+  function toggleBookmark(prompt_id) {
+    $(`div#${prompt_id} button#bookmark-button-${prompt_id}`).toggleClass(
+      "text-warning"
+    );
+  }
+
+  function toggleLike(prompt_id) {
+    let likes_count;
+    if (
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).hasClass(
+        "text-danger"
+      )
+    ) {
+      likes_count =
+        parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) - 1;
+      $(`div#${prompt_id} i#like-count-${prompt_id}`).removeClass(
+        "text-danger"
+      );
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).removeClass(
+        "text-danger"
+      );
+    } else {
+      likes_count =
+        parseInt($(`div#${prompt_id} span#likes-${prompt_id}`).html()) + 1;
+      $(`div#${prompt_id} i#like-count-${prompt_id}`).addClass("text-danger");
+      $(`div#${prompt_id} button#like-button-${prompt_id}`).addClass(
+        "text-danger"
+      );
+    }
+
+    $(`div#${prompt_id} span#likes-${prompt_id}`).html(`${likes_count}`);
+  }
+</script>
+
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    intersectionObserver.observe(intersection);
+    fetchGetPrompts();
+    removeSpinner();
+  });
+</script>
+{% endblock %}

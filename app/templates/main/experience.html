@@ -1,3 +1,84 @@
+
+<style media="screen">
+  .blog-post-box {
+    position: relative;
+    display: inline-block;
+  }
+  .blog-post-box span {
+    position: relative;
+    text-transform: none;
+    z-index: 3;
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+  }
+  .blog-post-box:hover span {
+  }
+
+  .cursor.cursor-dot.active-blog-post-1,
+  .cursor.cursor-dot.active-blog-post-2,
+  .cursor.cursor-dot.active-blog-post-3,
+  .cursor.cursor-dot.active-blog-post-4,
+  .cursor.cursor-dot.active-blog-post-5,
+  .cursor.cursor-dot.active-blog-post-6,
+  .cursor.cursor-dot.active-blog-post-7,
+  .cursor.cursor-dot.active-blog-post-8 {
+    opacity: 0;
+  }
+  .cursor-shadow.active-blog-post-1,
+  .cursor-shadow.active-blog-post-2,
+  .cursor-shadow.active-blog-post-3,
+  .cursor-shadow.active-blog-post-4,
+  .cursor-shadow.active-blog-post-5,
+  .cursor-shadow.active-blog-post-6,
+  .cursor-shadow.active-blog-post-7,
+  .cursor-shadow.active-blog-post-8 {
+    --size: 160px;
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 0;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .cursor-shadow.active-blog-post-1 {
+    background-image: url("https://images.unsplash.com/photo-1585301079507-3d745e800105?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2831&q=80");
+  }
+  .cursor-shadow.active-blog-post-2 {
+    background-image: url("https://i.ytimg.com/vi/I_A8NinGXr4/maxresdefault.jpg");
+  }
+  .cursor-shadow.active-blog-post-3 {
+    background-image: url("https://miro.medium.com/v2/resize:fit:1200/1*SXdOXQCHWL3u3SDqloY3FQ.jpeg");
+  }
+  .cursor-shadow.active-blog-post-4 {
+    background-image: url("https://engage-eu.s3-ap-southeast-1.amazonaws.com/uploads/images/final-2.width-1920.jpg");
+  }
+  .cursor-shadow.active-blog-post-5 {
+    background-image: url("/static/data/main/course-square.jpeg");
+  }
+  .cursor-shadow.active-blog-post-6 {
+    background-image: url("/static/data/main/kingsford.jpeg");
+  }
+  .cursor-shadow.active-blog-post-7 {
+    background-image: url("https://www.fnsyrus.com/assets/images/shared/ob_logo.png?v=20191118");
+  }
+  .cursor-shadow.active-blog-post-8 {
+    background-image: url("/static/data/main/thammasat.png");
+  }
+
+  @media (max-width: 991px) {
+    .h5 {
+      font-size: 1.2rem;
+    }
+    .section-title-wrap h1 {
+      font-size: 4rem;
+    }
+    .blog-nav {
+      font-size: 7vw;
+    }
+  }
+</style>
 <h1 class="display-3 mb-5">
   {{_('Experience')}}
 </h1>
@@ -49,14 +130,14 @@
       </a>
       as an IT Manager. Later, the company underwent a change, and I had to move
       to
-      <a href="#" class="cursor-link-blog-post-6">
+      <a href="#" class="cursor-link-blog-post-7">
         <div class="blog-post-box">
           <span class="h5">Finansia Syrus Company</span>
         </div>
       </a>
       as an Investment Consultant. Not being familiar with finance. Then, I
       pursued Technology Business at
-      <a href="#" class="cursor-link-blog-post-7">
+      <a href="#" class="cursor-link-blog-post-8">
         <div class="blog-post-box">
           <span class="h5">Thammasat University,</span>
         </div>
@@ -67,3 +148,32 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+
+  $(window).mousemove(function (e) {
+    $(".cursor").css({
+      left: e.pageX,
+      top: e.pageY,
+    });
+  });
+  $(".cursor-link")
+    .on("mouseenter", function () {
+      $(".cursor").addClass("active");
+    })
+    .on("mouseleave", function () {
+      $(".cursor").removeClass("active");
+    });
+  for (let i = 1; i <= 8; i++) {
+    const linkClass = `.cursor-link-blog-post-${i}`;
+    const cursorClass = `active-blog-post-${i}`;
+
+    $(linkClass)
+      .on("mouseenter", function () {
+        $(".cursor").addClass(cursorClass);
+      })
+      .on("mouseleave", function () {
+        $(".cursor").removeClass(cursorClass);
+      });
+  }
+</script>

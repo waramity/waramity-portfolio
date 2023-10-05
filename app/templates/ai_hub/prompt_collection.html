@@ -1,0 +1,1015 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!-- Description script -->
+<script type="text/javascript">
+  function addLinks(str) {
+    const regex = /(https?:\/\/[^\s]+)/g;
+    return str.replace(regex, '<a href="$1">$1</a>');
+  }
+
+  function addLineBreaks(str) {
+    return str.replace(/\n/g, "<br>");
+  }
+
+  function prepareDescription(str) {
+    str = addLinks(str);
+    str = addLineBreaks(str);
+    return str;
+  }
+</script>
+<!-- END Description script -->
+
+<!-- Format Time Script -->
+<script type="text/javascript">
+  function formatTime(dtStr) {
+    var dt = new Date(dtStr);
+    var monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    var formattedDate =
+      monthNames[dt.getMonth()] + " " + dt.getDate() + ", " + dt.getFullYear();
+
+    return formattedDate;
+  }
+
+  function formatTimeDifference(date_str) {
+    var date = new Date(date_str);
+    var timeDiff = Math.abs(Date.now() - date.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 60 * 60));
+    var diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    var diffMonths = Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30));
+
+    if (diffMinutes < 60) {
+      document.getElementById("last-updated").innerHTML =
+        diffMinutes + " minutes ago";
+    } else if (diffHours < 24) {
+      document.getElementById("last-updated").innerHTML =
+        diffHours + " hours ago";
+    } else if (diffDays < 30) {
+      document.getElementById("last-updated").innerHTML =
+        diffDays + " days ago";
+    } else {
+      document.getElementById("last-updated").innerHTML =
+        diffMonths + " months ago";
+    }
+  }
+</script>
+<!-- END Format Time Script -->
+
+<style>
+  .prompt-swiper {
+    width: 100%;
+  }
+
+  .prompt-swiper-button-prev,
+  .prompt-swiper-button-next {
+    position: static;
+    width: 100%;
+  }
+
+  .prompt-swiper-pagination {
+    position: static;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: inherit; /* Use the default background color or your desired color */
+    color: inherit; /* Use the default text color or your desired color */
+    text-decoration: none; /* Remove any text decoration on hover (e.g., underline) */
+    --bs-btn-active-bg: none;
+  }
+</style>
+
+<div class="container mb-5">
+  <div class="my-3 text-danger">
+    <span id="error-message" class=""></span>
+  </div>
+  <div class="row mb-2">
+    <div class="col-7">
+      <div class="row">
+        <div class="col-12">
+          <div class="row mb-5">
+            <div class="col-1">
+              <a
+                href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+              >
+                <div class="image-container">
+                  <img src="{{creator['image_url']}}" class="img-fluid" />
+                </div>
+              </a>
+            </div>
+            <div class="col-7">
+              <a
+                href="{{ url_for( 'ai_hub.profile', profile_name=creator['profile_name']) }}"
+                class="text-decoration-none text-black"
+              >
+                <p class="lh-1" style="line-height: 0.3 !important;">
+                  {{creator["profile_name"]}}
+                </p>
+                <p class="lh-1" style="line-height: 1 !important;">
+                  Joined <span id="creator-registered-on"></span>
+                </p>
+              </a>
+            </div>
+            <div class="col-4">
+              {% if current_user.is_authenticated %} {% if
+              creator["profile_name"] != current_user.get_profile_name() %} {%if
+              followed%}
+              <button
+                id="follow-button"
+                type="button"
+                class="btn btn-outline-primary w-75"
+              >
+                Unfollow
+              </button>
+              {%else%}
+              <button
+                id="follow-button"
+                type="button"
+                class="btn btn-primary w-75"
+              >
+                Follow
+              </button>
+              {%endif%} {%endif%} {%endif%}
+            </div>
+          </div>
+        </div>
+        <div class="col-1 my-auto">
+          <div class="swiper-button-prev prompt-swiper-button-prev"></div>
+        </div>
+
+        <div class="col-10">
+          <div class="swiper prompt-swiper">
+            <div class="swiper-wrapper">
+              {% for prompt in prompt_collection['prompts'] %}
+              <div class="swiper-slide my-auto">
+                <img
+                  data-enlargable
+                  src="{{prompt['image_url']}}"
+                  class="w-100"
+                  data-prompt="{{ prompt['prompt'] }}"
+                  data-negative-prompt="{{ prompt['negative_prompt'] }}"
+                  data-sampler="{{ prompt['sampler'] }}"
+                  data-steps="{{ prompt['steps'] }}"
+                  data-seed="{{ prompt['seed'] }}"
+                  data-size="{{ prompt['size'] }}"
+                  data-cfg-scale="{{ prompt['cfg_scale'] }}"
+                  data-model-hash="{{ prompt['model_hash'] }}"
+                />
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="swiper-pagination mt-3 prompt-swiper-pagination"></div>
+        </div>
+        <div class="col-1 my-auto">
+          <div class="swiper-button-next prompt-swiper-button-next"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <div class="row mb-5">
+        <div id="prompt-info" class="col-12">
+          <div class="d-flex">
+            <h3>{{prompt_collection['topic']}}</h3>
+            {% if current_user.is_authenticated %}
+
+            <button
+              id="heart-button"
+              type="button"
+              class="btn btn-outline-secondary border-0 fs-5"
+            >
+              {%if liked%}
+              <i class="bi bi-heart-fill text-danger"></i>
+              {%else%}
+              <i class="bi bi-heart-fill"></i>
+              {%endif%}
+              <span id="heart-amount">{{prompt_collection['likes']}}</span>
+            </button>
+
+            <button
+              id="bookmark-button"
+              type="button"
+              class="btn btn-outline-secondary border-0 fs-5"
+            >
+              {%if bookmarked%}
+              <i class="bi bi-bookmark-fill text-warning"></i>
+              {%else%}
+              <i id="bookmark-button" class="bi bi-bookmark-fill"></i>
+              {%endif%}
+            </button>
+            {%endif%}
+          </div>
+
+          <p>
+            <small>Created <span id="prompt-created-date"></span></small>
+          </p>
+          <p id="prompt-description"></p>
+        </div>
+        <div class="col-12 row">
+          {% if current_user.is_authenticated %} {% if creator["profile_name"]
+          == current_user.get_profile_name() %}
+
+          <div class="col-6">
+            <a
+              class="btn btn-primary w-100"
+              href="{{ url_for( 'ai_hub.edit_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+            >
+              <i class="bi bi-pencil-square"></i>
+              Edit
+            </a>
+          </div>
+
+          <div class="col-6">
+            <a
+              class="btn btn-outline-danger w-100"
+              href="{{ url_for( 'ai_hub.destroy_prompt', profile_name=creator['profile_name'], slug=prompt_collection['slug']) }}"
+            >
+              <i class="bi bi-trash3"></i>
+
+              Destroy
+            </a>
+          </div>
+          {%endif%} {%endif%}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="row mb-2">
+            <div class="col-10">
+              <label for="promptFormControlInput" class="form-label"
+                >Prompt:</label
+              >
+            </div>
+            <div class="col-2">
+              <button
+                id="copy-prompt-button"
+                class="w-100 p-0 btn btn-outline-secondary"
+              >
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
+          </div>
+          <textarea
+            id="prompt-input"
+            class="form-control remove-scroll mb-2"
+            aria-label="prompt input"
+            disabled
+          >
+{{prompt_collection['prompts'][0]['prompt']}}
+      </textarea
+          >
+
+          <div class="row mb-2">
+            <div class="col-10">
+              <label for="negativePromptFormControlInput" class="form-label"
+                >Negative prompt:</label
+              >
+            </div>
+            <div class="col-2">
+              <button
+                id="copy-negative-prompt-button"
+                class="w-100 p-0 btn btn-outline-secondary"
+              >
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
+          </div>
+          <textarea
+            id="negative-prompt-input"
+            class="form-control remove-scroll mb-2"
+            aria-label="negative prompt input"
+            disabled
+          >
+{{prompt_collection['prompts'][0]['negative_prompt']}}
+      </textarea
+          >
+        </div>
+        <div class="col-6">
+          <label for="samplerFormControlInput" class="form-label"
+            >Sampler:</label
+          >
+          <input
+            id="sampler-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="sampler input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['sampler']}}"
+          />
+          <label for="seedFormControlInput" class="form-label">Seed:</label>
+          <input
+            id="seed-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="seed input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['seed']}}"
+          />
+          <label for="CFGScaleFormControlInput" class="form-label"
+            >CFG Scale:</label
+          >
+          <input
+            id="cfg-scale-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="cfg scale input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['cfg_scale']}}"
+          />
+        </div>
+
+        <div class="col-6">
+          <label for="stepsFormControlInput" class="form-label">Steps:</label>
+          <input
+            id="steps-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="steps input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['steps']}}"
+          />
+          <label for="sizeFormControlInput" class="form-label">Size:</label>
+          <input
+            id="size-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="size input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['size']}}"
+          />
+
+          <label for="modelHashFormControlInput" class="form-label"
+            >Model hash:</label
+          >
+          <input
+            id="model-hash-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="model hash input"
+            disabled
+            value="{{prompt_collection['prompts'][0]['model_hash']}}"
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="modelFormControlInput" class="form-label">Model:</label>
+          <input
+            id="model-input"
+            class="form-control form-control-sm mb-2"
+            type="text"
+            aria-label="modelinput"
+            disabled
+            value="{{prompt_collection['model_name']}}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- START: swiper script -->
+<script>
+  const swiper = new Swiper(".prompt-swiper", {
+    direction: "horizontal",
+    loop: true,
+    pagination: {
+      el: ".prompt-swiper-pagination",
+    },
+    navigation: {
+      nextEl: ".prompt-swiper-button-next",
+      prevEl: ".prompt-swiper-button-prev",
+    },
+    on: {
+      slideChange: function () {
+        var currentSlide = this.slides[this.activeIndex];
+        document.getElementById(
+          "prompt-input"
+        ).value = currentSlide.querySelector("img").getAttribute("data-prompt");
+
+        document.getElementById(
+          "negative-prompt-input"
+        ).value = currentSlide
+          .querySelector("img")
+          .getAttribute("data-negative-prompt");
+
+        document.getElementById(
+          "sampler-input"
+        ).value = currentSlide
+          .querySelector("img")
+          .getAttribute("data-sampler");
+
+        document.getElementById(
+          "steps-input"
+        ).value = currentSlide.querySelector("img").getAttribute("data-steps");
+
+        document.getElementById(
+          "seed-input"
+        ).value = currentSlide.querySelector("img").getAttribute("data-seed");
+
+        document.getElementById(
+          "size-input"
+        ).value = currentSlide.querySelector("img").getAttribute("data-size");
+
+        document.getElementById(
+          "cfg-scale-input"
+        ).value = currentSlide
+          .querySelector("img")
+          .getAttribute("data-cfg-scale");
+
+        document.getElementById(
+          "model-hash-input"
+        ).value = currentSlide
+          .querySelector("img")
+          .getAttribute("data-model-hash");
+      },
+    },
+  });
+</script>
+<!-- END: swiper script -->
+
+<!-- START: enlargable image script -->
+<script type="text/javascript">
+  function setImageEnlargable() {
+    $("img[data-enlargable]")
+      .addClass("img-enlargable")
+      .click(function () {
+        var src = $(this).attr("src");
+        src = src.replace(/\\/g, "/");
+        $("<div>")
+          .css({
+            background: `RGBA(0, 0, 0, 0.5) url(${src}) no-repeat center`,
+            backgroundSize: "contain",
+            width: "100%",
+            height: "100%",
+            position: "fixed",
+            zIndex: "10000",
+            top: "0",
+            left: "0",
+            cursor: "zoom-out",
+          })
+          .click(function () {
+            $(this).remove();
+          })
+          .appendTo("body");
+      });
+  }
+  setImageEnlargable();
+</script>
+<!-- END: enlargable image script -->
+
+<!-- START: format time script -->
+<script type="text/javascript">
+  var dtStr = "{{creator['registered_on']}}";
+  document.getElementById("creator-registered-on").innerHTML = formatTime(
+    dtStr
+  );
+</script>
+<!-- END: format time script -->
+
+<!-- START: copy button script -->
+<script type="text/javascript">
+  const copy_prompt_button = document.querySelector("#copy-prompt-button");
+  const copy_negative_prompt_button = document.querySelector(
+    "#copy-negative-prompt-button"
+  );
+
+  copy_prompt_button.addEventListener("click", function () {
+    copyText("#prompt-input");
+  });
+  copy_negative_prompt_button.addEventListener("click", function () {
+    copyText("#negative-prompt-input");
+  });
+
+  function copyText(element_id) {
+    const input = document.querySelector(element_id);
+    navigator.clipboard.writeText(input.value);
+  }
+</script>
+
+<!-- END: copy button script -->
+
+<style media="screen">
+  #prompt-description {
+    max-height: 5em;
+    overflow: hidden;
+  }
+
+  #prompt-description.show-more {
+    max-height: none;
+    overflow: visible;
+  }
+</style>
+
+<!-- Message Script -->
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+</script>
+<!-- END Message Script -->
+<script>
+  function toggleHeartButton() {
+    $(".bi-heart-fill").toggleClass("text-danger");
+    if ($(".bi-heart-fill.text-danger").length) {
+      stars = parseInt($("#heart-amount").html()) + 1;
+      $("#heart-amount").html(stars);
+    } else {
+      stars = parseInt($("#heart-amount").html()) - 1;
+      $("#heart-amount").html(stars);
+    }
+  }
+
+  function promptCollectionLike() {
+    if ($("#heart-button").hasClass("disabled")) {
+      return;
+    }
+    $("#heart-button").addClass("disabled");
+    fetch(
+      `/en/ai_hub/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/like`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    ).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+          toggleHeartButton();
+        }
+
+        $("#heart-button").removeClass("disabled");
+      });
+    });
+  }
+
+  $("#heart-button").on("click", function () {
+    promptCollectionLike();
+  });
+
+  function toggleBookmarkButton() {
+    $(".bi-bookmark-fill").toggleClass("text-warning");
+  }
+
+  function promptCollectionBookmark() {
+    if ($("#bookmark-button").hasClass("disabled")) {
+      return;
+    }
+    $("#bookmark-button").addClass("disabled");
+    fetch(
+      `/en/ai_hub/prompt-collection/{{creator['profile_name']}}/{{prompt_collection['slug']}}/bookmark`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    ).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+          toggleBookmarkButton();
+        }
+
+        $("#bookmark-button").removeClass("disabled");
+      });
+    });
+  }
+
+  $("#bookmark-button").on("click", function () {
+    promptCollectionBookmark();
+  });
+</script>
+
+<!-- START: format time script -->
+<script type="text/javascript">
+  var prompt_created_date = "{{prompt_collection['created_date']}}";
+
+  document.getElementById("prompt-created-date").innerHTML = formatTime(
+    prompt_created_date
+  );
+</script>
+<!-- END: format time script -->
+
+<!-- START: evaluate description script -->
+<script type="text/javascript">
+  function countLines(str) {
+    let count = str.split("<br>").length - 1;
+    return count;
+  }
+
+  function addShowmoreButton() {
+    let line_length = countLines(
+      document.getElementById("prompt-description").innerHTML
+    );
+
+    if (line_length > 5) {
+      document.getElementById("prompt-info").innerHTML =
+        document.getElementById("prompt-info").innerHTML +
+        `<button id="show-more-button" class="btn btn-outline-primary w-100" onclick="toggleText()">Show more</button>`;
+    }
+  }
+
+  function toggleText() {
+    var element = document.querySelector("#prompt-description");
+    element.classList.toggle("show-more");
+
+    var button = document.querySelector("#show-more-button");
+    if (button.innerHTML === "Show more") {
+      button.innerHTML = "Show less";
+    } else {
+      button.innerHTML = "Show more";
+    }
+  }
+
+  document.getElementById("prompt-description").innerHTML = prepareDescription(
+    `{{prompt_collection['description']}}`
+  );
+
+  addShowmoreButton();
+</script>
+<!-- END: evaluate description script -->
+
+<!-- START: follow script -->
+<script type="text/javascript">
+  async function toggleFollowButton() {
+    var button = document.getElementById("follow-button");
+
+    $("#follow-button").toggleClass("disabled");
+
+    await followUser();
+
+    $("#follow-button.disabled").toggleClass("disabled");
+
+    if (button.classList.contains("btn-primary")) {
+      button.classList.remove("btn-primary");
+      button.classList.add("btn-outline-primary");
+      button.innerHTML = "Unfollow";
+    } else {
+      button.classList.remove("btn-outline-primary");
+      button.classList.add("btn-primary");
+      button.innerHTML = "Follow";
+    }
+  }
+
+  async function followUser() {
+    let follow_json = {
+      following_profile_name: "{{creator['profile_name']}}",
+    };
+    fetch(`/en/ai_hub/follow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(follow_json),
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+        }
+      });
+    });
+  }
+
+  const follow_button = document.querySelector("#follow-button");
+  if (follow_button != null) {
+    follow_button.addEventListener("click", async () => {
+      await toggleFollowButton();
+    });
+  }
+</script>
+<!-- END: follow script -->
+
+<!-- START: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+<div class="swiper-button-next invisible"></div>
+<div class="swiper-button-prev invisible"></div>
+
+<div class="swiper-pagination invisible"></div>
+<!-- END: เกิดบัคอะไรก็ไม่รู้ เลยต้องใส่ตรงนี้วไว้-->
+
+<div class="container">
+  <div class="my-5 mt-5 d-flex">
+    <h2 class="me-3">Comment</h2>
+
+    {% if current_user.is_authenticated %}
+    <button type="button" class="btn btn-outline-primary">
+      <a
+        class="dropdown-item"
+        href="/en/ai_hub/comment/prompt_collection/{{prompt_collection['slug']}}"
+      >
+        Add Comment
+      </a>
+    </button>
+    {% endif %}
+  </div>
+
+  <div id="comments" class="my-5 row"></div>
+</div>
+
+<!-- Comment template -->
+<style media="screen">
+  #toggle-option.dropdown-toggle::after {
+    display: none;
+  }
+</style>
+
+<template id="comment-template">
+  <div id="comment" class="col-3 mb-3 p-3">
+    <div class="row border">
+      <div class="col-3 my-3">
+        <a href="#" class="text-decoration-none text-dark profile-link">
+          <img id="profile-image" src="" class="rounded-circle w-100" />
+        </a>
+      </div>
+
+      <div class="col-7 my-3">
+        <a href="#" class="text-decoration-none text-dark profile-link">
+          <h6 id="profile-name" class="mt-0"></h6>
+          <small id="created-date"></small>
+        </a>
+      </div>
+
+      <div id="options" class="col-2 my-3 text-center">
+        <div role="button" class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle dropdown-toggle-no-caret text-dark bg-white border-0"
+            type="button"
+            id="toggle-option"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul
+            id="option-dropdown-list"
+            class="dropdown-menu"
+            aria-labelledby="toggle-option"
+          ></ul>
+        </div>
+      </div>
+
+      <p id="comment-text"></p>
+      <div class="swiper"></div>
+
+      <div id="like-button" class="col-3 my-3 text-center" role="button">
+        <i class="bi bi-heart me-2"></i> <span id="comment-likes"></span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- END Comment template -->
+
+<!-- Comment Script -->
+<script type="text/javascript">
+  let comment_template = document.querySelector("#comment-template");
+  let comments_section = document.querySelector("#comments");
+
+  async function likeComment(comment_slug, item_type, item_slug) {
+    if ($(`#like-button-${comment_slug}`).hasClass("disabled")) {
+      return;
+    }
+    $(`#like-button-${comment_slug}`).addClass("disabled");
+    fetch(`/en/ai_hub/comment/${item_type}/${item_slug}/${comment_slug}/like`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        }
+        $(`#like-button-${comment_slug}`).removeClass("disabled");
+      });
+    });
+  }
+
+  async function toggleLikeButton(comment_slug, item_type, item_slug) {
+    like_button = $(`#like-button-${comment_slug}`);
+    like_amount = $(`#like-button-${comment_slug}`).find("span");
+    like_icon = $(`#like-button-${comment_slug}`).find("i").get(0);
+
+    $(like_icon).toggleClass("text-danger");
+    if ($(`#like-button-${comment_slug} i.text-danger`).length) {
+      likes = parseInt(like_amount.html()) + 1;
+      like_amount.html(likes);
+    } else {
+      likes = parseInt(like_amount.html()) - 1;
+      like_amount.html(likes);
+    }
+    if (like_icon.classList.contains("bi-heart-fill")) {
+      like_icon.classList.remove("bi-heart-fill");
+      like_icon.classList.add("bi-heart");
+    } else {
+      like_icon.classList.remove("bi-heart");
+      like_icon.classList.add("bi-heart-fill");
+    }
+
+    await likeComment(comment_slug, item_type, item_slug);
+  }
+
+  function appendComment(comment, item_type, item_slug, user_slug) {
+    let comment_template_clone = comment_template.content.cloneNode(true);
+
+    comment_template_clone.querySelector(
+      "#profile-name"
+    ).innerHTML = `${comment["user"]["profile_name"]}`;
+
+    comment_template_clone.querySelector(
+      "#comment-likes"
+    ).innerHTML = `${comment["total_engagement"]["likes"]}`;
+
+    comment_template_clone.querySelector(
+      "#profile-image"
+    ).src = `${comment["user"]["image_url"]}`;
+
+    if (user_slug == comment["user"]["slug"]) {
+      comment_template_clone.querySelector(
+        "#option-dropdown-list"
+      ).innerHTML = `<li><a class="dropdown-item delete-button">Delete</a></li>`;
+      comment_template_clone
+        .querySelector("a.delete-button")
+        .addEventListener("click", async () => {
+          await deleteComment(`${comment["slug"]}`);
+        });
+    } else {
+      comment_template_clone.querySelector("#options").innerHTML = ``;
+    }
+
+    if (comment["current_user_liked"]) {
+      comment_template_clone.querySelector(".bi-heart").className =
+        "bi bi-heart-fill text-danger me-2";
+    }
+
+    comment_template_clone.querySelector(
+      "#created-date"
+    ).innerHTML = formatTime(comment["created_date"]);
+
+    comment_template_clone
+      .querySelector("#like-button")
+      .addEventListener("click", async () => {
+        await toggleLikeButton(`${comment["slug"]}`, item_type, item_slug);
+      });
+
+    comment_template_clone
+      .querySelector("#like-button")
+      .classList.add(`${comment["slug"]}`);
+
+    comment_template_clone.querySelector(
+      "#like-button"
+    ).id = `like-button-${comment["slug"]}`;
+
+    comment_template_clone.querySelector(
+      "#comment"
+    ).id = `comment-${comment["slug"]}`;
+
+    comment_template_clone.querySelector(
+      "#comment-text"
+    ).innerHTML = prepareDescription(`${comment["comment"]}`);
+
+    if (comment["prompts"].length != 0) {
+      comment_template_clone.querySelector(
+        ".swiper"
+      ).innerHTML = `<div class="swiper-wrapper"></div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>`;
+
+      for (var i = 0; i < comment["prompts"].length; i++) {
+        comment_template_clone.querySelector(
+          ".swiper-wrapper"
+        ).innerHTML += `<div class="swiper-slide"><img src="${comment["prompts"][i]["image_url"]}" class="w-100" /></div>`;
+      }
+
+      new Swiper(comment_template_clone.querySelector(".swiper"), {
+        loop: true,
+        navigation: {
+          nextEl: `.swiper-button-next`,
+          prevEl: `.swiper-button-prev`,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+        },
+      });
+    }
+
+    const profile_links = comment_template_clone.querySelectorAll(
+      ".profile-link"
+    );
+
+    for (let i = 0; i < profile_links.length; i++) {
+      const link = profile_links[i];
+      link.setAttribute(
+        "href",
+        `/th/ai_hub/profile/${comment["user"]["profile_name"]}`
+      );
+    }
+
+    comments_section.appendChild(comment_template_clone.children[0]);
+  }
+
+  function createComments(comments, item_type, item_slug, user_slug) {
+    for (var i = comments.length - 1; i >= 0; i--) {
+      appendComment(comments[i], item_type, item_slug, user_slug);
+    }
+  }
+
+  function showCommentMessage(message) {
+    document.querySelector(
+      "#comments"
+    ).innerHTML = `<p class="my-5 text-center">${message}</p>`;
+  }
+
+  function getComments(item_type, item_slug, user_slug) {
+    fetch(`/en/ai_hub/get-comments/${item_type}/${item_slug}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+          if (data["message"] == null) {
+            createComments(data["comments"], item_type, item_slug, user_slug);
+          } else {
+            showCommentMessage(data["message"]);
+          }
+        }
+      });
+    });
+  }
+
+  function removeComment(comment_slug) {
+    $(`#comment-${comment_slug}`).remove();
+  }
+
+  async function deleteComment(comment_slug) {
+    fetch(`/en/ai_hub/delete-comment/${comment_slug}`, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+        } else {
+          removeComment(comment_slug);
+        }
+      });
+    });
+  }
+</script>
+
+<!-- END Comment Script -->
+
+<script type="text/javascript">
+  {% if current_user.is_authenticated %}
+    const current_user_slug = "{{current_user.get_slug()}}"
+  {% else %}
+    const current_user_slug = null
+  {% endif %}
+  getComments("prompt_collection", "{{prompt_collection["slug"]}}", current_user_slug);
+</script>
+
+{% endblock %}

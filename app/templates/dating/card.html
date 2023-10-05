@@ -1,0 +1,235 @@
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<style media="screen">
+  .tinder--status {
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .tinder--status i {
+    font-size: 100px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: all 0.2s ease-in-out;
+    position: absolute;
+    width: 100px;
+    margin-left: -50px;
+  }
+
+  .tinder_love .fa-heart {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  .tinder_nope .fa-remove {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  .tinder--cards {
+    flex-grow: 0.9;
+    padding-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 1;
+  }
+
+  .tinder--card {
+    display: inline-block;
+    width: 90vw;
+    max-width: 400px;
+    background: #ffffff;
+    padding-bottom: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: absolute;
+    will-change: transform;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .moving.tinder--card {
+    transition: none;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: grabbing;
+  }
+
+  .tinder--card img {
+    max-width: 100%;
+    pointer-events: none;
+  }
+
+  .tinder--buttons {
+    flex: 0 0 100px;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .tinder--buttons button {
+    border: 0;
+    background: #ffffff;
+    display: inline-block;
+    margin: 0 8px;
+  }
+
+  .tinder--buttons button:focus {
+    outline: 0;
+  }
+
+  .tinder--buttons i {
+    font-size: 32px;
+    vertical-align: middle;
+  }
+
+  .fa-heart {
+    color: #fface4;
+  }
+
+  .fa-remove {
+    color: #cdd6dd;
+  }
+</style>
+
+<div class="tinder--status">
+  <i class="fa fa-remove"></i>
+  <i class="fa fa-heart"></i>
+</div>
+
+<div class="tinder--cards"></div>
+
+<div class="tinder--buttons fs-5">
+  <button id="nope" class="shadow-sm p-4">
+    <i class="fa fa-remove me-2"></i> <span class="fw-semibold">NOPE</span>
+  </button>
+  <button id="love" class="shadow-sm p-4">
+    <i class="fa fa-heart me-2"></i> <span class="fw-semibold">LOVE </span>
+  </button>
+</div>
+
+<script type="text/javascript">
+  "use strict";
+
+  var tinderContainer = document.querySelector(".main");
+  var allCards = document.querySelectorAll(".tinder--card");
+  var nope = document.getElementById("nope");
+  var love = document.getElementById("love");
+
+  function initCards(card, index) {
+    var newCards = document.querySelectorAll(".tinder--card:not(.removed)");
+
+    newCards.forEach(function (card, index) {
+      card.style.zIndex = allCards.length - index;
+      card.style.opacity = (10 - index) / 10;
+      card.classList.add("shadow-sm");
+    });
+
+    tinderContainer.classList.add("loaded");
+  }
+
+  initCards();
+
+  function createButtonListener(like) {
+    return function (event) {
+      event.preventDefault();
+      if (like) {
+        updateLike(like);
+      } else {
+        updateDislike(like);
+      }
+    };
+  }
+
+  function updateLike(like) {
+    let cards = document.querySelectorAll(".tinder--card:not(.removed)");
+    if (!cards.length) return false;
+    let card = cards[0];
+    let res_user_id = card.id;
+    let req = { res_user_id: res_user_id, like: like };
+
+    fetch("{{url_for('dating.update_like')}}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req),
+    }).then((res) => {
+      res.json().then((data) => {
+        updateCard(card, cards, like);
+        if (data.result == "Match") {
+          createChatItem(
+            data.match_id,
+            data.user_id,
+            data.given_name,
+            data.profile_image_uri,
+            data.last_message
+          );
+        }
+      });
+    });
+  }
+
+  function updateDislike(like) {
+    var cards = document.querySelectorAll(".tinder--card:not(.removed)");
+    if (!cards.length) return false;
+    var card = cards[0];
+    let res_user_id = card.id;
+    let req = { res_user_id: res_user_id, like: like };
+
+    fetch("{{url_for('dating.update_dislike')}}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req),
+    }).then((res) => {
+      res.json().then((data) => {
+        updateCard(card, cards, like);
+      });
+    });
+  }
+
+  function updateCard(card, cards, like) {
+    var moveOutWidth = document.body.clientWidth * 1.5;
+    if (like) {
+      tinderContainer.classList.toggle("tinder_love");
+      card.style.transform =
+        "translate(" + moveOutWidth + "px, -100px) rotate(-30deg)";
+    } else {
+      tinderContainer.classList.toggle("tinder_nope");
+      card.style.transform =
+        "translate(-" + moveOutWidth + "px, -100px) rotate(30deg)";
+    }
+    card.classList.add("removed");
+    setInterval(() => card.remove(), 100);
+    if (cards.length == 0) {
+      getUserCardBasedOnPreferences();
+    }
+
+    initCards();
+  }
+
+  function removeLove() {
+    tinderContainer.classList.remove("tinder_love");
+  }
+
+  function removeNope() {
+    tinderContainer.classList.remove("tinder_nope");
+  }
+
+  var nopeListener = createButtonListener(false);
+  var loveListener = createButtonListener(true);
+
+  nope.addEventListener("mousedown", nopeListener);
+  love.addEventListener("mousedown", loveListener);
+
+  nope.addEventListener("mouseup", function () {
+    setTimeout(removeNope, 400);
+  });
+  love.addEventListener("mouseup", function () {
+    setTimeout(removeLove, 400);
+  });
+</script>

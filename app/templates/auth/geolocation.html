@@ -1,0 +1,28 @@
+{% extends "dating/_base.html" %} {% block content %}
+<h3>{{_('Confirm to allow us to access your location')}}</h3>
+<p>
+  {{_('We would like to access your location data to provide you with
+  personalized recommendations and location-based services within our mobile
+  app.')}}
+</p>
+
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  onclick="allowGeolocation()"
+>
+  {{_("I'm confirmed.")}}
+</button>
+<script type="text/javascript">
+  let data = { geolocation_permission: true };
+  function allowGeolocation() {
+    fetch("{{url_for('auth.geolocation')}}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      window.location.replace(res.url);
+    });
+  }
+</script>
+{% endblock %}

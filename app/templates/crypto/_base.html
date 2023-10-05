@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% if title %}
+    <title></title>
+    {% else %}
+    <title></title>
+    {% endif %}
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/assets/css/dark-theme.css"
+    />
+
+    <style media="screen">
+      @import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;700&display=swap");
+
+      body {
+        --color-bg--300: #1e181ef0;
+        --color-bg--500: #191a1e;
+        --color-primary--500: #e8615a;
+        --color-primary--600: #9c3230;
+        --color-primary-black: #0e0e18;
+        --color-primary-red: #710000;
+        --color-primary-yellow: #fdf500;
+        --color-primary-green: #1ac5b0;
+        --color-primary-blue: #37ebf3;
+        --color-primary-purple: #930DB;
+        --color-primary-pink1: #e455ae;
+        --color-primary-pink2: #cb1dcd;
+        --color-primary-silver: #d1c5c0;
+        --color-secondary-blue: #37ebf360;
+        --font-primary: "Rajdhani", sans-serif;
+        --font-secondary: "VT323", monospace;
+        --color-green: #1ac5b0;
+        --ui-glow: 0 0 5px var(--color-primary--500);
+        --ui-glow-borders--500: 0 0 3px var(--color-primary--500);
+        --ui-glow-color: currentcolor;
+        --ui-glow-text: -9px -6px 40px var(--ui-glow-color);
+        --ui-glow-text--dimmed: -9px -6px 40px var(--ui-glow-color);
+        --ui-elevation--1: 2px 2px 0 rgba(0, 0, 0, 0.8);
+        --ui-notch-amount: 1rem;
+        --ui-notch-hypotenuse: 22.627416px;
+        font-family: var(--font-primary);
+        color: var(--color-primary--500);
+        background-color: var(--color-bg--500);
+        margin: 0;
+      }
+
+      body:before {
+        content: " ";
+        display: block;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.2;
+      }
+
+      .text-glow {
+        font-family: var(--font-secondary);
+        color: var(--color-primary--500);
+        letter-spacing: 0.035rem;
+        text-shadow: var(--ui-glow-text);
+        text-transform: uppercase;
+      }
+
+      header {
+        font-family: var(--font-secondary);
+        color: var(--color-primary-yellow);
+        letter-spacing: 0.035rem;
+        text-shadow: var(--ui-glow-text);
+        text-transform: uppercase;
+      }
+
+      header small {
+        color: var(--color-primary-silver);
+      }
+
+      .overflow-y-scroll::-webkit-scrollbar {
+        background: transparent;
+        width: 5px;
+      }
+
+      .overflow-y-scroll::-webkit-scrollbar-thumb {
+        background-color: var(--color-primary--500);
+      }
+    </style>
+  </head>
+
+  <body>
+    {% block content %} {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,38 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+<div class="container">
+  <h1 class="my-4">ลบ Prompt Collection</h1>
+  <form
+    action="{{ url_for('ai_hub.destroy_prompt', profile_name=profile_name, slug=slug) }}"
+    method="POST"
+    enctype="multipart/form-data"
+    class="destroy-prompt-collection-form"
+  >
+    {{ form.csrf_token }} {{ form.slug.label(class="mb-3") }}
+    <p>Slug: {{slug}}</p>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {{ form.slug(class="form-control form-control-lg
+    mb-5") }}
+    <span class="error">
+      {% if form.slug.errors %} {% for error in form.slug.errors %} {{ error }}
+      {% endfor %} {% endif %}
+    </span>
+    {{ form.submit(class="submit btn btn-outline-primary") }}
+  </form>
+</div>
+<script type="text/javascript">
+  document
+    .querySelector(".destroy-prompt-collection-form")
+    .addEventListener("submit", function (event) {
+      if (this.dataset.submitted) {
+        event.preventDefault();
+        return false;
+      }
+      this.dataset.submitted = true;
+    });
+</script>
+{% endblock %}

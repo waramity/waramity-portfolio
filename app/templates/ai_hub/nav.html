@@ -1,0 +1,153 @@
+<!-- Profile Style -->
+<style media="screen">
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%;
+  }
+
+  .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+<!-- END Profile Style -->
+
+<nav class="navbar navbar-expand-lg navbar-light mb-5">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a
+          class="nav-link"
+          aria-current="page"
+          href="{{ url_for('ai_hub.index') }}"
+          >The deep pub</a
+        >
+
+        {% if not current_user.is_authenticated %}
+        <!-- Button trigger modal -->
+        <style type="text/css">
+          .login-modal:hover {
+            cursor: pointer;
+            color: #adb5bd !important;
+          }
+        </style>
+        <a
+          class="fw-bold fs-5 text-decoration-none text-secondary me-4 login-modal btn btn-outline-secondary rounded-pill"
+          data-bs-toggle="modal"
+          data-bs-target="#loginModal"
+          role="button"
+        >
+          {{_('Sign in')}}
+        </a>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="loginModal"
+          tabindex="-1"
+          aria-labelledby="loginModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">
+                  {{_('Sign in')}}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-center">
+                <a
+                  class="btn btn-lg btn-outline-secondary"
+                  href="{{url_for('ai_hub.google_auth')}}"
+                >
+                  <img
+                    src="https://img.icons8.com/color/16/000000/google-logo.png"
+                  />
+                  {{_('Sign in with Google Account')}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %} {%if current_user.get_profile_name() %}
+        <a href="{{ url_for('ai_hub.upload_prompt') }}" class="nav-link">
+          {{_('+ Upload Prompt')}}
+        </a>
+
+        <div class="dropdown">
+          <button
+            class="btn btn-light dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              class="me-2"
+              src="{{current_user.get_profile_image()}}"
+              alt=""
+              style="width: 2em;"
+            />
+
+            {{current_user.get_profile_name()}}
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('ai_hub.profile', profile_name=current_user.get_profile_name()) }}"
+              >
+                <i class="bi bi-person-circle"></i>
+                {{_('Profile')}}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('ai_hub.bookmark') }}">
+                <i class="bi bi-bookmark"></i>
+                {{_('Bookmark')}}
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('ai_hub.edit_profile', profile_name=current_user.get_profile_name()) }}"
+              >
+                <i class="bi bi-pencil-square"></i>
+                {{_('Edit profile')}}
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('ai_hub.logout') }}" class="dropdown-item">
+                <i class="bi bi-box-arrow-right"></i>
+                {{_('Sign out')}}
+              </a>
+            </li>
+          </ul>
+        </div>
+        {%endif%} {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

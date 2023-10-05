@@ -1,0 +1,535 @@
+{% extends "ai_hub/_base.html" %} {% block content %}
+
+<div class="container">
+  <div class="row mb-3">
+    <div class="my-3 text-danger">
+      <span id="error-message" class=""></span>
+    </div>
+    <div class="col-10">
+      <h2>อัพโหลด Prompt ของคุณ</h2>
+    </div>
+
+    <div class="col-2">
+      <button
+        id="submit-upload-button"
+        type="button"
+        class="btn btn-outline-primary w-100"
+      >
+        อัพโหลด
+      </button>
+    </div>
+  </div>
+  <div class="mb-5">
+    <label for="topic-input" class="form-label">
+      Topic <span class="text-danger">*</span>
+    </label>
+    <input
+      id="topic-input"
+      class="form-control mb-3"
+      type="text"
+      maxlength="32"
+    />
+    <label for="description-textarea" class="form-label">รายละเอียด</label>
+    <textarea
+      class="form-control mb-3"
+      id="description-textarea"
+      rows="3"
+      maxlength="188"
+    ></textarea>
+
+    <label for="model-input" class="form-label">
+      Model ที่ใช้
+    </label>
+    <input
+      id="model-input"
+      class="form-control"
+      type="text"
+      aria-label=".form-controlg example"
+      maxlength="100"
+    />
+  </div>
+
+  <div class="dropzone">
+    <p>Drag and drop images here or click to select files</p>
+  </div>
+  <div class="prompt-container"></div>
+</div>
+
+<template id="prompt-item-dropzone-template">
+  <div class="row mb-3">
+    <div class="col-2">
+      <img id="prompt-image" class="w-100 mb-3" src="" alt="" />
+
+      <div class="d-flex justify-content-center align-items-center">
+        <button
+          id="delete-button"
+          type="button"
+          class="btn btn-danger delete-button"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <div class="col-4">
+      <label for="promptFormControlInput" class="form-label">Prompt:</label>
+      <textarea
+        id="prompt-input"
+        class="form-control remove-scroll mb-2"
+        aria-label="prompt input"
+      ></textarea>
+
+      <label for="negativePromptFormControlInput" class="form-label"
+        >Negative prompt:</label
+      >
+      <textarea
+        id="negative-prompt-input"
+        class="form-control remove-scroll mb-3"
+        aria-label="negative prompt input"
+      ></textarea>
+    </div>
+    <div class="col-3">
+      <label for="samplerFormControlInput" class="form-label">Sampler:</label>
+      <input
+        id="sampler-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="sampler input"
+      />
+      <label for="seedFormControlInput" class="form-label">Seed:</label>
+      <input
+        id="seed-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="seed input"
+      />
+      <label for="CFGScaleFormControlInput" class="form-label"
+        >CFG Scale:</label
+      >
+      <input
+        id="cfg-scale-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="cfg scale input"
+      />
+    </div>
+
+    <div class="col-3">
+      <label for="stepsFormControlInput" class="form-label">Steps:</label>
+      <input
+        id="steps-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="steps input"
+      />
+      <label for="sizeFormControlInput" class="form-label">Size:</label>
+      <input
+        id="size-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="size input"
+      />
+
+      <label for="modelHashFormControlInput" class="form-label"
+        >Model hash:</label
+      >
+      <input
+        id="model-hash-input"
+        class="form-control form-control-sm"
+        type="text"
+        aria-label="model hash input"
+      />
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  function showErrorMessage(error_message) {
+    $('span[id="error-message"]').text("* " + error_message);
+  }
+
+  function removeErrorMessage() {
+    $('span[id="error-message"]').text("");
+  }
+
+  function showMessage(message) {
+    $('span[id="message"]').text("" + message);
+  }
+
+  function removeMessage() {
+    $('span[id="message"]').text("");
+  }
+</script>
+
+<script type="text/javascript">
+  function submitPrompt() {
+    this.classList.add("disabled");
+    let topic = $("#topic-input").val();
+    let description = $("#description-textarea").val();
+    let model_name = $("#model-input").val();
+    let prompt_children = $(".prompt-container").children();
+
+    let prompts = {
+      topic: topic,
+      description: description,
+      model_name: model_name,
+      prompts: [],
+    };
+
+    prompt_children.each(function (i) {
+      let prompt_json = {
+        image_url: "",
+        prompt: "",
+        negative_prompt: "",
+        steps: 0,
+        sampler: "",
+        cfg_scale: 0,
+        seed: 0,
+        size: "",
+        model_hash: "",
+      };
+
+      prompt_json.image_url = prompt_children[i].querySelector(
+        "#prompt-image"
+      ).src;
+
+      prompt_json.prompt = prompt_children[i].querySelector(
+        "#prompt-input"
+      ).value;
+
+      prompt_json.negative_prompt = prompt_children[i].querySelector(
+        "#negative-prompt-input"
+      ).value;
+
+      prompt_json.steps = prompt_children[i].querySelector(
+        "#steps-input"
+      ).value;
+
+      prompt_json.sampler = prompt_children[i].querySelector(
+        "#sampler-input"
+      ).value;
+
+      prompt_json.cfg_scale = prompt_children[i].querySelector(
+        "#cfg-scale-input"
+      ).value;
+
+      prompt_json.seed = prompt_children[i].querySelector("#seed-input").value;
+
+      prompt_json.size = prompt_children[i].querySelector("#size-input").value;
+
+      prompt_json.model_hash = prompt_children[i].querySelector(
+        "#model-hash-input"
+      ).value;
+
+      prompts.prompts.push(prompt_json);
+    });
+
+    fetch(`/en/ai_hub/upload-prompt`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(prompts),
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data["status"] == 0) {
+          removeErrorMessage();
+          showErrorMessage(data["error_message"]);
+          $("#submit-upload-button.disabled").toggleClass("disabled");
+        } else {
+          window.location.href = `${data["redirect_url"]}`;
+        }
+      });
+    });
+  }
+</script>
+
+<script type="text/javascript">
+  const MAX_IMAGES = 6; // maximum number of images to upload
+  let images = 0;
+
+  let dropzone;
+  let prompt_container;
+
+  function initializeDropzone() {
+    dropzone = document.querySelector(".dropzone");
+    prompt_container = document.querySelector(".prompt-container");
+
+    // prevent default drag behaviors
+    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
+
+    // highlight dropzone on dragover
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, () => {
+        dropzone.classList.add("highlight");
+      });
+    });
+
+    // unhighlight dropzone on dragleave
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("highlight");
+    });
+
+    // handle dropped files
+    dropzone.addEventListener("drop", (e) => {
+      dropzone.classList.remove("highlight");
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    // handle selected files
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.multiple = true;
+    fileInput.addEventListener("change", (e) => {
+      const files = e.target.files;
+      handleFiles(files);
+    });
+    dropzone.addEventListener("click", () => {
+      fileInput.click();
+    });
+  }
+
+  // handle files
+  function handleFiles(files) {
+    // iterate over files and append thumbnails to container
+    for (const file of files) {
+      if (images >= MAX_IMAGES) {
+        break;
+      }
+      if (!file.type.startsWith("image/")) {
+        continue;
+      }
+
+      images += 1;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let parsed_prompt_json;
+        parsePNG(file)
+          .then((prompt_json) => {
+            if (typeof prompt_json === "undefined") {
+              var prompt_item_template = document.querySelector(
+                "#prompt-item-dropzone-template"
+              );
+
+              let prompt_item_template_clone = prompt_item_template.content.cloneNode(
+                true
+              );
+
+              prompt_item_template_clone.querySelector(
+                "#prompt-image"
+              ).src = `${reader.result}`;
+
+              const uuid = Math.random().toString(36).substring(2, 10);
+              prompt_item_template_clone.querySelector(".row").id = `${uuid}`;
+
+              prompt_item_template_clone
+                .querySelector("#delete-button")
+                .addEventListener("click", function () {
+                  const elementToDelete = document.getElementById(uuid);
+                  elementToDelete.parentNode.removeChild(elementToDelete);
+
+                  images -= 1;
+                });
+
+              prompt_container.appendChild(
+                prompt_item_template_clone.children[0]
+              );
+            } else {
+              var prompt_item_template = document.querySelector(
+                "#prompt-item-dropzone-template"
+              );
+
+              let prompt_item_template_clone = prompt_item_template.content.cloneNode(
+                true
+              );
+
+              prompt_item_template_clone.querySelector(
+                "#prompt-image"
+              ).src = `${reader.result}`;
+
+              prompt_item_template_clone.querySelector(
+                "#prompt-input"
+              ).value = `${prompt_json.prompt}`;
+
+              prompt_item_template_clone.querySelector(
+                "#negative-prompt-input"
+              ).value = `${prompt_json.negative_prompt}`;
+
+              prompt_item_template_clone.querySelector(
+                "#sampler-input"
+              ).value = `${prompt_json.sampler}`;
+
+              prompt_item_template_clone.querySelector(
+                "#steps-input"
+              ).value = `${prompt_json.steps}`;
+
+              prompt_item_template_clone.querySelector(
+                "#seed-input"
+              ).value = `${prompt_json.seed}`;
+
+              prompt_item_template_clone.querySelector(
+                "#size-input"
+              ).value = `${prompt_json.size}`;
+
+              prompt_item_template_clone.querySelector(
+                "#cfg-scale-input"
+              ).value = `${prompt_json.cfg_scale}`;
+
+              prompt_item_template_clone.querySelector(
+                "#model-hash-input"
+              ).value = `${prompt_json.model_hash}`;
+
+              const uuid = Math.random().toString(36).substring(2, 10);
+              prompt_item_template_clone.querySelector(".row").id = `${uuid}`;
+
+              prompt_item_template_clone
+                .querySelector("#delete-button")
+                .addEventListener("click", function () {
+                  const elementToDelete = document.getElementById(uuid);
+                  elementToDelete.parentNode.removeChild(elementToDelete);
+
+                  images -= 1;
+                });
+
+              prompt_container.appendChild(
+                prompt_item_template_clone.children[0]
+              );
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+    }
+  }
+
+  function readFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  function parsePNG(file) {
+    return readFile(file).then((buffer) => {
+      const view = new DataView(buffer);
+      const textDecoder = new TextDecoder("utf-8");
+      let pos = 8;
+      while (pos < buffer.byteLength) {
+        const length = view.getUint32(pos);
+        const type = String.fromCharCode(
+          view.getUint8(pos + 4),
+          view.getUint8(pos + 5),
+          view.getUint8(pos + 6),
+          view.getUint8(pos + 7)
+        );
+        const chunkData = textDecoder.decode(
+          buffer.slice(pos + 8, pos + 8 + length)
+        );
+
+        if (pos + 8 + length <= view.byteLength) {
+          const crc = view.getUint32(pos + 8 + length);
+
+          if (type == "tEXt") {
+            let prompt_regex = /(?<=parameters\u0000).*/;
+            let prompt_match = chunkData.match(prompt_regex);
+            let negative_prompt_regex = /(?<=Negative prompt: ).*/;
+            let negative_prompt_match = chunkData.match(negative_prompt_regex);
+            let description_prompt_regex = /Steps: \d+, Sampler: [\w\+\s]+, CFG scale: [\d.]+, Seed: \d+, Size: \d+x\d+, Model hash: [\da-f]+/;
+            let description_prompt_match = chunkData.match(
+              description_prompt_regex
+            );
+            let description_item_regex = /(\d+)|([a-zA-Z\s]+)|(\d+x\d+)|([a-fA-F\d]+)/;
+
+            let prompt_json = {
+              prompt: "",
+              negative_prompt: "",
+              steps: 0,
+              sampler: "",
+              cfg_scale: 0,
+              seed: 0,
+              size: "",
+              model_hash: "",
+            };
+            if (prompt_match != null && prompt_match[0] != null) {
+              prompt_json["prompt"] = prompt_match[0];
+            }
+            if (
+              negative_prompt_match != null &&
+              negative_prompt_match[0] != null
+            ) {
+              prompt_json["negative_prompt"] = negative_prompt_match[0];
+            }
+            if (
+              description_prompt_match != null &&
+              description_prompt_match[0] != null
+            ) {
+              let description_items = description_prompt_match[0].split(",");
+              description_items.forEach(function (item) {
+                let keyValuePair = item.split(":");
+                let key = keyValuePair[0].trim();
+                let value = keyValuePair[1].trim();
+
+                switch (key) {
+                  case "Steps":
+                    prompt_json.steps = parseInt(value);
+                    break;
+                  case "Sampler":
+                    prompt_json.sampler = value;
+                    break;
+                  case "CFG scale":
+                    prompt_json.cfg_scale = parseInt(value);
+                    break;
+                  case "Seed":
+                    prompt_json.seed = parseInt(value);
+                    break;
+                  case "Size":
+                    prompt_json.size = value;
+                    break;
+                  case "Model hash":
+                    prompt_json.model_hash = value;
+                    break;
+                  default:
+                    break;
+                }
+              });
+            }
+            return prompt_json;
+          }
+          pos += 12 + length;
+        } else {
+          return;
+        }
+      }
+    });
+  }
+</script>
+
+<script type="text/javascript">
+  document
+    .getElementById("submit-upload-button")
+    .addEventListener("click", submitPrompt);
+  initializeDropzone();
+</script>
+
+<style media="screen">
+  .dropzone {
+    border: 2px dashed gray;
+    padding: 20px;
+    text-align: center;
+    margin: 20px;
+  }
+  .prompt-container {
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+</style>
+
+{% endblock %}
